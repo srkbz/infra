@@ -3,7 +3,7 @@ version: '3'
 output: prefixed
 
 includes:
-  docker: ../modules/docker
+  docker: ../../modules/docker
 
 tasks:
   default:
