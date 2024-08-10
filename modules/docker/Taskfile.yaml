@@ -1,10 +1,5 @@
 version: '3'
 
-output: prefixed
-
-includes:
-  docker: ../modules/docker
-
 tasks:
   default:
     cmds:
