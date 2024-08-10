@@ -6,7 +6,7 @@ TASK_VERSION="3.38.0"
 function main {
     ensure-task
     cd "nodes/$(cat NODE)"
-    exec sudo "$(task-path)" "$@"
+    exec "$(task-path)" "$@"
 }
 
 function ensure-task {
