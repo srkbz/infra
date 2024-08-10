@@ -1,0 +1,15 @@
+version: '3'
+
+vars:
+  CADDY_VERSION: '2.8.4'
+
+tasks:
+  default:
+    deps: [deb]
+
+  deb:
+    cmds:
+      - curl -l --output '.cache/caddy/{{.CADDY_VERSION}}/caddy.deb' 'https://github.com/caddyserver/caddy/releases/download/v{{.CADDY_VERSION}}/caddy_{{.CADDY_VERSION}}_linux_amd64.deb'
+      - apt-get install '.cache/caddy/{{.CADDY_VERSION}}/caddy.deb'
+    generates:
+      - .cache/caddy/{{.CADDY_VERSION}}/caddy.deb
