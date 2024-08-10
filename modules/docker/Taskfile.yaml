@@ -6,3 +6,8 @@ tasks:
       - '{{.TASKFILE_DIR}}/install-docker-debian.sh'
     status:
       - command -v docker
+
+  cleanup:
+    cmds:
+      - docker system prune -af
+      - docker system df
