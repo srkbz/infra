@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ROOT="$(dirname "${BASH_SOURCE[0]}")"
+
 TASK_VERSION="3.38.0"
 
 function main {
@@ -16,7 +18,7 @@ function ensure-task {
 }
 
 function task-path {
-    printf "%s" "$(pwd)/.cache/task/${TASK_VERSION}/task"
+    printf "%s" "${ROOT}/.cache/task/${TASK_VERSION}/task"
 }
 
 main "$@"
