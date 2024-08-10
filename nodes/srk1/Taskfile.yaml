@@ -1,0 +1,8 @@
+version: '3'
+
+output: prefixed
+
+tasks:
+  default:
+    cmds:
+      - echo henlo
