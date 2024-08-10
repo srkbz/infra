@@ -12,5 +12,5 @@ tasks:
       - mkdir -p '.cache/caddy/{{.CADDY_VERSION}}'
       - curl -L -o '.cache/caddy/{{.CADDY_VERSION}}/caddy.deb' 'https://github.com/caddyserver/caddy/releases/download/v{{.CADDY_VERSION}}/caddy_{{.CADDY_VERSION}}_linux_amd64.deb'
       - apt-get install './.cache/caddy/{{.CADDY_VERSION}}/caddy.deb'
-    generates:
-      - .cache/caddy/{{.CADDY_VERSION}}/caddy.deb
+    status:
+      - '[ -f .cache/caddy/{{.CADDY_VERSION}}/caddy.deb ]'
