@@ -5,7 +5,8 @@ output: prefixed
 includes:
   docker: ../../modules/docker
   caddy: ../../modules/caddy
+  webhook: ../../modules/webhook
 
 tasks:
   default:
-    deps: [docker, caddy]
+    deps: [docker, caddy, webhook]

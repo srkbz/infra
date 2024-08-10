@@ -1,0 +1,8 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - apt-get install -y webhook
+    status:
+      - command -v webhook
