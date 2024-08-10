@@ -7,7 +7,4 @@ includes:
 
 tasks:
   default:
-    cmds:
-      - '{{.TASKFILE_DIR}}/install-docker-debian.sh'
-    status:
-      - command -v docker
+    deps: [docker]
