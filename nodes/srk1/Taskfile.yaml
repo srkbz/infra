@@ -4,7 +4,8 @@ output: prefixed
 
 includes:
   docker: ../../modules/docker
+  caddy: ../../modules/caddy
 
 tasks:
   default:
-    deps: [docker]
+    deps: [docker, caddy]
