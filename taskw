@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(dirname "${BASH_SOURCE[0]}")"
+ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
 TASK_VERSION="3.38.0"
 
