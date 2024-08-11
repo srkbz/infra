@@ -1,4 +1,4 @@
-http://${DOMAIN} {
+https://${DOMAIN} {
   root * /srv/srkbz/static-sites/${DOMAIN}/live
   file_server
 }
