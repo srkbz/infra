@@ -12,7 +12,7 @@ tasks:
     cmds:
       - '{{.TASKFILE_DIR}}/build-site.sh'
     status:
-      - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT')" == '{{.COMMIT}}' ]
+      - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT')" == "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT')" ]
 
   target-commit:
     deps: [workdir, ':docker']
@@ -22,7 +22,7 @@ tasks:
     cmds:
       - '{{.TASKFILE_DIR}}/update-target-commit.sh'
     status:
-      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT' ]
+      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT' ]
 
   caddy-config:
     deps: [':caddy']
