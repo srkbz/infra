@@ -1,4 +1,4 @@
-# Infra v2
+# Infra
 
 ```bash
 apt-get update
