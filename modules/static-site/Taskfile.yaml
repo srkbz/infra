@@ -11,7 +11,7 @@ tasks:
       - static-sites/{{.DOMAIN}}.env
     deps: [workdir, ':docker']
     cmds:
-      - '{{.TASKFILE_DIR}}/build-site'
+      - '{{.TASKFILE_DIR}}/build-site.sh'
 
   caddy-config:
     dotenv:
