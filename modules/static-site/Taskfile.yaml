@@ -1,13 +1,12 @@
 version: '3'
 
-dotenv:
-  - static-sites/{{.DOMAIN}}.env
-
 tasks:
   default:
     deps: [workdir, ':caddy']
 
   caddy-config:
+    dotenv:
+      - static-sites/{{.DOMAIN}}.env
     deps: [':caddy']
     cmds:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
