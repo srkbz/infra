@@ -12,6 +12,7 @@ tasks:
     cmds:
       - '{{.TASKFILE_DIR}}/build-site.sh'
     status:
+      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT' ]
       - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT')" == "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT')" ]
 
   target-commit:
