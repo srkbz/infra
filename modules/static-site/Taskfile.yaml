@@ -12,6 +12,8 @@ tasks:
       COMMIT: '{{.COMMIT}}'
     cmds:
       - '{{.TASKFILE_DIR}}/build-site.sh'
+    status:
+      - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT')" != '{{.COMMIT}}' ]
 
   caddy-config:
     deps: [':caddy']

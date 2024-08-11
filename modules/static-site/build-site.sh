@@ -25,6 +25,7 @@ mkdir -p "${BUILD_WORKSPACE}"
         rm -rf "${SITE_LIVE}"
         cp -r "dist" "${SITE_LIVE}"
     fi
+    printf "%s" "${COMMIT}" >"/srv/srkbz/static-sites/${DOMAIN}/COMMIT"
 )
 
 rm -rf "${BUILD_WORKSPACE}"
