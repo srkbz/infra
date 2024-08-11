@@ -4,7 +4,7 @@ set -xeuo pipefail
 BUILD_ID="$(openssl rand -hex 16)"
 BUILD_WORKSPACE="/srv/srkbz/static-sites/${DOMAIN}/builds/${BUILD_ID}"
 SITE_LIVE="/srv/srkbz/static-sites/${DOMAIN}/live"
-COMMIT="$(cat "/srv/srkbz/static-sites/${DOMAIN}/COMMIT")"
+TARGET_COMMIT="$(cat "/srv/srkbz/static-sites/${DOMAIN}/TARGET_COMMIT")"
 
 mkdir -p "${BUILD_WORKSPACE}"
 
@@ -12,8 +12,8 @@ mkdir -p "${BUILD_WORKSPACE}"
     cd "${BUILD_WORKSPACE}"
     git init
     git remote add origin "${REPOSITORY}"
-    git fetch origin "${COMMIT}"
-    git reset --hard "${COMMIT}"
+    git fetch origin "${TARGET_COMMIT}"
+    git reset --hard "${TARGET_COMMIT}"
 
     if [ -f "Dockerfile" ]; then
         docker build -t "site_${BUILD_ID}" .
@@ -26,7 +26,7 @@ mkdir -p "${BUILD_WORKSPACE}"
         rm -rf "${SITE_LIVE}"
         cp -r "dist" "${SITE_LIVE}"
     fi
-    printf "%s" "${COMMIT}" >"/srv/srkbz/static-sites/${DOMAIN}/LIVE_COMMIT"
+    printf "%s" "${TARGET_COMMIT}" >"/srv/srkbz/static-sites/${DOMAIN}/LIVE_COMMIT"
 )
 
 rm -rf "${BUILD_WORKSPACE}"
