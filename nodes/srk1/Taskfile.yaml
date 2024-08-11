@@ -7,6 +7,18 @@ includes:
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
 
+  static-site-sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: sirikon.me
+  
+  static-site-osoondo.com:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: osoondo.com
+
 tasks:
   default:
-    deps: [docker, caddy, webhook]
+    deps:
+      - static-site-sirikon.me
+      - static-site-osoondo.com
