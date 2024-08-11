@@ -11,26 +11,36 @@ includes:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: sirikon.me
+      REPOSITORY: https://github.com/sirikon/sirikon.me.git
+      COMMIT: ad45734b25bc4bc9a801b119c453fc135a896b47
   
   static-site-osoondo.com:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: osoondo.com
+      REPOSITORY: https://github.com/sirikon/osoondo.com.git
+      COMMIT: 58906353000f8ccfb4ab5345764ba22ef420bd46
   
   static-site-egin.sirikon.me:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: egin.sirikon.me
+      REPOSITORY: https://github.com/sirikon/egin.git
+      COMMIT: a20e3c3bf90e8c99240e1f354150fd9f7564d8b8
   
   static-site-astenagusia.eus:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: astenagusia.eus
+      REPOSITORY: https://github.com/sirikon/astenagusia.git
+      COMMIT: d0ca4abb43c902e1082ca2b5b59f47103bca5fec
   
   static-site-2048.sirikon.me:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: 2048.sirikon.me
+      REPOSITORY: https://github.com/sirikon/2048.git
+      COMMIT: f20501fea92d9c367536da894a9a539d81170a6a
 
 tasks:
   default:

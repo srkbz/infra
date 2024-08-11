@@ -5,23 +5,22 @@ tasks:
     deps: [build, caddy-config]
 
   build:
-    dotenv:
-      - static-sites/{{.DOMAIN}}.env
-    sources:
-      - static-sites/{{.DOMAIN}}.env
     deps: [workdir, ':docker']
+    env:
+      DOMAIN: '{{.DOMAIN}}'
+      REPOSITORY: '{{.REPOSITORY}}'
+      COMMIT: '{{.COMMIT}}'
     cmds:
       - '{{.TASKFILE_DIR}}/build-site.sh'
 
   caddy-config:
-    dotenv:
-      - static-sites/{{.DOMAIN}}.env
     deps: [':caddy']
+    env:
+      DOMAIN: '{{.DOMAIN}}'
     cmds:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
       - systemctl reload caddy
     sources:
-      - static-sites/{{.DOMAIN}}.env
       - '{{.TASKFILE_DIR}}/Caddyfile'
 
   workdir:
