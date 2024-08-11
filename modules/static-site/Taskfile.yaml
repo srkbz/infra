@@ -17,6 +17,7 @@ tasks:
   target-commit:
     deps: [workdir, ':docker']
     env:
+      DOMAIN: '{{.DOMAIN}}'
       REPOSITORY: '{{.REPOSITORY}}'
       BRANCH: '{{.BRANCH}}'
     cmds:
