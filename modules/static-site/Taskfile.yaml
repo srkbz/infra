@@ -5,7 +5,7 @@ tasks:
     deps: [build, caddy-config]
 
   build:
-    deps: [workdir, ':docker']
+    deps: [workdir, ':docker', target-commit]
     env:
       DOMAIN: '{{.DOMAIN}}'
       REPOSITORY: '{{.REPOSITORY}}'
@@ -15,7 +15,7 @@ tasks:
       - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT')" == '{{.COMMIT}}' ]
 
   target-commit:
-    deps: [workdir, ':docker', target-commit]
+    deps: [workdir, ':docker']
     env:
       REPOSITORY: '{{.REPOSITORY}}'
       BRANCH: '{{.BRANCH}}'
