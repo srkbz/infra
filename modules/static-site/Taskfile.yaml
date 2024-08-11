@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   default:
-    deps: [workdir, ':caddy']
+    deps: [workdir, caddy-config]
 
   caddy-config:
     dotenv:
