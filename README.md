@@ -3,8 +3,7 @@
 ```bash
 apt-get update
 apt-get install -y git
-git clone https://github.com/srkbz/infra2.git
-cd infra2
-echo '<node-name>' >NODE
+git clone https://github.com/srkbz/infra.git
+cd infra
 ./taskw
 ```
