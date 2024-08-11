@@ -7,7 +7,7 @@ tasks:
     status:
       - command -v docker
 
-  cleanup:
+  clean:
     cmds:
       - docker system prune -af
       - docker system df
