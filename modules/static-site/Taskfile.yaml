@@ -9,11 +9,20 @@ tasks:
     env:
       DOMAIN: '{{.DOMAIN}}'
       REPOSITORY: '{{.REPOSITORY}}'
-      COMMIT: '{{.COMMIT}}'
     cmds:
       - '{{.TASKFILE_DIR}}/build-site.sh'
     status:
       - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT')" == '{{.COMMIT}}' ]
+
+  target-commit:
+    deps: [workdir, ':docker', target-commit]
+    env:
+      REPOSITORY: '{{.REPOSITORY}}'
+      BRANCH: '{{.BRANCH}}'
+    cmds:
+      - '{{.TASKFILE_DIR}}/update-target-commit.sh'
+    status:
+      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/COMMIT' ]
 
   caddy-config:
     deps: [':caddy']
