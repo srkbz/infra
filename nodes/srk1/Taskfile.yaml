@@ -16,9 +16,27 @@ includes:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: osoondo.com
+  
+  static-site-egin.sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: egin.sirikon.me
+  
+  static-site-astenagusia.eus:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: astenagusia.eus
+  
+  static-site-2048.sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: 2048.sirikon.me
 
 tasks:
   default:
     deps:
       - static-site-sirikon.me
       - static-site-osoondo.com
+      - static-egin.sirikon.me
+      - static-astenagusia.eus
+      - static-2048.sirikon.me
