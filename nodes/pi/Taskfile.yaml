@@ -1,0 +1,17 @@
+version: '3'
+
+output: prefixed
+
+includes:
+  minidlna: ./minidlna
+  samba: ./samba
+
+tasks:
+  default:
+    deps: [public-dir, minidlna:configure, samba:configure]
+
+  public-dir:
+    cmds:
+      - mkdir -p /srv/public
+    status:
+      - '[ -d /srv/public ]'
