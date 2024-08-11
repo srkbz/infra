@@ -11,8 +11,8 @@ mkdir -p "${BUILD_WORKSPACE}"
     git init
     git remote add origin "${REPOSITORY}"
     git fetch origin "${BRANCH}"
-    git rev-parse origin/"${BRANCH}" \
-        >"/srv/srkbz/static-sites/${DOMAIN}/TARGET_COMMIT"
+    TARGET_COMMIT="$(git rev-parse origin/"${BRANCH}")"
+    printf "%s" "${TARGET_COMMIT}" >"/srv/srkbz/static-sites/${DOMAIN}/TARGET_COMMIT"
 )
 
 rm -rf "${BUILD_WORKSPACE}"
