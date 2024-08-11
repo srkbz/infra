@@ -3,6 +3,7 @@ version: '3'
 tasks:
   default:
     cmds:
-      - apt-get install -y webhook
+      - mkdir -p .cache/apt/lock
+      - flock .cache/apt/lock apt-get install -y webhook
     status:
       - command -v webhook
