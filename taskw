@@ -7,7 +7,7 @@ TASK_VERSION="3.38.0"
 
 function main {
     ensure-task
-    cd "nodes/$(cat NODE)"
+    cd "nodes/$(hostname)"
     exec "$(task-path)" "$@"
 }
 
