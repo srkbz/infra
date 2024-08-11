@@ -6,23 +6,37 @@ includes:
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
-  static-site: ../../modules/static-site
+
+  static-site-sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: sirikon.me
+  
+  static-site-osoondo.com:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: osoondo.com
+  
+  static-site-egin.sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: egin.sirikon.me
+  
+  static-site-astenagusia.eus:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: astenagusia.eus
+  
+  static-site-2048.sirikon.me:
+    taskfile: ../../modules/static-site
+    vars:
+      DOMAIN: 2048.sirikon.me
 
 tasks:
   default:
     deps:
-      - task: static-site
-        vars:
-          DOMAIN: sirikon.me
-      - task: static-site
-        vars:
-          DOMAIN: osoondo.com
-      - task: static-site
-        vars:
-          DOMAIN: egin.sirikon.me
-      - task: static-site
-        vars:
-          DOMAIN: astenagusia.eus
-      - task: static-site
-        vars:
-          DOMAIN: 2048.sirikon.me
+      - static-site-sirikon.me
+      - static-site-osoondo.com
+      - static-site-egin.sirikon.me
+      - static-site-astenagusia.eus
+      - static-site-2048.sirikon.me
