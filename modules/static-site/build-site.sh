@@ -4,6 +4,7 @@ set -xeuo pipefail
 BUILD_ID="$(openssl rand -hex 16)"
 BUILD_WORKSPACE="/srv/srkbz/static-sites/${DOMAIN}/builds/${BUILD_ID}"
 SITE_LIVE="/srv/srkbz/static-sites/${DOMAIN}/live"
+COMMIT="$(cat "/srv/srkbz/static-sites/${DOMAIN}/COMMIT")"
 
 mkdir -p "${BUILD_WORKSPACE}"
 
@@ -25,7 +26,6 @@ mkdir -p "${BUILD_WORKSPACE}"
         rm -rf "${SITE_LIVE}"
         cp -r "dist" "${SITE_LIVE}"
     fi
-    printf "%s" "${COMMIT}" >"/srv/srkbz/static-sites/${DOMAIN}/COMMIT"
 )
 
 rm -rf "${BUILD_WORKSPACE}"
