@@ -1,8 +1,19 @@
 version: '3'
 
+dotenv:
+  - static-sites/{{.DOMAIN}}.env
+
 tasks:
   default:
     deps: [workdir, ':caddy']
+
+  caddy-config:
+    deps: [':caddy']
+    cmds:
+      - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
+      - systemctl reload caddy
+    sources:
+      - '{{.TASKFILE_DIR}}/Caddyfile'
 
   workdir:
     cmds:
