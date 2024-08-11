@@ -2,6 +2,11 @@ version: '3'
 
 tasks:
   default:
-    deps: [':caddy']
+    deps: [workdir, ':caddy']
+
+  workdir:
     cmds:
-      - echo hello {{.DOMAIN}}
+      - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/live
+      - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/builds
+    status:
+      - '[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]'
