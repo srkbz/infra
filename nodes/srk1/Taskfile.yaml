@@ -37,6 +37,6 @@ tasks:
     deps:
       - static-site-sirikon.me
       - static-site-osoondo.com
-      - static-egin.sirikon.me
-      - static-astenagusia.eus
-      - static-2048.sirikon.me
+      - static-site-egin.sirikon.me
+      - static-site-astenagusia.eus
+      - static-site-2048.sirikon.me
