@@ -2,14 +2,14 @@ version: '3'
 
 tasks:
   default:
-    deps: [workdir, caddy-config]
+    deps: [build, caddy-config]
 
   build:
     dotenv:
       - static-sites/{{.DOMAIN}}.env
     sources:
       - static-sites/{{.DOMAIN}}.env
-    deps: [':docker']
+    deps: [workdir, ':docker']
     cmds:
       - '{{.TASKFILE_DIR}}/build-site'
 
