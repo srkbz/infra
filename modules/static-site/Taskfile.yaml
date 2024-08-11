@@ -4,6 +4,15 @@ tasks:
   default:
     deps: [workdir, caddy-config]
 
+  build:
+    dotenv:
+      - static-sites/{{.DOMAIN}}.env
+    sources:
+      - static-sites/{{.DOMAIN}}.env
+    deps: [':docker']
+    cmds:
+      - '{{.TASKFILE_DIR}}/build-site'
+
   caddy-config:
     dotenv:
       - static-sites/{{.DOMAIN}}.env
@@ -12,6 +21,7 @@ tasks:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
       - systemctl reload caddy
     sources:
+      - static-sites/{{.DOMAIN}}.env
       - '{{.TASKFILE_DIR}}/Caddyfile'
 
   workdir:
