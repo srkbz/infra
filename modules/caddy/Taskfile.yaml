@@ -5,6 +5,17 @@ vars:
 
 tasks:
   default:
+    deps: [configure]
+
+  configure:
+    deps: [install]
+    cmds:
+      - mkdir -p /etc/caddy/conf.d
+      - cp {{.TASKFILE_DIR}}/Caddyfile /etc/caddy/Caddyfile
+    sources:
+      - '{{.TASKFILE_DIR}}/Caddyfile'
+
+  install:
     deps: [deb]
     cmds:
       - mkdir -p .cache/apt
