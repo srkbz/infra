@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+export SRKBZ_INFRA_ROOT
 
 TASK_VERSION="3.38.0"
 
@@ -18,7 +19,7 @@ function ensure-task {
 }
 
 function task-path {
-    printf "%s" "${ROOT}/.cache/task/${TASK_VERSION}/task"
+    printf "%s" "${SRKBZ_INFRA_ROOT}/.cache/task/${TASK_VERSION}/task"
 }
 
 main "$@"
