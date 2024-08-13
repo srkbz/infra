@@ -7,7 +7,7 @@ SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 export SRKBZ_INFRA_ROOT
 
 APPLY_TRIGGER="/srv/srkbz/triggers/APPLY"
-LOCK_FILE="$(pwd)/.cache/taskw"
+LOCK_FILE="$(pwd)/.cache/taskw/lock"
 
 function main {
     if [ -f "${APPLY_TRIGGER}" ]; then
