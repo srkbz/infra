@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   default:
-    deps: [triggers-dir]
+    deps: [triggers]
     cmds:
       - cat {{.TASKFILE_DIR}}/srkbz-infra.service | envsubst > /etc/systemd/system/srkbz-infra.service
       - cat {{.TASKFILE_DIR}}/srkbz-infra.path | envsubst > /etc/systemd/system/srkbz-infra.path
