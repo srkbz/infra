@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  default:
+    env:
+      SRKBZ_INFRA_ROOT: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - cat {{.TASKFILE_DIR}}/srkbz-infra.service | envsubst > /etc/systemd/system/srkbz-infra.service
+      - cat {{.TASKFILE_DIR}}/srkbz-infra.path | envsubst > /etc/systemd/system/srkbz-infra.path
+      - systemctl daemon-reload
+      - systemctl enable srkbz-infra.path
+      - systemctl start srkbz-infra.path
+    sources:
+      - '{{.TASKFILE_DIR}}/srkbz-infra.path'
+      - '{{.TASKFILE_DIR}}/srkbz-infra.service'

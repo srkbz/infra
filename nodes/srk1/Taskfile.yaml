@@ -3,6 +3,7 @@ version: '3'
 output: prefixed
 
 includes:
+  install-as-service: ../../modules/install-as-service
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
@@ -45,6 +46,7 @@ includes:
 tasks:
   default:
     deps:
+      - install-as-service
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
