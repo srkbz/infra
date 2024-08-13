@@ -17,7 +17,16 @@ tasks:
     deps: [triggers-dir]
 
   triggers-dir:
+    deps: [triggers-group]
     cmds:
       - mkdir -p /srv/srkbz/triggers
+      - chown root:srkbz-infra-triggers /srv/srkbz/triggers
+      - chmod --recursive 775 /srv/srkbz/triggers
     status:
       - \[ -d /srv/srkbz/triggers ]
+
+  triggers-group:
+    cmds:
+      - groupadd --force srkbz-infra-triggers
+    status:
+      - cat /etc/group | grep srkbz-infra-triggers
