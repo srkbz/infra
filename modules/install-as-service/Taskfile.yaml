@@ -13,8 +13,17 @@ tasks:
       - '{{.TASKFILE_DIR}}/srkbz-infra.path'
       - '{{.TASKFILE_DIR}}/srkbz-infra.service'
 
+  triggers:
+    deps: [triggers-dir, remove-apply-trigger]
+
   triggers-dir:
     cmds:
       - mkdir -p /srv/srkbz/triggers
     status:
       - \[ -d /srv/srkbz/triggers ]
+
+  remove-apply-trigger:
+    cmds:
+      - rm /srv/srkbz/triggers/APPLY
+    status:
+      - \[ ! -f /srv/srkbz/triggers/APPLY ]
