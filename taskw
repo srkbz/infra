@@ -7,6 +7,9 @@ export SRKBZ_INFRA_ROOT
 TASK_VERSION="3.38.0"
 
 function main {
+    if [ -f /srv/srkbz/triggers/APPLY ]; then
+        rm /srv/srkbz/triggers/APPLY
+    fi
     ensure-task
     cd "nodes/$(hostname)"
     exec "$(task-path)" "$@"
