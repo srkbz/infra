@@ -7,14 +7,18 @@ SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 export SRKBZ_INFRA_ROOT
 
 APPLY_TRIGGER="/srv/srkbz/triggers/APPLY"
+LOCK_FILE="$(pwd)/.cache/taskw"
 
 function main {
     if [ -f "${APPLY_TRIGGER}" ]; then
         rm "${APPLY_TRIGGER}"
     fi
     ensure-task
-    cd "nodes/$(hostname)"
-    exec "$(task-path)" "$@"
+    (
+        cd "nodes/$(hostname)"
+        mkdir -p "$(dirname "${LOCK_FILE}")"
+        exec flock "${LOCK_FILE}" "$(task-path)" "$@"
+    )
 }
 
 function ensure-task {
