@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+TASK_VERSION="3.38.0"
+
 SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 export SRKBZ_INFRA_ROOT
 
-TASK_VERSION="3.38.0"
+APPLY_TRIGGER="/srv/srkbz/triggers/APPLY"
 
 function main {
-    if [ -f /srv/srkbz/triggers/APPLY ]; then
-        rm /srv/srkbz/triggers/APPLY
+    if [ -f "${APPLY_TRIGGER}" ]; then
+        rm "${APPLY_TRIGGER}"
     fi
     ensure-task
-    cd "nodes/$(hostname)"
-    exec "$(task-path)" "$@"
+    exec "$(task-path)" --dir "nodes/$(hostname)" "$@"
 }
 
 function ensure-task {
     if [ ! -f "$(task-path)" ]; then
-        sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "$(dirname "$(task-path)")" "v${TASK_VERSION}"
+        sh -c "$(curl --location https://taskfile.dev/install.sh)" \
+            -- -d -b "$(dirname "$(task-path)")" "v${TASK_VERSION}"
     fi
 }
 
