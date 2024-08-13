@@ -2,6 +2,7 @@ version: '3'
 
 tasks:
   default:
+    deps: [triggers-dir]
     env:
       SRKBZ_INFRA_ROOT: '{{.USER_WORKING_DIR}}'
     cmds:
@@ -13,3 +14,9 @@ tasks:
     sources:
       - '{{.TASKFILE_DIR}}/srkbz-infra.path'
       - '{{.TASKFILE_DIR}}/srkbz-infra.service'
+
+  triggers-dir:
+    cmds:
+      - mkdir -p /srv/srkbz/triggers
+    status:
+      - \[ -d /srv/srkbz/triggers ]
