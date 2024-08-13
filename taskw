@@ -13,7 +13,8 @@ function main {
         rm "${APPLY_TRIGGER}"
     fi
     ensure-task
-    exec "$(task-path)" --dir "nodes/$(hostname)" "$@"
+    cd "nodes/$(hostname)"
+    exec "$(task-path)" "$@"
 }
 
 function ensure-task {
