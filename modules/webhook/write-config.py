@@ -11,4 +11,5 @@ if isdir(".cache/webhook/conf"):
         with open(item_path, "r") as f:
             webhooks = [*webhooks, *json.load(f)]
 
-print(webhooks)
+with open("/etc/webhook.conf", "w") as f:
+    json.dump(f, indent=2)
