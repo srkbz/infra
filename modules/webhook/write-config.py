@@ -13,3 +13,4 @@ if isdir(".cache/webhook/conf"):
 
 with open("/etc/webhook.conf", "w") as f:
     json.dump(webhooks, f, indent=2)
+    f.write("\n")

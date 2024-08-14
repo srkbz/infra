@@ -1,16 +1,16 @@
-version: '3'
+version: "3"
 
 tasks:
   default:
     deps: [build, caddy-config]
 
   build:
-    deps: [workdir, ':docker', target-commit]
+    deps: [workdir, ":docker", target-commit]
     env:
-      DOMAIN: '{{.DOMAIN}}'
-      REPOSITORY: '{{.REPOSITORY}}'
+      DOMAIN: "{{.DOMAIN}}"
+      REPOSITORY: "{{.REPOSITORY}}"
     cmds:
-      - '{{.TASKFILE_DIR}}/build-site.sh'
+      - "{{.TASKFILE_DIR}}/build-site.sh"
     status:
       - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT' ]
       - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT')" == "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT')" ]
@@ -20,29 +20,35 @@ tasks:
       - task: update-target-commit
     status:
       - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT' ]
-  
+
   update-target-commit:
-    deps: [workdir, ':docker']
+    deps: [workdir, ":docker"]
     env:
-      DOMAIN: '{{.DOMAIN}}'
-      REPOSITORY: '{{.REPOSITORY}}'
-      BRANCH: '{{.BRANCH}}'
+      DOMAIN: "{{.DOMAIN}}"
+      REPOSITORY: "{{.REPOSITORY}}"
+      BRANCH: "{{.BRANCH}}"
     cmds:
-      - '{{.TASKFILE_DIR}}/update-target-commit.sh'
+      - "{{.TASKFILE_DIR}}/update-target-commit.sh"
 
   caddy-config:
-    deps: [':caddy']
+    deps: [":caddy"]
     env:
-      DOMAIN: '{{.DOMAIN}}'
+      DOMAIN: "{{.DOMAIN}}"
     cmds:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
       - systemctl reload caddy
     sources:
-      - '{{.TASKFILE_DIR}}/Caddyfile'
+      - "{{.TASKFILE_DIR}}/Caddyfile"
 
   workdir:
     cmds:
       - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/live
       - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/builds
     status:
-      - '[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]'
+      - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]"
+
+  webhook-config:
+    cmds:
+      - "{{.TASKFILE_DIR}}/webhook-build.py"
+    sources:
+      - "{{.TASKFILE_DIR}}/webhook-build.py"
