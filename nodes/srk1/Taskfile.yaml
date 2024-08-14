@@ -46,9 +46,12 @@ includes:
 tasks:
   default:
     deps:
+      - webhook
       - infra-service
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
       - static-site-astenagusia.eus
       - static-site-2048.sirikon.me
+    cmds:
+      - task: webhook:after-all
