@@ -2,8 +2,18 @@ version: '3'
 
 tasks:
   default:
+    deps: [package]
+
+  package:
     cmds:
       - mkdir -p .cache/apt/lock
       - flock .cache/apt/lock apt-get install -y webhook
     status:
       - command -v webhook
+
+  after-all:
+    cmds:
+      - '{{.TASKFILE_DIR}}/write-config.py'
+    sources:
+      - '{{.TASKFILE_DIR}}/write-config.py'
+      - .cache/webhook/conf/*
