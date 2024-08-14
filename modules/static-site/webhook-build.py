@@ -5,6 +5,7 @@ from os import environ, makedirs
 
 DOMAIN = environ.get("DOMAIN")
 BRANCH = environ.get("BRANCH")
+WEBHOOK_SECRET = environ.get("WEBHOOK_SECRET")
 TASKFILE_DIR = environ.get("TASKFILE_DIR")
 SRKBZ_INFRA_ROOT = environ.get("SRKBZ_INFRA_ROOT")
 
@@ -22,7 +23,7 @@ with open(f".cache/webhook/conf/static-site_{DOMAIN}.json", "w") as f:
                         {
                             "match": {
                                 "type": "payload-hmac-sha1",
-                                "secret": "secret",
+                                "secret": WEBHOOK_SECRET,
                                 "parameter": {
                                     "source": "header",
                                     "name": "X-Hub-Signature",

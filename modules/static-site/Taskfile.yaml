@@ -48,6 +48,8 @@ tasks:
       - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]"
 
   webhook-config:
+    dotenv:
+      - "{{.USER_WORKING_DIR}}/static-sites/{{.DOMAIN}}.env"
     env:
       DOMAIN: "{{.DOMAIN}}"
       TASKFILE_DIR: "{{.TASKFILE_DIR}}"
