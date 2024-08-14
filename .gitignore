@@ -1,3 +1,3 @@
 **/.cache
 **/.task
-**/*.secrets.env
+**/nodes/*/secrets
