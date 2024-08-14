@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 tasks:
   default:
@@ -10,11 +10,11 @@ tasks:
       - systemctl enable srkbz-infra.path
       - systemctl start srkbz-infra.path
     sources:
-      - '{{.TASKFILE_DIR}}/srkbz-infra.path'
-      - '{{.TASKFILE_DIR}}/srkbz-infra.service'
+      - "{{.TASKFILE_DIR}}/srkbz-infra.path"
+      - "{{.TASKFILE_DIR}}/srkbz-infra.service"
 
   triggers:
-    deps: [triggers-dir]
+    deps: [triggers-dir, remove-apply-trigger]
 
   triggers-dir:
     deps: [triggers-group]
@@ -30,3 +30,9 @@ tasks:
       - groupadd --force srkbz-infra-triggers
     status:
       - cat /etc/group | grep srkbz-infra-triggers
+
+  remove-apply-trigger:
+    cmds:
+      - rm /srv/srkbz/triggers/APPLY
+    status:
+      - \[ ! -f /srv/srkbz/triggers/APPLY ]

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 output: prefixed
 
@@ -14,28 +14,28 @@ includes:
       DOMAIN: sirikon.me
       REPOSITORY: https://github.com/sirikon/sirikon.me.git
       BRANCH: master
-  
+
   static-site-osoondo.com:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: osoondo.com
       REPOSITORY: https://github.com/sirikon/osoondo.com.git
       BRANCH: master
-  
+
   static-site-egin.sirikon.me:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: egin.sirikon.me
       REPOSITORY: https://github.com/sirikon/egin.git
       BRANCH: master
-  
+
   static-site-astenagusia.eus:
     taskfile: ../../modules/static-site
     vars:
       DOMAIN: astenagusia.eus
       REPOSITORY: https://github.com/sirikon/astenagusia.git
       BRANCH: master
-  
+
   static-site-2048.sirikon.me:
     taskfile: ../../modules/static-site
     vars:
