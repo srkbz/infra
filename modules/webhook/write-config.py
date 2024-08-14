@@ -12,4 +12,4 @@ if isdir(".cache/webhook/conf"):
             webhooks = [*webhooks, *json.load(f)]
 
 with open("/etc/webhook.conf", "w") as f:
-    json.dump(f, indent=2)
+    json.dump(webhooks, f, indent=2)
