@@ -9,6 +9,9 @@ WEBHOOK_SECRET = environ.get("WEBHOOK_SECRET")
 TASKFILE_DIR = environ.get("TASKFILE_DIR")
 SRKBZ_INFRA_ROOT = environ.get("SRKBZ_INFRA_ROOT")
 
+if WEBHOOK_SECRET is None:
+    raise Exception("WEBHOOK_SECRET is not configured")
+
 makedirs(".cache/webhook/conf", exist_ok=True)
 with open(f".cache/webhook/conf/static-site_{DOMAIN}.json", "w") as f:
     json.dump(
