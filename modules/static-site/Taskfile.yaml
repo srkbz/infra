@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
   default:
-    deps: [build, caddy-config]
+    deps: [build, caddy-config, webhook-config]
 
   build:
     deps: [workdir, ":docker", target-commit]

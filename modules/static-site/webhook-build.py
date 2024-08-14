@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import json
-from os import environ
+from os import environ, makedirs
 
 DOMAIN = environ.get("DOMAIN")
 TASKFILE_DIR = environ.get("TASKFILE_DIR")
 SRKBZ_INFRA_ROOT = environ.get("SRKBZ_INFRA_ROOT")
 
+makedirs(".cache/webhook/conf", exist_ok=True)
 with open(f".cache/webhook/conf/static-site_{DOMAIN}.json") as f:
     json.dump(
         [
