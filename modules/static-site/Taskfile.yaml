@@ -48,6 +48,10 @@ tasks:
       - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]"
 
   webhook-config:
+    env:
+      DOMAIN: "{{.DOMAIN}}"
+      TASKFILE_DIR: "{{.TASKFILE_DIR}}"
+      BRANCH: "{{.BRANCH}}"
     cmds:
       - "{{.TASKFILE_DIR}}/webhook-build.py"
     sources:

@@ -4,11 +4,12 @@ import json
 from os import environ, makedirs
 
 DOMAIN = environ.get("DOMAIN")
+BRANCH = environ.get("BRANCH")
 TASKFILE_DIR = environ.get("TASKFILE_DIR")
 SRKBZ_INFRA_ROOT = environ.get("SRKBZ_INFRA_ROOT")
 
 makedirs(".cache/webhook/conf", exist_ok=True)
-with open(f".cache/webhook/conf/static-site_{DOMAIN}.json") as f:
+with open(f".cache/webhook/conf/static-site_{DOMAIN}.json", "w") as f:
     json.dump(
         [
             {
@@ -31,7 +32,7 @@ with open(f".cache/webhook/conf/static-site_{DOMAIN}.json") as f:
                         {
                             "match": {
                                 "type": "value",
-                                "value": "refs/heads/master",
+                                "value": f"refs/heads/{BRANCH}",
                                 "parameter": {"source": "payload", "name": "ref"},
                             }
                         },
