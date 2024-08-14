@@ -49,7 +49,7 @@ tasks:
 
   webhook-config:
     dotenv:
-      - "{{.USER_WORKING_DIR}}/static-sites/{{.DOMAIN}}.env"
+      - "{{.USER_WORKING_DIR}}/static-sites/{{.DOMAIN}}.secrets.env"
     env:
       DOMAIN: "{{.DOMAIN}}"
       TASKFILE_DIR: "{{.TASKFILE_DIR}}"
@@ -58,3 +58,4 @@ tasks:
       - "{{.TASKFILE_DIR}}/webhook-build.py"
     sources:
       - "{{.TASKFILE_DIR}}/webhook-build.py"
+      - "{{.USER_WORKING_DIR}}/static-sites/{{.DOMAIN}}.secrets.env"

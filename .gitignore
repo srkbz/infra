@@ -1,2 +1,3 @@
 **/.cache
 **/.task
+**/*.secrets.env
