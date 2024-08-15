@@ -3,9 +3,10 @@ version: "3"
 tasks:
   package:
     cmds:
-      - apt-get install minidlna
+      - mkdir -p .cache/apt
+      - flock .cache/apt/lock apt-get install -y minidlna
     status:
-      - "[ -f /usr/sbin/minidlnad ]"
+      - test -f /usr/sbin/minidlnad
 
   configure:
     deps: [package]
@@ -14,3 +15,5 @@ tasks:
       - systemctl restart minidlna.service
     sources:
       - "{{.TASKFILE_DIR}}/minidlna.conf"
+    status:
+      - test -f /etc/minidlna.conf

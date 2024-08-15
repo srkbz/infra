@@ -12,7 +12,7 @@ tasks:
     cmds:
       - "{{.TASKFILE_DIR}}/build-site.sh"
     status:
-      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT' ]
+      - test -f '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT'
       - \[ "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT')" == "$(cat '/srv/srkbz/static-sites/{{.DOMAIN}}/LIVE_COMMIT')" ]
 
   target-commit:
@@ -24,7 +24,7 @@ tasks:
     cmds:
       - "{{.TASKFILE_DIR}}/update-target-commit.sh"
     status:
-      - \[ -f '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT' ]
+      - test -f '/srv/srkbz/static-sites/{{.DOMAIN}}/TARGET_COMMIT'
 
   caddy-config:
     deps: [":caddy"]
@@ -36,15 +36,15 @@ tasks:
     sources:
       - "{{.TASKFILE_DIR}}/Caddyfile"
     status:
-      - \[ -f '/etc/caddy/conf.d/{{.DOMAIN}}.caddyfile' ]
+      - test -f '/etc/caddy/conf.d/{{.DOMAIN}}.caddyfile'
 
   workdir:
     cmds:
       - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/live
       - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/builds
     status:
-      - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}}/live ]"
-      - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}}/builds ]"
+      - test -d /srv/srkbz/static-sites/{{.DOMAIN}}/live
+      - test -d /srv/srkbz/static-sites/{{.DOMAIN}}/builds
 
   webhook-config:
     deps: [":secrets"]
@@ -60,4 +60,4 @@ tasks:
       - "{{.TASKFILE_DIR}}/webhook-build.py"
       - "{{.USER_WORKING_DIR}}/secrets/static-sites/{{.DOMAIN}}.env"
     status:
-      - \[ -f '.cache/webhook/conf/static-site_{{.DOMAIN}}.json' ]
+      - test -f '.cache/webhook/conf/static-site_{{.DOMAIN}}.json'

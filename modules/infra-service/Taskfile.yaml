@@ -26,7 +26,7 @@ tasks:
       - chown root:srkbz-infra-triggers /srv/srkbz/triggers
       - chmod --recursive 775 /srv/srkbz/triggers
     status:
-      - \[ -d /srv/srkbz/triggers ]
+      - test -d /srv/srkbz/triggers
 
   triggers-group:
     cmds:

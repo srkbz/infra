@@ -1,11 +1,12 @@
-version: '3'
+version: "3"
 
 tasks:
   package:
     cmds:
-      - apt-get install samba
+      - mkdir -p .cache/apt
+      - flock .cache/apt/lock apt-get install -y samba
     status:
-      - '[ -f /usr/sbin/smbd ]'
+      - test -f /usr/sbin/smbd
 
   configure:
     deps: [package]
@@ -13,4 +14,6 @@ tasks:
       - cp '{{.TASKFILE_DIR}}/smb.conf' /etc/samba/smb.conf
       - systemctl restart smbd.service
     sources:
-      - '{{.TASKFILE_DIR}}/smb.conf'
+      - "{{.TASKFILE_DIR}}/smb.conf"
+    status:
+      - test -f /etc/samba/smb.conf

@@ -15,4 +15,4 @@ tasks:
     cmds:
       - mkdir -p /srv/public
     status:
-      - "[ -d /srv/public ]"
+      - test -d /srv/public

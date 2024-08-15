@@ -19,4 +19,4 @@ tasks:
       - "{{.TASKFILE_DIR}}/write-config.py"
       - .cache/webhook/conf/*
     status:
-      - \[ -f /etc/webhook.conf ]
+      - test -f /etc/webhook.conf
