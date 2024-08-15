@@ -33,6 +33,6 @@ tasks:
 
   remove-apply-trigger:
     cmds:
-      - rm /srv/srkbz/triggers/APPLY
+      - rm -f /srv/srkbz/triggers/APPLY
     status:
       - \[ ! -f /srv/srkbz/triggers/APPLY ]
