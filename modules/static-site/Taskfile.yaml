@@ -48,6 +48,7 @@ tasks:
       - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}} ]"
 
   webhook-config:
+    deps: [":secrets"]
     dotenv:
       - "{{.USER_WORKING_DIR}}/secrets/static-sites/{{.DOMAIN}}.env"
     env:

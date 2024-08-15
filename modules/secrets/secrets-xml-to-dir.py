@@ -54,7 +54,7 @@ class SecretsXMLWalker:
                     file = join(*breadcrumb, entry_title + ".env")
                     if file not in self._files:
                         self._files[file] = {}
-                    self._files[file][key] = value
+                    self._files[file][key.upper()] = value
 
 
 walker = SecretsXMLWalker(argv[1])
