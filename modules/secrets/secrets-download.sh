@@ -2,7 +2,7 @@
 set -euo pipefail
 
 rm -rf ./*
-chmod 700 .
+chmod -R 700 .
 umask 077
 curl -Lo "secrets.zip" "${SECRETS_URL}"
 unzip -o 'secrets.zip' || true
