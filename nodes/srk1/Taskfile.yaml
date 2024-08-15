@@ -1,7 +1,7 @@
 version: "3"
 
 output: prefixed
-run: once
+run: when_changed
 
 includes:
   secrets: ../../modules/secrets
