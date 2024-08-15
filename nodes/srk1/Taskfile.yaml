@@ -3,6 +3,7 @@ version: "3"
 output: prefixed
 
 includes:
+  secrets: ../../modules/secrets
   infra-service: ../../modules/infra-service
   docker: ../../modules/docker
   caddy: ../../modules/caddy
@@ -46,6 +47,7 @@ includes:
 tasks:
   default:
     deps:
+      - secrets
       - webhook
       - infra-service
       - static-site-sirikon.me
