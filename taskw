@@ -6,12 +6,12 @@ TASK_VERSION="3.38.0"
 SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 export SRKBZ_INFRA_ROOT
 
-LOCK_FILE="$(pwd)/.cache/taskw/lock"
+LOCK_FILE="${SRKBZ_INFRA_ROOT}/.cache/taskw/lock"
 
 function main {
     ensure-task
     (
-        cd "nodes/$(hostname)"
+        cd "${SRKBZ_INFRA_ROOT}/nodes/$(hostname)"
         mkdir -p "$(dirname "${LOCK_FILE}")"
         exec flock "${LOCK_FILE}" "$(task-path)" "$@"
     )
