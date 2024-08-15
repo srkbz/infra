@@ -13,8 +13,8 @@ tasks:
       - "{{.TASKFILE_DIR}}/srkbz-infra.path"
       - "{{.TASKFILE_DIR}}/srkbz-infra.service"
     status:
-      - /etc/systemd/system/srkbz-infra.path
-      - /etc/systemd/system/srkbz-infra.service
+      - test -f /etc/systemd/system/srkbz-infra.path
+      - test -f /etc/systemd/system/srkbz-infra.service
 
   triggers:
     deps: [triggers-dir, remove-apply-trigger]
