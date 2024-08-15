@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 
 tasks:
   default:
     cmds:
-      - '{{.TASKFILE_DIR}}/install-docker-debian.sh'
+      - "{{.TASKFILE_DIR}}/install-docker-debian.sh"
     status:
       - command -v docker
 

@@ -1,7 +1,7 @@
-version: '3'
+version: "3"
 
 vars:
-  CADDY_VERSION: '2.8.4'
+  CADDY_VERSION: "2.8.4"
 
 tasks:
   default:
@@ -13,7 +13,7 @@ tasks:
       - mkdir -p /etc/caddy/conf.d
       - cp {{.TASKFILE_DIR}}/Caddyfile /etc/caddy/Caddyfile
     sources:
-      - '{{.TASKFILE_DIR}}/Caddyfile'
+      - "{{.TASKFILE_DIR}}/Caddyfile"
 
   install:
     deps: [deb]
@@ -22,11 +22,11 @@ tasks:
       - flock .cache/apt/lock apt-get install -y './.cache/caddy/{{.CADDY_VERSION}}/caddy.deb'
     status:
       - command -v caddy
-      - '[[ "$(caddy --version)" == "v{{.CADDY_VERSION}} "* ]]' 
+      - '[[ "$(caddy --version)" == "v{{.CADDY_VERSION}} "* ]]'
 
   deb:
     cmds:
       - mkdir -p '.cache/caddy/{{.CADDY_VERSION}}'
       - curl -L -o '.cache/caddy/{{.CADDY_VERSION}}/caddy.deb' 'https://github.com/caddyserver/caddy/releases/download/v{{.CADDY_VERSION}}/caddy_{{.CADDY_VERSION}}_linux_amd64.deb'
     status:
-      - '[ -f .cache/caddy/{{.CADDY_VERSION}}/caddy.deb ]'
+      - "[ -f .cache/caddy/{{.CADDY_VERSION}}/caddy.deb ]"

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 output: prefixed
 
@@ -14,4 +14,4 @@ tasks:
     cmds:
       - mkdir -p /srv/public
     status:
-      - '[ -d /srv/public ]'
+      - "[ -d /srv/public ]"

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 tasks:
   default:
@@ -13,8 +13,8 @@ tasks:
 
   after-all:
     cmds:
-      - '{{.TASKFILE_DIR}}/write-config.py'
+      - "{{.TASKFILE_DIR}}/write-config.py"
       - systemctl restart webhook.service
     sources:
-      - '{{.TASKFILE_DIR}}/write-config.py'
+      - "{{.TASKFILE_DIR}}/write-config.py"
       - .cache/webhook/conf/*
