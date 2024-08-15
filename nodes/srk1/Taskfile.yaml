@@ -1,6 +1,7 @@
 version: "3"
 
 output: prefixed
+run: once
 
 includes:
   secrets: ../../modules/secrets
