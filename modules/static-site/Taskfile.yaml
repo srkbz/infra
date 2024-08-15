@@ -44,7 +44,7 @@ tasks:
       - mkdir -p /srv/srkbz/static-sites/{{.DOMAIN}}/builds
     status:
       - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}}/live ]"
-      - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}}/build ]"
+      - "[ -d /srv/srkbz/static-sites/{{.DOMAIN}}/builds ]"
 
   webhook-config:
     deps: [":secrets"]
