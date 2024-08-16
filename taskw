@@ -2,29 +2,17 @@
 set -euo pipefail
 
 TASK_VERSION="3.38.0"
+TASK_INSTALLER="https://raw.githubusercontent.com/go-task/task/b259edeb65e24f28c41604b9819869aca082d3b6/install-task.sh"
 
-SRKBZ_INFRA_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-export SRKBZ_INFRA_ROOT
+ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+TASK_BIN="${ROOT}/.cache/task/${TASK_VERSION}/task"
+NODE_ROOT="${ROOT}/nodes/$(hostname)"
+NODE_LOCK="${NODE_ROOT}/.cache/taskw/lock"
 
-function main {
-    ensure-task
-    (
-        cd "${SRKBZ_INFRA_ROOT}/nodes/$(hostname)"
-        LOCK_FILE="$(pwd)/.cache/taskw/lock"
-        mkdir -p "$(dirname "${LOCK_FILE}")"
-        exec flock "${LOCK_FILE}" "$(task-path)" "$@"
-    )
-}
-
-function ensure-task {
-    if [ ! -f "$(task-path)" ]; then
-        sh -c "$(curl --location https://taskfile.dev/install.sh)" \
-            -- -d -b "$(dirname "$(task-path)")" "v${TASK_VERSION}"
-    fi
-}
-
-function task-path {
-    printf "%s" "${SRKBZ_INFRA_ROOT}/.cache/task/${TASK_VERSION}/task"
-}
-
-main "$@"
+if [ ! -f "${TASK_BIN}" ]; then
+    sh -c "$(curl "${TASK_INSTALLER}")" \
+        -- -d -b "$(dirname "${TASK_BIN}")" "v${TASK_VERSION}"
+fi
+cd "${NODE_ROOT}"
+mkdir -p "$(dirname "${NODE_LOCK}")"
+SRKBZ_INFRA_ROOT="${ROOT}" exec flock "${NODE_LOCK}" "${TASK_BIN}" "$@"
