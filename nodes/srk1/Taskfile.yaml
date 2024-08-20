@@ -4,7 +4,7 @@ output: prefixed
 run: when_changed
 
 includes:
-  task-service: ../../modules/task-service
+  taskw-service: ../../modules/taskw-service
   secrets: ../../modules/secrets
   docker: ../../modules/docker
   caddy: ../../modules/caddy
@@ -48,7 +48,7 @@ includes:
 tasks:
   default:
     deps:
-      - task-service
+      - taskw-service
       - secrets
       - webhook
       - static-site-sirikon.me
