@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
   default:
-    deps: [package]
+    deps: [package, webhook-conf-dir]
 
   package:
     cmds:
@@ -10,6 +10,12 @@ tasks:
       - flock .cache/apt/lock apt-get install -y webhook
     status:
       - command -v webhook
+
+  webhook-conf-dir:
+    cmds:
+      - mkdir -p .cache/webhook/conf
+    status:
+      - test -d .cache/webhook/conf
 
   after-all:
     cmds:
