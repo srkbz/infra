@@ -23,7 +23,7 @@ tasks:
     deps: [triggers-group]
     cmds:
       - mkdir -p "${TASKW_ROOT}/.state/taskw/triggers"
-      - chown root:srkbz-infra-triggers "${TASKW_ROOT}/.state/taskw/triggers"
+      - chown root:taskw-triggers "${TASKW_ROOT}/.state/taskw/triggers"
       - chmod --recursive 775 "${TASKW_ROOT}/.state/taskw/triggers"
     status:
       - test -d "${TASKW_ROOT}/.state/taskw/triggers"
