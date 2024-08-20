@@ -1,8 +1,0 @@
-[Unit]
-Description=srkbz infra
-After=network.target
-
-[Service]
-Type=oneshot
-ExecStart=${SRKBZ_INFRA_ROOT}/taskw
-WorkingDirectory=${SRKBZ_INFRA_ROOT}

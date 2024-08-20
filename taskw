@@ -4,9 +4,9 @@ set -euo pipefail
 TASK_VERSION="3.38.0"
 TASK_INSTALLER="https://raw.githubusercontent.com/go-task/task/b259edeb65e24f28c41604b9819869aca082d3b6/install-task.sh"
 
-ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-TASK_BIN="${ROOT}/.cache/task/${TASK_VERSION}/task"
-NODE_ROOT="${ROOT}/nodes/$(hostname)"
+TASKW_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+TASK_BIN="${TASKW_ROOT}/.cache/task/${TASK_VERSION}/task"
+NODE_ROOT="${TASKW_ROOT}/nodes/$(hostname)"
 NODE_LOCK="${NODE_ROOT}/.cache/taskw/lock"
 
 if [ ! -f "${TASK_BIN}" ]; then
@@ -15,4 +15,4 @@ if [ ! -f "${TASK_BIN}" ]; then
 fi
 cd "${NODE_ROOT}"
 mkdir -p "$(dirname "${NODE_LOCK}")"
-SRKBZ_INFRA_ROOT="${ROOT}" exec flock "${NODE_LOCK}" "${TASK_BIN}" "$@"
+TASKW_ROOT="${TASKW_ROOT}" exec flock "${NODE_LOCK}" "${TASK_BIN}" "$@"

@@ -1,0 +1,41 @@
+version: "3"
+
+tasks:
+  default:
+    deps: [triggers]
+    cmds:
+      - cat {{.TASKFILE_DIR}}/taskw.service | envsubst > /etc/systemd/system/taskw.service
+      - cat {{.TASKFILE_DIR}}/taskw.path | envsubst > /etc/systemd/system/taskw.path
+      - systemctl daemon-reload
+      - systemctl enable taskw.path
+      - systemctl start taskw.path
+    sources:
+      - "{{.TASKFILE_DIR}}/taskw.path"
+      - "{{.TASKFILE_DIR}}/taskw.service"
+    status:
+      - test -f /etc/systemd/system/taskw.path
+      - test -f /etc/systemd/system/taskw.service
+
+  triggers:
+    deps: [triggers-dir, remove-apply-trigger]
+
+  triggers-dir:
+    deps: [triggers-group]
+    cmds:
+      - mkdir -p "${TASKW_ROOT}/.state/taskw/triggers"
+      - chown root:srkbz-infra-triggers "${TASKW_ROOT}/.state/taskw/triggers"
+      - chmod --recursive 775 "${TASKW_ROOT}/.state/taskw/triggers"
+    status:
+      - test -d "${TASKW_ROOT}/.state/taskw/triggers"
+
+  triggers-group:
+    cmds:
+      - groupadd --force taskw-triggers
+    status:
+      - cat /etc/group | grep taskw-triggers
+
+  remove-apply-trigger:
+    cmds:
+      - rm -f "${TASKW_ROOT}/.state/taskw/triggers/APPLY"
+    status:
+      - \[ ! -f "${TASKW_ROOT}/.state/taskw/triggers/APPLY" ]

@@ -1,0 +1,8 @@
+[Unit]
+Description=taskw
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=${TASKW_ROOT}/taskw
+WorkingDirectory=${TASKW_ROOT}

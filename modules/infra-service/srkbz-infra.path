@@ -1,5 +1,0 @@
-[Path]
-PathExists=/srv/srkbz/triggers/APPLY
-
-[Install]
-WantedBy=multi-user.target

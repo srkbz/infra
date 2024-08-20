@@ -4,8 +4,8 @@ output: prefixed
 run: when_changed
 
 includes:
+  task-service: ../../modules/task-service
   secrets: ../../modules/secrets
-  infra-service: ../../modules/infra-service
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
@@ -48,9 +48,9 @@ includes:
 tasks:
   default:
     deps:
+      - task-service
       - secrets
       - webhook
-      - infra-service
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
