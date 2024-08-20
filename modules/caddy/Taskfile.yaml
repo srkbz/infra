@@ -12,7 +12,6 @@ tasks:
     cmds:
       - mkdir -p /etc/caddy/conf.d
       - cp {{.TASKFILE_DIR}}/Caddyfile /etc/caddy/Caddyfile
-      - systemctl reload caddy
     sources:
       - "{{.TASKFILE_DIR}}/Caddyfile"
     status:
@@ -34,3 +33,10 @@ tasks:
       - curl -L -o '.cache/caddy/{{.CADDY_VERSION}}/caddy.deb' 'https://github.com/caddyserver/caddy/releases/download/v{{.CADDY_VERSION}}/caddy_{{.CADDY_VERSION}}_linux_amd64.deb'
     status:
       - test -f .cache/caddy/{{.CADDY_VERSION}}/caddy.deb
+
+  after-all:
+    cmds:
+      - systemctl reload caddy
+    sources:
+      - /etc/caddy/Caddyfile
+      - /etc/caddy/conf.d/*

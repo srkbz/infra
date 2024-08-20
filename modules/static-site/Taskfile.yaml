@@ -32,7 +32,6 @@ tasks:
       DOMAIN: "{{.DOMAIN}}"
     cmds:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
-      - systemctl reload caddy
     sources:
       - "{{.TASKFILE_DIR}}/Caddyfile"
     status:

@@ -58,3 +58,4 @@ tasks:
       - static-site-2048.sirikon.me
     cmds:
       - task: webhook:after-all
+      - task: caddy:after-all
