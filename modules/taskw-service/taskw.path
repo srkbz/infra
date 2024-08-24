@@ -1,5 +1,5 @@
 [Path]
-PathExists=${TASKW_ROOT}/.state/taskw/triggers/APPLY
+PathExists=${TASKW_ROOT}/.state/taskw/triggers/RUN
 
 [Install]
 WantedBy=multi-user.target

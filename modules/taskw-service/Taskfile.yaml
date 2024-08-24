@@ -17,7 +17,7 @@ tasks:
       - test -f /etc/systemd/system/taskw.service
 
   triggers:
-    deps: [triggers-dir, remove-apply-trigger]
+    deps: [triggers-dir, remove-run-trigger]
 
   triggers-dir:
     deps: [triggers-group]
@@ -34,8 +34,8 @@ tasks:
     status:
       - cat /etc/group | grep taskw-triggers
 
-  remove-apply-trigger:
+  remove-run-trigger:
     cmds:
-      - rm -f "${TASKW_ROOT}/.state/taskw/triggers/APPLY"
+      - rm -f "${TASKW_ROOT}/.state/taskw/triggers/RUN"
     status:
-      - \[ ! -f "${TASKW_ROOT}/.state/taskw/triggers/APPLY" ]
+      - \[ ! -f "${TASKW_ROOT}/.state/taskw/triggers/RUN" ]
