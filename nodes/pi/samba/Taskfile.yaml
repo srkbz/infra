@@ -1,15 +1,8 @@
 version: "3"
 
 tasks:
-  package:
-    cmds:
-      - mkdir -p .cache/apt
-      - flock .cache/apt/lock apt-get install -y samba
-    status:
-      - test -f /usr/sbin/smbd
-
   configure:
-    deps: [package]
+    deps: [package, samba-guest-user]
     cmds:
       - cp '{{.TASKFILE_DIR}}/smb.conf' /etc/samba/smb.conf
       - systemctl restart smbd.service
@@ -17,3 +10,16 @@ tasks:
       - "{{.TASKFILE_DIR}}/smb.conf"
     status:
       - test -f /etc/samba/smb.conf
+
+  package:
+    cmds:
+      - mkdir -p .cache/apt
+      - flock .cache/apt/lock apt-get install -y samba
+    status:
+      - test -f /usr/sbin/smbd
+
+  samba-guest-user:
+    cmds:
+      - adduser --system samba-guest
+    status:
+      - cat /etc/passwd | grep samba-guest
