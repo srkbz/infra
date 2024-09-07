@@ -14,6 +14,6 @@ tasks:
   public-dir:
     cmds:
       - mkdir -p /srv/public
-      - chmod -R 666 /srv/public
+      - chmod -R 777 /srv/public
     status:
       - test -d /srv/public
