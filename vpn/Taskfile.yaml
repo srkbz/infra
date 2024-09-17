@@ -1,0 +1,33 @@
+version: "3"
+
+vars:
+  WG_HOME: /etc/wireguard
+
+  SERVER_WG_ENDPOINT_PORT: "51820"
+  SERVER_WG_INTERFACE_ADDRESS: "10.0.0.1/24"
+
+tasks:
+  home-gateway:
+    deps: [package, keypair, ip-forwarding]
+
+  package:
+    cmds:
+      - mkdir -p .cache/apt/lock
+      - flock .cache/apt/lock apt-get install -y wireguard
+    status:
+      - command -v wg
+
+  keypair:
+    deps: [package]
+    cmds:
+      - umask 077; wg genkey | tee "{{.WG_HOME}}/privatekey" | wg pubkey > "{{.WG_HOME}}/publickey"
+    status:
+      - test -f "{{.WG_HOME}}/privatekey"
+      - test -f "{{.WG_HOME}}/publickey"
+
+  ip-forwarding:
+    cmds:
+      - echo "\n# configured by srkbz/infra\nnet.ipv4.ip_forward=1\n" >>/etc/sysctl.conf
+      - sysctl -p
+    status:
+      - cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
