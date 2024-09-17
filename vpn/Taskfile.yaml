@@ -27,6 +27,7 @@ tasks:
       HOME_GATEWAY_WG_INTERFACE_ADDRESS: "{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}"
     cmds:
       - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | HOME_GATEWAY_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" SERVER_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/server.public-key")" SERVER_PUBLIC_IP="$(cat "{{.WG_HOME}}/peer-data/server.public-ip")" envsubst > "{{.WG_HOME}}/wg0.conf"
+      - chmod 600 "{{.WG_HOME}}/wg0.conf"
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/server.public-key"
       - test -f "{{.WG_HOME}}/peer-data/server.public-ip"
@@ -55,6 +56,7 @@ tasks:
       SERVER_WG_INTERFACE_ADDRESS: "{{.SERVER_WG_INTERFACE_ADDRESS}}"
     cmds:
       - cat '{{.TASKFILE_DIR}}/server-wg0.ini' | SERVER_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" HOME_GATEWAY_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/home-gateway.public-key")" CLIENT_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/client.public-key")" envsubst > "{{.WG_HOME}}/wg0.conf"
+      - chmod 600 "{{.WG_HOME}}/wg0.conf"
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/home-gateway.public-key"
       - test -f "{{.WG_HOME}}/peer-data/client.public-key"
