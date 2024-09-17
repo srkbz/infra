@@ -15,7 +15,8 @@ tasks:
     deps: [home-gateway-config]
     cmds:
       - systemctl enable wg-quick@wg0
-      - systemctl restart wg-quick@wg0
+      - systemctl start wg-quick@wg0
+      - wg syncconf wg0 <(wg-quick strip wg0)
     sources:
       - "{{.WG_HOME}}/wg0.conf"
 
@@ -42,7 +43,8 @@ tasks:
     deps: [server-config]
     cmds:
       - systemctl enable wg-quick@wg0
-      - systemctl restart wg-quick@wg0
+      - systemctl start wg-quick@wg0
+      - wg syncconf wg0 <(wg-quick strip wg0)
     sources:
       - "{{.WG_HOME}}/wg0.conf"
 
