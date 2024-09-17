@@ -10,7 +10,13 @@ vars:
 
 tasks:
   home-gateway:
+    deps: [home-gateway-up]
+
+  home-gateway-up:
     deps: [home-gateway-config]
+    cmds:
+      - systemctl enable wg-quick@wg0
+      - systemctl start wg-quick@wg0
 
   home-gateway-config:
     deps: [peer-data-dir, package, keypair, ip-forwarding]
