@@ -13,7 +13,7 @@ tasks:
     deps: [home-gateway-config]
 
   home-gateway-config:
-    deps: [peer-dir, package, keypair, ip-forwarding]
+    deps: [peer-data-dir, package, keypair, ip-forwarding]
     env:
       WG_PORT: "{{.WG_PORT}}"
       HOME_GATEWAY_WG_INTERFACE_ADDRESS: "{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}"
@@ -37,11 +37,11 @@ tasks:
       - test -f "{{.WG_HOME}}/iface-keys/private"
       - test -f "{{.WG_HOME}}/iface-keys/public"
 
-  peer-dir:
+  peer-data-dir:
     cmds:
-      - mkdir -p "{{.WG_HOME}}/peer-keys/"
+      - mkdir -p "{{.WG_HOME}}/peer-data/"
     status:
-      - test -f "{{.WG_HOME}}/peer-keys/"
+      - test -f "{{.WG_HOME}}/peer-data/"
 
   ip-forwarding:
     cmds:
