@@ -10,10 +10,10 @@ vars:
 
 tasks:
   home-gateway:
-    deps: [package, keypair, ip-forwarding, home-gateway-config]
+    deps: [home-gateway-config]
 
   home-gateway-config:
-    deps: [package, keypair, ip-forwarding]
+    deps: [peer-dir, package, keypair, ip-forwarding]
     env:
       WG_PORT: "{{.WG_PORT}}"
       HOME_GATEWAY_WG_INTERFACE_ADDRESS: "{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}"
@@ -32,10 +32,16 @@ tasks:
   keypair:
     deps: [package]
     cmds:
-      - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/peer-keys/"; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
+      - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
     status:
       - test -f "{{.WG_HOME}}/iface-keys/private"
       - test -f "{{.WG_HOME}}/iface-keys/public"
+
+  peer-dir:
+    cmds:
+      - mkdir -p "{{.WG_HOME}}/peer-keys/"
+    status:
+      - test -f "{{.WG_HOME}}/peer-keys/"
 
   ip-forwarding:
     cmds:
