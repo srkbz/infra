@@ -55,3 +55,4 @@ tasks:
       - sysctl -p
     status:
       - cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
+      - '[ "$(cat /proc/sys/net/ipv4/ip_forward)" == "1" ]'
