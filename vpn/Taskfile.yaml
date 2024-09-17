@@ -32,7 +32,7 @@ tasks:
   keypair:
     deps: [package]
     cmds:
-      - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
+      - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/peer-keys/"; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
     status:
       - test -f "{{.WG_HOME}}/iface-keys/private"
       - test -f "{{.WG_HOME}}/iface-keys/public"
