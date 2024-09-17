@@ -16,6 +16,8 @@ tasks:
     cmds:
       - systemctl enable wg-quick@wg0
       - systemctl start wg-quick@wg0
+    sources:
+      - "{{.WG_HOME}}/wg0.conf"
 
   home-gateway-config:
     deps: [peer-data-dir, package, keypair, ip-forwarding]
@@ -41,6 +43,8 @@ tasks:
     cmds:
       - systemctl enable wg-quick@wg0
       - systemctl start wg-quick@wg0
+    sources:
+      - "{{.WG_HOME}}/wg0.conf"
 
   server-config:
     deps: [peer-data-dir, package, keypair]
