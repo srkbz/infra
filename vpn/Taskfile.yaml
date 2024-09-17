@@ -2,13 +2,19 @@ version: "3"
 
 vars:
   WG_HOME: /etc/wireguard
+  WG_PORT: "51820"
 
-  SERVER_WG_ENDPOINT_PORT: "51820"
   SERVER_WG_INTERFACE_ADDRESS: "10.0.0.1/24"
+
+  HOME_GATEWAY_WG_INTERFACE_ADDRESS: "10.0.0.2/24"
 
 tasks:
   home-gateway:
     deps: [package, keypair, ip-forwarding]
+
+  home-gateway-config:
+    cmds:
+      - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | envsubst > /etc/wireguard/wg0.conf
 
   package:
     cmds:
