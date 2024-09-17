@@ -20,14 +20,14 @@ tasks:
   keypair:
     deps: [package]
     cmds:
-      - umask 077; wg genkey | tee "{{.WG_HOME}}/privatekey" | wg pubkey > "{{.WG_HOME}}/publickey"
+      - bash -c 'umask 077; wg genkey | tee "{{.WG_HOME}}/privatekey" | wg pubkey > "{{.WG_HOME}}/publickey"'
     status:
       - test -f "{{.WG_HOME}}/privatekey"
       - test -f "{{.WG_HOME}}/publickey"
 
   ip-forwarding:
     cmds:
-      - echo "\n# configured by srkbz/infra\nnet.ipv4.ip_forward=1\n" >>/etc/sysctl.conf
+      - printf "%s\n" "# configured by srkbz/infra" "net.ipv4.ip_forward=1" >>/etc/sysctl.conf
       - sysctl -p
     status:
       - cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
