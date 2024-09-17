@@ -5,7 +5,6 @@ vars:
   WG_PORT: "51820"
 
   SERVER_WG_INTERFACE_ADDRESS: "10.0.0.1/24"
-
   HOME_GATEWAY_WG_INTERFACE_ADDRESS: "10.0.0.2/24"
 
 tasks:
@@ -33,6 +32,26 @@ tasks:
       - "{{.WG_HOME}}/iface-keys/private"
       - "{{.WG_HOME}}/peer-data/server.public-key"
       - "{{.WG_HOME}}/peer-data/server.public-ip"
+
+  server-up:
+    deps: [server-config]
+    cmds:
+      - systemctl enable wg-quick@wg0
+      - systemctl start wg-quick@wg0
+
+  server-config:
+    deps: [peer-data-dir, package, keypair]
+    env:
+      WG_PORT: "{{.WG_PORT}}"
+      SERVER_WG_INTERFACE_ADDRESS: "{{.SERVER_WG_INTERFACE_ADDRESS}}"
+    cmds:
+      - cat '{{.TASKFILE_DIR}}/server-wg0.ini' | SERVER_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" HOME_GATEWAY_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/home-gateway.public-key")" envsubst > "{{.WG_HOME}}/wg0.conf"
+    preconditions:
+      - test -f "{{.WG_HOME}}/peer-data/home-gateway.public-key"
+    sources:
+      - "{{.TASKFILE_DIR}}/server-wg0.ini"
+      - "{{.WG_HOME}}/iface-keys/private"
+      - "{{.WG_HOME}}/peer-data/home-gateway.public-key"
 
   package:
     cmds:
