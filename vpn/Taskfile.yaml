@@ -18,7 +18,7 @@ tasks:
       WG_PORT: "{{.WG_PORT}}"
       HOME_GATEWAY_WG_INTERFACE_ADDRESS: "{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}"
     cmds:
-      - HOME_GATEWAY_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" SERVER_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-keys/server")" cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | envsubst > "{{.WG_HOME}}/wg0.conf"
+      - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | HOME_GATEWAY_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" SERVER_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-keys/server")" envsubst > "{{.WG_HOME}}/wg0.conf"
     preconditions:
       - test -f "{{.WG_HOME}}/peer-keys/server"
 
