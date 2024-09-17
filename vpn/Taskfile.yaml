@@ -10,9 +10,10 @@ vars:
 
 tasks:
   home-gateway:
-    deps: [package, keypair, ip-forwarding]
+    deps: [package, keypair, ip-forwarding, home-gateway-config]
 
   home-gateway-config:
+    deps: [package, keypair, ip-forwarding]
     cmds:
       - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | envsubst > /etc/wireguard/wg0.conf
 
