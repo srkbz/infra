@@ -14,8 +14,11 @@ tasks:
 
   home-gateway-config:
     deps: [package, keypair, ip-forwarding]
+    env:
+      WG_PORT: '{{.WG_PORT}}'
+      HOME_GATEWAY_WG_INTERFACE_ADDRESS: '{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}'
     cmds:
-      - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | envsubst > /etc/wireguard/wg0.conf
+      - HOME_GATEWAY_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" SERVER_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-keys/server")" cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | envsubst > "{{.WG_HOME}}/wg0.conf"
 
   package:
     cmds:
@@ -27,10 +30,10 @@ tasks:
   keypair:
     deps: [package]
     cmds:
-      - bash -c 'umask 077; wg genkey | tee "{{.WG_HOME}}/privatekey" | wg pubkey > "{{.WG_HOME}}/publickey"'
+      - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
     status:
-      - test -f "{{.WG_HOME}}/privatekey"
-      - test -f "{{.WG_HOME}}/publickey"
+      - test -f "{{.WG_HOME}}/iface-keys/private"
+      - test -f "{{.WG_HOME}}/iface-keys/public"
 
   ip-forwarding:
     cmds:
