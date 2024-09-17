@@ -22,6 +22,11 @@ tasks:
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/server.public-key"
       - test -f "{{.WG_HOME}}/peer-data/server.public-ip"
+    sources:
+      - "{{.TASKFILE_DIR}}/home-gateway-wg0.ini"
+      - "{{.WG_HOME}}/iface-keys/private"
+      - "{{.WG_HOME}}/peer-data/server.public-key"
+      - "{{.WG_HOME}}/peer-data/server.public-ip"
 
   package:
     cmds:
@@ -42,7 +47,7 @@ tasks:
     cmds:
       - mkdir -p "{{.WG_HOME}}/peer-data/"
     status:
-      - test -f "{{.WG_HOME}}/peer-data/"
+      - test -d "{{.WG_HOME}}/peer-data/"
 
   ip-forwarding:
     cmds:
