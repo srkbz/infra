@@ -33,6 +33,9 @@ tasks:
       - "{{.WG_HOME}}/peer-data/server.public-key"
       - "{{.WG_HOME}}/peer-data/server.public-ip"
 
+  server:
+    deps: [server-up]
+
   server-up:
     deps: [server-config]
     cmds:

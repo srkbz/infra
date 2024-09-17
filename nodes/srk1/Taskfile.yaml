@@ -9,6 +9,7 @@ includes:
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
+  vpn: ../../vpn
 
   static-site-sirikon.me:
     taskfile: ../../modules/static-site
@@ -56,6 +57,7 @@ tasks:
       - static-site-egin.sirikon.me
       - static-site-astenagusia.eus
       - static-site-2048.sirikon.me
+      - vpn:server
     cmds:
       - task: webhook:after-all
       - task: caddy:after-all
