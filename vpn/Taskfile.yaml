@@ -19,7 +19,7 @@ tasks:
       - "{{.WG_HOME}}/wg0.conf"
 
   config:
-    deps: [peer-data-dir, package, keypair]
+    deps: [peer-data-dir, package, keypair, ip-forwarding]
     dir: "{{.WG_HOME}}"
     cmds:
       - "{{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}' > wg0.conf"
