@@ -41,20 +41,20 @@ def server_config():
     print("[Interface]")
     print(f"Address = {SERVER_IP}/{VPN_NETWORK.prefixlen}")
     print(f"ListenPort = {WG_PORT}")
-    print("PrivateKey = " + read_file("iface-keys/private"))
+    print("PrivateKey = " + read_file("iface-keys/private").strip())
     print("")
     print("PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT")
     print("PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT")
     print("")
     print("# Home Gateway")
     print("[Peer]")
-    print("PublicKey = " + read_file("peer-data/home-gateway.public-key"))
+    print("PublicKey = " + read_file("peer-data/home-gateway.public-key").strip())
     print(f"AllowedIPs = {HOME_GATEWAY_IP}/32,{HOME_NETWORK}")
     print("")
     for name, ip in CLIENTS:
         print(f"# Client: {name}")
         print("[Peer]")
-        print("PublicKey = " + read_file(f"peer-data/{name}.public-key"))
+        print("PublicKey = " + read_file(f"peer-data/{name}.public-key").strip())
         print(f"AllowedIPs = {ip}/32")
 
 
@@ -62,7 +62,7 @@ def home_gateway_config():
     print("[Interface]")
     print(f"Address = {HOME_GATEWAY_IP}/{VPN_NETWORK.prefixlen}")
     print(f"ListenPort = {WG_PORT}")
-    print("PrivateKey = " + read_file("iface-keys/private"))
+    print("PrivateKey = " + read_file("iface-keys/private").strip())
     print("")
     print(
         "PostUp = "
@@ -87,7 +87,7 @@ def home_gateway_config():
     print("")
     print("# Server")
     print("[Peer]")
-    print("PublicKey = " + read_file(f"peer-data/server.public-key"))
+    print("PublicKey = " + read_file(f"peer-data/server.public-key").strip())
     print(f"AllowedIPs = {VPN_NETWORK}")
     print(f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}")
     print("PersistentKeepalive = 15")
