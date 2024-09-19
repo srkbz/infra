@@ -13,7 +13,7 @@ includes:
 
 tasks:
   default:
-    deps: [public-dir, minidlna:configure, samba:configure, vpn:home-gateway]
+    deps: [public-dir, minidlna:configure, samba:configure, vpn]
 
   public-dir:
     cmds:

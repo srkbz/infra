@@ -60,7 +60,7 @@ tasks:
       - static-site-egin.sirikon.me
       - static-site-astenagusia.eus
       - static-site-2048.sirikon.me
-      - vpn:server
+      - vpn
     cmds:
       - task: webhook:after-all
       - task: caddy:after-all
