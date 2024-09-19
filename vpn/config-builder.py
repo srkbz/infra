@@ -55,7 +55,7 @@ def server_config():
         print(f"# Client: {name}")
         print("[Peer]")
         print("PublicKey = " + read_file(f"peer-data/{name}.public-key"))
-        print(f"AllowedIPs = {ip}")
+        print(f"AllowedIPs = {ip}/32")
 
 
 def home_gateway_config():
