@@ -5,6 +5,7 @@ from io import StringIO
 from sys import argv
 from os import getcwd
 
+print("BRHUHH")
 print(getcwd())
 
 WG_PORT = 51820
