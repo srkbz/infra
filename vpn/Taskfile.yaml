@@ -2,41 +2,8 @@ version: "3"
 
 vars:
   WG_HOME: /etc/wireguard
-  WG_PORT: "51820"
-
-  SERVER_WG_INTERFACE_ADDRESS: "10.0.0.1/24"
-  HOME_GATEWAY_WG_INTERFACE_ADDRESS: "10.0.0.2/24"
 
 tasks:
-  home-gateway:
-    deps: [home-gateway-up]
-
-  home-gateway-up:
-    deps: [home-gateway-config]
-    cmds:
-      - systemctl enable wg-quick@wg0
-      - systemctl start wg-quick@wg0
-      - wg syncconf wg0 <(wg-quick strip wg0)
-    sources:
-      - "{{.WG_HOME}}/wg0.conf"
-
-  home-gateway-config:
-    deps: [peer-data-dir, package, keypair, ip-forwarding]
-    env:
-      WG_PORT: "{{.WG_PORT}}"
-      HOME_GATEWAY_WG_INTERFACE_ADDRESS: "{{.HOME_GATEWAY_WG_INTERFACE_ADDRESS}}"
-    cmds:
-      - cat '{{.TASKFILE_DIR}}/home-gateway-wg0.ini' | HOME_GATEWAY_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" SERVER_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/server.public-key")" SERVER_PUBLIC_IP="$(cat "{{.WG_HOME}}/peer-data/server.public-ip")" envsubst > "{{.WG_HOME}}/wg0.conf"
-      - chmod 600 "{{.WG_HOME}}/wg0.conf"
-    preconditions:
-      - test -f "{{.WG_HOME}}/peer-data/server.public-key"
-      - test -f "{{.WG_HOME}}/peer-data/server.public-ip"
-    sources:
-      - "{{.TASKFILE_DIR}}/home-gateway-wg0.ini"
-      - "{{.WG_HOME}}/iface-keys/private"
-      - "{{.WG_HOME}}/peer-data/server.public-key"
-      - "{{.WG_HOME}}/peer-data/server.public-ip"
-
   server:
     deps: [server-up]
 
@@ -51,20 +18,45 @@ tasks:
 
   server-config:
     deps: [peer-data-dir, package, keypair]
-    env:
-      WG_PORT: "{{.WG_PORT}}"
-      SERVER_WG_INTERFACE_ADDRESS: "{{.SERVER_WG_INTERFACE_ADDRESS}}"
+    dir: "{{.WG_HOME}}"
     cmds:
-      - cat '{{.TASKFILE_DIR}}/server-wg0.ini' | SERVER_WG_PRIVATE_KEY="$(cat "{{.WG_HOME}}/iface-keys/private")" HOME_GATEWAY_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/home-gateway.public-key")" CLIENT_WG_PUBLIC_KEY="$(cat "{{.WG_HOME}}/peer-data/client.public-key")" envsubst > "{{.WG_HOME}}/wg0.conf"
-      - chmod 600 "{{.WG_HOME}}/wg0.conf"
+      - "{{.TASKFILE_DIR}}/config-builder.py server > wg0.conf"
+      - chmod 600 wg0.conf
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/home-gateway.public-key"
-      - test -f "{{.WG_HOME}}/peer-data/client.public-key"
+      - test -f "{{.WG_HOME}}/peer-data/phone.public-key"
     sources:
-      - "{{.TASKFILE_DIR}}/server-wg0.ini"
+      - "{{.TASKFILE_DIR}}/config-builder.py"
       - "{{.WG_HOME}}/iface-keys/private"
       - "{{.WG_HOME}}/peer-data/home-gateway.public-key"
-      - "{{.WG_HOME}}/peer-data/client.public-key"
+      - "{{.WG_HOME}}/peer-data/phone.public-key"
+
+  home-gateway:
+    deps: [home-gateway-up]
+
+  home-gateway-up:
+    deps: [home-gateway-config]
+    cmds:
+      - systemctl enable wg-quick@wg0
+      - systemctl start wg-quick@wg0
+      - wg syncconf wg0 <(wg-quick strip wg0)
+    sources:
+      - "{{.WG_HOME}}/wg0.conf"
+
+  home-gateway-config:
+    deps: [peer-data-dir, package, keypair, ip-forwarding]
+    dir: "{{.WG_HOME}}"
+    cmds:
+      - "{{.TASKFILE_DIR}}/config-builder.py server > wg0.conf"
+      - chmod 600 wg0.conf
+    preconditions:
+      - test -f "{{.WG_HOME}}/peer-data/server.public-key"
+      - test -f "{{.WG_HOME}}/peer-data/server.public-ip"
+    sources:
+      - "{{.TASKFILE_DIR}}/config-builder.py"
+      - "{{.WG_HOME}}/iface-keys/private"
+      - "{{.WG_HOME}}/peer-data/server.public-key"
+      - "{{.WG_HOME}}/peer-data/server.public-ip"
 
   package:
     cmds:
