@@ -47,7 +47,7 @@ tasks:
     deps: [peer-data-dir, package, keypair, ip-forwarding]
     dir: "{{.WG_HOME}}"
     cmds:
-      - "{{.TASKFILE_DIR}}/config-builder.py server > wg0.conf"
+      - "{{.TASKFILE_DIR}}/config-builder.py home_gateway > wg0.conf"
       - chmod 600 wg0.conf
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/server.public-key"
