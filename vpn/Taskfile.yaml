@@ -51,12 +51,10 @@ tasks:
       - chmod 600 wg0.conf
     preconditions:
       - test -f "{{.WG_HOME}}/peer-data/server.public-key"
-      - test -f "{{.WG_HOME}}/peer-data/server.public-ip"
     sources:
       - "{{.TASKFILE_DIR}}/config-builder.py"
       - "{{.WG_HOME}}/iface-keys/private"
       - "{{.WG_HOME}}/peer-data/server.public-key"
-      - "{{.WG_HOME}}/peer-data/server.public-ip"
 
   package:
     cmds:
