@@ -6,7 +6,10 @@ run: when_changed
 includes:
   minidlna: ./minidlna
   samba: ./samba
-  vpn: ../../vpn
+  vpn:
+    taskfile: ../../vpn
+    vars:
+      PROFILE: home-gateway
 
 tasks:
   default:

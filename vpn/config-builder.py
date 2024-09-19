@@ -24,13 +24,13 @@ for _, ip in CLIENTS:
 
 def main():
     if len(argv) <= 1:
-        print("Usage: config-builder.py <server|home_gateway>")
+        print("Usage: config-builder.py <server|home-gateway>")
         exit(1)
 
     match argv[1]:
         case "server":
             server_config()
-        case "home_gateway":
+        case "home-gateway":
             home_gateway_config()
         case _:
             print("Unrecognized option " + argv[1])

@@ -1,14 +1,16 @@
 version: "3"
 
+shopt: [globstar]
+
 vars:
   WG_HOME: /etc/wireguard
 
 tasks:
-  server:
-    deps: [server-up]
+  default:
+    deps: [up]
 
-  server-up:
-    deps: [server-config]
+  up:
+    deps: [config]
     cmds:
       - systemctl enable wg-quick@wg0
       - systemctl start wg-quick@wg0
@@ -16,45 +18,18 @@ tasks:
     sources:
       - "{{.WG_HOME}}/wg0.conf"
 
-  server-config:
+  config:
     deps: [peer-data-dir, package, keypair]
     dir: "{{.WG_HOME}}"
     cmds:
-      - "{{.TASKFILE_DIR}}/config-builder.py server > wg0.conf"
+      - "{{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}' > wg0.conf"
       - chmod 600 wg0.conf
     preconditions:
-      - test -f "{{.WG_HOME}}/peer-data/home-gateway.public-key"
-      - test -f "{{.WG_HOME}}/peer-data/phone.public-key"
+      - "{{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}'"
     sources:
       - "{{.TASKFILE_DIR}}/config-builder.py"
-      - "{{.WG_HOME}}/iface-keys/private"
-      - "{{.WG_HOME}}/peer-data/home-gateway.public-key"
-      - "{{.WG_HOME}}/peer-data/phone.public-key"
-
-  home-gateway:
-    deps: [home-gateway-up]
-
-  home-gateway-up:
-    deps: [home-gateway-config]
-    cmds:
-      - systemctl enable wg-quick@wg0
-      - systemctl start wg-quick@wg0
-      - wg syncconf wg0 <(wg-quick strip wg0)
-    sources:
-      - "{{.WG_HOME}}/wg0.conf"
-
-  home-gateway-config:
-    deps: [peer-data-dir, package, keypair, ip-forwarding]
-    dir: "{{.WG_HOME}}"
-    cmds:
-      - "{{.TASKFILE_DIR}}/config-builder.py home_gateway > wg0.conf"
-      - chmod 600 wg0.conf
-    preconditions:
-      - test -f "{{.WG_HOME}}/peer-data/server.public-key"
-    sources:
-      - "{{.TASKFILE_DIR}}/config-builder.py"
-      - "{{.WG_HOME}}/iface-keys/private"
-      - "{{.WG_HOME}}/peer-data/server.public-key"
+      - "{{.WG_HOME}}/iface-keys/*"
+      - "{{.WG_HOME}}/peer-data/*"
 
   package:
     cmds:
