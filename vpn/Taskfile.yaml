@@ -25,7 +25,7 @@ tasks:
       - "{{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}' > wg0.conf"
       - chmod 600 wg0.conf
     preconditions:
-      - "{{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}'"
+      - "cd '{{.WG_HOME}}' && {{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}'"
     sources:
       - "{{.TASKFILE_DIR}}/config-builder.py"
       - "{{.WG_HOME}}/iface-keys/*"
