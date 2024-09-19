@@ -3,6 +3,9 @@ from ipaddress import ip_address, ip_network
 from configparser import ConfigParser
 from io import StringIO
 from sys import argv
+from os import getcwd
+
+print(getcwd())
 
 WG_PORT = 51820
 VPN_NETWORK = ip_network("10.0.0.0/24")
