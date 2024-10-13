@@ -2,6 +2,8 @@ services:
   freshrss:
     image: freshrss/freshrss
     restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     environment:
       TZ: Europe/Madrid
       CRON_MIN: "15,45"
