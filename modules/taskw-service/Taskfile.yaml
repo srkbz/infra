@@ -16,6 +16,14 @@ tasks:
       - test -f /etc/systemd/system/taskw.path
       - test -f /etc/systemd/system/taskw.service
 
+  triggers-bin:
+    cmds:
+      - cp "{{.TASKFILE_DIR}}/taskw-triggers" /usr/local/bin/taskw-triggers
+    sources:
+      - "{{.TASKFILE_DIR}}/taskw-triggers"
+    status:
+      - test -f /usr/local/bin/taskw-triggers
+
   triggers:
     deps: [triggers-dir]
 
