@@ -17,25 +17,19 @@ tasks:
       - test -f /etc/systemd/system/taskw.service
 
   triggers:
-    deps: [triggers-dir, remove-run-trigger]
+    deps: [triggers-dir]
 
   triggers-dir:
     deps: [triggers-group]
     cmds:
-      - mkdir -p "${TASKW_ROOT}/.state/taskw/triggers"
-      - chown root:taskw-triggers "${TASKW_ROOT}/.state/taskw/triggers"
-      - chmod --recursive 775 "${TASKW_ROOT}/.state/taskw/triggers"
+      - mkdir -p /opt/taskw/triggers
+      - chown root:taskw-triggers /opt/taskw/triggers
+      - chmod --recursive 775 /opt/taskw/triggers
     status:
-      - test -d "${TASKW_ROOT}/.state/taskw/triggers"
+      - test -d /opt/taskw/triggers
 
   triggers-group:
     cmds:
       - groupadd --force taskw-triggers
     status:
       - cat /etc/group | grep taskw-triggers
-
-  remove-run-trigger:
-    cmds:
-      - rm -f "${TASKW_ROOT}/.state/taskw/triggers/RUN"
-    status:
-      - \[ ! -f "${TASKW_ROOT}/.state/taskw/triggers/RUN" ]
