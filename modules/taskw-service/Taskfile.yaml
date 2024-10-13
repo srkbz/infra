@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
   default:
-    deps: [triggers]
+    deps: [triggers, triggers-bin]
     cmds:
       - cat {{.TASKFILE_DIR}}/taskw.service | envsubst > /etc/systemd/system/taskw.service
       - cat {{.TASKFILE_DIR}}/taskw.path | envsubst > /etc/systemd/system/taskw.path
