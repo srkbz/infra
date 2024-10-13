@@ -1,6 +1,6 @@
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:1.23.15
     restart: always
     volumes:
       - ./.state/data:/app/data
