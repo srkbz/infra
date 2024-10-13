@@ -1,0 +1,12 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    restart: always
+    environment:
+      WATCHTOWER_SCHEDULE: "0 0 4 * * *"
+      WATCHTOWER_NOTIFICATIONS_HOSTNAME: "pamplonetario"
+      WATCHTOWER_LABEL_TAKE_PRECEDENCE: "true"
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_NOTIFICATION_URL: "${WATCHTOWER_NOTIFICATION_URL}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

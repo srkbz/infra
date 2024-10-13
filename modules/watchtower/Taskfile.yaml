@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+  default:
+    deps: [":docker"]
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - cat "{{.ROOT_DIR}}/.env" | grep "WATCHTOWER_NOTIFICATION_URL=" > .env
+      - docker compose up --detach --remove-orphans
+    sources:
+      - "{{.TASKFILE_DIR}}/docker-compose.yml"
+      - "{{.ROOT_DIR}}/.env"
+    preconditions:
+      - . "{{.ROOT_DIR}}/.env" && [ -n "$WATCHTOWER_NOTIFICATION_URL" ]
