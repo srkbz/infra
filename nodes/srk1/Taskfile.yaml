@@ -9,6 +9,7 @@ includes:
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
+  uptime-kuma: ../../modules/uptime-kuma
   vpn:
     taskfile: ../../vpn
     vars:
@@ -55,6 +56,7 @@ tasks:
       - taskw-service
       - secrets
       - webhook
+      - uptime-kuma
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
