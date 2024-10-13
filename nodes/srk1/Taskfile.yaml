@@ -13,7 +13,7 @@ includes:
   freshrss: ../../modules/freshrss
   uptime-kuma: ../../modules/uptime-kuma
   vpn:
-    taskfile: ../../vpn
+    taskfile: ../../modules/vpn
     vars:
       PROFILE: server
 
