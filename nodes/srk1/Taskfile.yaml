@@ -9,6 +9,7 @@ includes:
   docker: ../../modules/docker
   caddy: ../../modules/caddy
   webhook: ../../modules/webhook
+  watchtower: ../../modules/watchtower
   freshrss: ../../modules/freshrss
   uptime-kuma: ../../modules/uptime-kuma
   vpn:
@@ -56,6 +57,7 @@ tasks:
     deps:
       - taskw-service
       - secrets
+      - watchtower
       - webhook
       - freshrss
       - uptime-kuma
