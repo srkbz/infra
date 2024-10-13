@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  default:
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - docker compose up --detach --wait --remove-orphans
+    sources:
+      - docker-compose.yml

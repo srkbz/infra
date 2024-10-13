@@ -1,0 +1,11 @@
+services:
+  freshrss:
+    image: freshrss/freshrss
+    restart: always
+    environment:
+      TZ: Europe/Madrid
+      CRON_MIN: "15,45"
+    volumes:
+      - ./.state/data:/var/www/FreshRSS/data
+    ports:
+      - 10.0.0.1:3000:80
