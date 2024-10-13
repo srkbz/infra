@@ -26,7 +26,8 @@ class SecretsXMLWalker:
 
     def dump(self):
         for file, content in self._files.items():
-            makedirs(dirname(file), exist_ok=True)
+            if dirname(file) != "":
+                makedirs(dirname(file), exist_ok=True)
             with open(file, "w") as f:
                 for key, value in content.items():
                     f.write(f"{key}={value}\n")
