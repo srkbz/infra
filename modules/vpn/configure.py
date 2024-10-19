@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from ipaddress import ip_address, ip_network
-from configparser import ConfigParser
-from io import StringIO
 from sys import argv
 from os import makedirs
 from os.path import join, exists
@@ -41,21 +39,40 @@ def main():
 
 
 def server_configure():
-    for client, _ in CLIENTS:
-        if not exists(join("/opt/vpn/clients", client, "private.key")):
-            makedirs(join("/opt/vpn/clients", client), exist_ok=True)
+    if not exists("/opt/vpn/private.key"):
+        makedirs("/opt/vpn", exist_ok=True)
+        run(
+            ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
+            cwd="/opt/vpn/",
+        )
+
+    for client_name, _ in CLIENTS:
+        if not exists(join("/opt/vpn/clients", client_name, "private.key")):
+            makedirs(join("/opt/vpn/clients", client_name), exist_ok=True)
             run(
                 ["bash", "-c", "rm -rf *"],
-                cwd=join("/opt/vpn/clients", client),
+                cwd=join("/opt/vpn/clients", client_name),
             )
             run(
                 ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
-                cwd=join("/opt/vpn/clients", client),
+                cwd=join("/opt/vpn/clients", client_name),
             )
 
-    # with open("/opt/vpn/wg0.conf", "w") as f:
-    #     for line in server_wireguard_config():
-    #         f.write(line + "\n")
+        with open(join("/opt/vpn/clients", client_name, "home_lan.conf"), "w") as f:
+            for line in client_home_lan_wireguard_config():
+                f.write(line + "\n")
+
+
+def client_home_lan_wireguard_config(client_name, client_ip):
+    yield "[Interface]"
+    yield "PrivateKey = " + read_file(
+        join("/opt/vpn/clients", client_name, "private.key")
+    ).strip()
+    yield "Address = " + str(client_ip) + "/32"
+    yield ""
+    yield "[Peer]"
+    yield "PublicKey = " + read_file("/opt/vpn/public.key").strip()
+    yield f"AllowedIPs = {VPN_NETWORK}/24, {HOME_NETWORK}/24"
 
 
 def server_wireguard_config():
@@ -112,19 +129,6 @@ def home_gateway_configure():
     print(f"AllowedIPs = {VPN_NETWORK}")
     print(f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}")
     print("PersistentKeepalive = 15")
-
-
-def base_config():
-    config = ConfigParser()
-    config.optionxform = str
-    return config
-
-
-def print_config(config):
-    with StringIO() as ss:
-        config.write(ss)
-        ss.seek(0)
-        print(ss.read(), end="")
 
 
 def read_file(path):
