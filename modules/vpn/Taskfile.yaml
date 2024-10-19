@@ -13,6 +13,8 @@ tasks:
       - /etc/wireguard/wg0.conf
     preconditions:
       - test -f /etc/wireguard/wg0.conf
+    status:
+      - systemctl status wg-quick@wg0
 
   home-gateway:
     deps: [wireguard, ip-forwarding, configure]
@@ -25,6 +27,7 @@ tasks:
       - /opt/vpn/home-gateway/wg0.conf
     status:
       - test -f /etc/wireguard/wg0.conf
+      - systemctl status wg-quick@wg0
 
   reset:
     cmds:
