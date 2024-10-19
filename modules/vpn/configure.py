@@ -51,9 +51,9 @@ def server_configure():
 
         print(client_ip)
 
-    with open("/opt/vpn/wg0.conf", "w") as f:
-        for line in server_wireguard_config():
-            f.write(line + "\n")
+    # with open("/opt/vpn/wg0.conf", "w") as f:
+    #     for line in server_wireguard_config():
+    #         f.write(line + "\n")
 
 
 def server_wireguard_config():
