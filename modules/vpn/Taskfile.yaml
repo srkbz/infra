@@ -4,7 +4,7 @@ shopt: [globstar]
 
 tasks:
   server:
-    deps: [wireguard, ip-forwarding, configure]
+    deps: [wireguard, ip-forwarding]
     cmds:
       - systemctl enable wg-quick@wg0
       - systemctl start wg-quick@wg0
