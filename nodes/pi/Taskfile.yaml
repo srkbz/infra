@@ -6,14 +6,11 @@ run: when_changed
 includes:
   minidlna: ./minidlna
   samba: ./samba
-  vpn:
-    taskfile: ../../vpn
-    vars:
-      PROFILE: home-gateway
+  vpn: ../../modules/vpn
 
 tasks:
   default:
-    deps: [public-dir, minidlna:configure, samba:configure, vpn]
+    deps: [public-dir, minidlna:configure, samba:configure, vpn:home-gateway]
 
   public-dir:
     cmds:

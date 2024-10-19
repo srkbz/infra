@@ -3,66 +3,44 @@ version: "3"
 shopt: [globstar]
 
 tasks:
-  default:
-    deps: [configure]
+  server:
+    deps: [wireguard, ip-forwarding, configure]
+    cmds:
+      - systemctl enable wg-quick@wg0
+      - systemctl start wg-quick@wg0
+      - wg syncconf wg0 <(wg-quick strip wg0)
+    sources:
+      - /etc/wireguard/wg0.conf
+
+  home-gateway:
+    deps: [wireguard, ip-forwarding, configure]
+    cmds:
+      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
+      - systemctl enable wg-quick@wg0
+      - systemctl start wg-quick@wg0
+      - wg syncconf wg0 <(wg-quick strip wg0)
+    sources:
+      - /opt/vpn/home-gateway/wg0.conf
 
   configure:
+    deps: [wireguard]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - ./configure.py '{{.PROFILE}}'
     sources:
       - configure.py
-# vars:
-#   WG_HOME: /etc/wireguard
 
-# tasks:
-#   default:
-#     deps: [up]
+  wireguard:
+    cmds:
+      - mkdir -p .cache/apt/lock
+      - flock .cache/apt/lock apt-get install -y wireguard
+    status:
+      - command -v wg
 
-#   up:
-#     deps: [config]
-#     cmds:
-#       - systemctl enable wg-quick@wg0
-#       - systemctl start wg-quick@wg0
-#       - wg syncconf wg0 <(wg-quick strip wg0)
-#     sources:
-#       - "{{.WG_HOME}}/wg0.conf"
-
-#   config:
-#     deps: [peer-data-dir, package, keypair, ip-forwarding]
-#     cmds:
-#       - "cd {{.WG_HOME}} && {{.TASKFILE_DIR}}/config-builder.py '{{.PROFILE}}' > wg0.conf"
-#       - chmod 600 "{{.WG_HOME}}/wg0.conf"
-#     sources:
-#       - "{{.TASKFILE_DIR}}/config-builder.py"
-#       - "{{.WG_HOME}}/iface-keys/*"
-#       - "{{.WG_HOME}}/peer-data/*"
-
-#   package:
-#     cmds:
-#       - mkdir -p .cache/apt/lock
-#       - flock .cache/apt/lock apt-get install -y wireguard
-#     status:
-#       - command -v wg
-
-#   keypair:
-#     deps: [package]
-#     cmds:
-#       - bash -c 'umask 077; mkdir -p "{{.WG_HOME}}/iface-keys/"; wg genkey | tee "{{.WG_HOME}}/iface-keys/private" | wg pubkey > "{{.WG_HOME}}/iface-keys/public"'
-#     status:
-#       - test -f "{{.WG_HOME}}/iface-keys/private"
-#       - test -f "{{.WG_HOME}}/iface-keys/public"
-
-#   peer-data-dir:
-#     cmds:
-#       - mkdir -p "{{.WG_HOME}}/peer-data/"
-#     status:
-#       - test -d "{{.WG_HOME}}/peer-data/"
-
-#   ip-forwarding:
-#     cmds:
-#       - printf "%s\n" "# configured by srkbz/infra" "net.ipv4.ip_forward=1" >>/etc/sysctl.conf
-#       - sysctl -p
-#     status:
-#       - cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
-#       - '[ "$(cat /proc/sys/net/ipv4/ip_forward)" == "1" ]'
+  ip-forwarding:
+    cmds:
+      - printf "%s\n" "# configured by srkbz/infra" "net.ipv4.ip_forward=1" >>/etc/sysctl.conf
+      - sysctl -p
+    status:
+      - cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
+      - '[ "$(cat /proc/sys/net/ipv4/ip_forward)" == "1" ]'

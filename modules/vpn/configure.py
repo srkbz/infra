@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from ipaddress import ip_address, ip_network
-from sys import argv
 from os import makedirs
 from os.path import join, exists
 from subprocess import run
@@ -24,21 +23,6 @@ for _, ip in CLIENTS:
 
 
 def main():
-    if len(argv) <= 1:
-        print("Usage: configure.py <server|home-gateway>")
-        exit(1)
-
-    match argv[1]:
-        case "server":
-            server_configure()
-        case "home-gateway":
-            home_gateway_configure()
-        case _:
-            print("Unrecognized option " + argv[1])
-            exit(1)
-
-
-def server_configure():
     if not exists("/opt/vpn/server/private.key"):
         makedirs("/opt/vpn/server", exist_ok=True)
         run(
