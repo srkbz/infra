@@ -26,6 +26,11 @@ tasks:
     status:
       - test -f /etc/wireguard/wg0.conf
 
+  home-gateway-reset:
+    cmds:
+      - wg-quick down wg0
+      - task: home-gateway
+
   configure:
     deps: [wireguard, qrencode]
     dir: "{{.TASKFILE_DIR}}"
