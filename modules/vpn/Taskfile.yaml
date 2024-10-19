@@ -9,7 +9,6 @@ tasks:
   home-gateway:
     deps: [configure]
     cmds:
-      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
       - task: up
 
   up:
@@ -35,6 +34,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - ./configure.py
+      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
     sources:
       - configure.py
 
