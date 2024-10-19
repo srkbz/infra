@@ -91,7 +91,7 @@ def server_wireguard_config():
     yield "[Interface]"
     yield f"Address = {SERVER_IP}/{VPN_NETWORK.prefixlen}"
     yield f"ListenPort = {WG_PORT}"
-    yield "PrivateKey = " + read_file("/opt/vpn/private.key").strip()
+    yield "PrivateKey = " + read_file("/opt/vpn/server/private.key").strip()
     yield ""
     yield "PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT"
     yield "PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT"
