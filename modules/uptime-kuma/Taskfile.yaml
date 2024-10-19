@@ -7,3 +7,4 @@ tasks:
       - docker compose up --detach --wait --remove-orphans
     sources:
       - docker-compose.yml
+      - scripts/*
