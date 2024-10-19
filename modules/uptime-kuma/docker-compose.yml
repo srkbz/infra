@@ -4,7 +4,9 @@ services:
     restart: always
     labels:
       com.centurylinklabs.watchtower.enable: "true"
+    command: ["/custom-scripts/start.sh"]
     volumes:
+      - ./scripts:/custom-scripts:ro
       - ./.state/data:/app/data
     ports:
       - 10.0.0.1:3001:3001
