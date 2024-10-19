@@ -53,6 +53,14 @@ def main():
             cwd=join("/opt/vpn/clients", client_name),
         )
 
+        with open(join("/opt/vpn/clients", client_name, "home_gateway.conf"), "w") as f:
+            for line in client_home_gateway_wireguard_config(client_name, client_ip):
+                f.write(line + "\n")
+        run(
+            ["bash", "-c", "cat home_gateway.conf | qrencode -t UTF8>home_gateway.qr"],
+            cwd=join("/opt/vpn/clients", client_name),
+        )
+
     with open("/opt/vpn/server/wg0.conf", "w") as f:
         for line in server_wireguard_config():
             f.write(line + "\n")
@@ -72,6 +80,19 @@ def client_home_lan_wireguard_config(client_name, client_ip):
     yield "[Peer]"
     yield "PublicKey = " + read_file("/opt/vpn/server/public.key").strip()
     yield f"AllowedIPs = {VPN_NETWORK}, {HOME_NETWORK}"
+    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
+
+
+def client_home_gateway_wireguard_config(client_name, client_ip):
+    yield "[Interface]"
+    yield "PrivateKey = " + read_file(
+        join("/opt/vpn/clients", client_name, "private.key")
+    ).strip()
+    yield f"Address = {client_ip}/32"
+    yield ""
+    yield "[Peer]"
+    yield "PublicKey = " + read_file("/opt/vpn/server/public.key").strip()
+    yield f"AllowedIPs = 0.0.0.0/0"
     yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
 
 
