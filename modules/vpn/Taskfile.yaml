@@ -26,10 +26,10 @@ tasks:
     status:
       - test -f /etc/wireguard/wg0.conf
 
-  home-gateway-reset:
+  reset:
     cmds:
       - wg-quick down wg0 || true
-      - systemctl restart wg-quick@wg0
+      - systemctl stop wg-quick@wg0
 
   configure:
     deps: [wireguard, qrencode]
