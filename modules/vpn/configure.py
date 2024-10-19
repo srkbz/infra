@@ -46,10 +46,6 @@ def server_configure():
             cwd="/opt/vpn/server",
         )
 
-    with open("/opt/vpn/server/wg0.conf", "w") as f:
-        for line in server_wireguard_config():
-            f.write(line + "\n")
-
     if not exists("/opt/vpn/home-gateway/private.key"):
         makedirs("/opt/vpn/home-gateway", exist_ok=True)
         run(
@@ -72,6 +68,10 @@ def server_configure():
         with open(join("/opt/vpn/clients", client_name, "home_lan.conf"), "w") as f:
             for line in client_home_lan_wireguard_config(client_name, client_ip):
                 f.write(line + "\n")
+
+    with open("/opt/vpn/server/wg0.conf", "w") as f:
+        for line in server_wireguard_config():
+            f.write(line + "\n")
 
 
 def client_home_lan_wireguard_config(client_name, client_ip):
