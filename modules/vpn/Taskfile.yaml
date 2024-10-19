@@ -25,7 +25,7 @@ tasks:
       - /opt/vpn/home-gateway/wg0.conf
 
   configure:
-    deps: [wireguard]
+    deps: [wireguard, qrencode]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - ./configure.py '{{.PROFILE}}'
@@ -38,6 +38,13 @@ tasks:
       - flock .cache/apt/lock apt-get install -y wireguard
     status:
       - command -v wg
+
+  qrencode:
+    cmds:
+      - mkdir -p .cache/apt/lock
+      - flock .cache/apt/lock apt-get install -y qrencode
+    status:
+      - command -v qrencode
 
   ip-forwarding:
     cmds:

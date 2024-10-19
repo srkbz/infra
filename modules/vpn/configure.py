@@ -48,6 +48,10 @@ def main():
         with open(join("/opt/vpn/clients", client_name, "home_lan.conf"), "w") as f:
             for line in client_home_lan_wireguard_config(client_name, client_ip):
                 f.write(line + "\n")
+        run(
+            ["bash", "-c", "cat home_lan.conf | qrencode -t UTF8>home_lan.qr"],
+            cwd=join("/opt/vpn/clients", client_name),
+        )
 
     with open("/opt/vpn/server/wg0.conf", "w") as f:
         for line in server_wireguard_config():
