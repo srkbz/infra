@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from ipaddress import ip_address, ip_network
-from os import makedirs
+from os import makedirs, umask
 from os.path import join, exists
 from subprocess import run
 
@@ -23,6 +23,10 @@ for _, ip in CLIENTS:
 
 
 def main():
+    umask(0o066)
+
+    makedirs("/opt/vpn", exist_ok=True)
+
     if not exists("/opt/vpn/server/private.key"):
         makedirs("/opt/vpn/server", exist_ok=True)
         run(
