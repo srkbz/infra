@@ -57,10 +57,6 @@ def server_configure():
         if not exists(join("/opt/vpn/clients", client_name, "private.key")):
             makedirs(join("/opt/vpn/clients", client_name), exist_ok=True)
             run(
-                ["bash", "-c", "rm -rf *"],
-                cwd=join("/opt/vpn/clients", client_name),
-            )
-            run(
                 ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
                 cwd=join("/opt/vpn/clients", client_name),
             )
@@ -70,6 +66,10 @@ def server_configure():
                 f.write(line + "\n")
 
     with open("/opt/vpn/server/wg0.conf", "w") as f:
+        for line in server_wireguard_config():
+            f.write(line + "\n")
+
+    with open("/opt/vpn/home-gateway/wg0.conf", "w") as f:
         for line in server_wireguard_config():
             f.write(line + "\n")
 
@@ -110,39 +110,35 @@ def server_wireguard_config():
         yield f"AllowedIPs = {client_ip}/32"
 
 
-def home_gateway_configure():
-    print("[Interface]")
-    print(f"Address = {HOME_GATEWAY_IP}/{VPN_NETWORK.prefixlen}")
-    print(f"ListenPort = {WG_PORT}")
-    print("PrivateKey = " + read_file("iface-keys/private").strip())
-    print("")
-    print(
-        "PostUp = "
-        + "; ".join(
-            [
-                f"iptables -t nat -A POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
-                f"iptables -A FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
-                f"iptables -A FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
-            ]
-        )
+def home_gateway_wireguard_config():
+    yield "[Interface]"
+    yield f"Address = {HOME_GATEWAY_IP}/{VPN_NETWORK.prefixlen}"
+    yield f"ListenPort = {WG_PORT}"
+    yield "PrivateKey = " + read_file("/opt/vpn/home-gateway/private.key").strip()
+    yield ""
+    yield "PostUp = " + "; ".join(
+        [
+            f"iptables -t nat -A POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
+            f"iptables -A FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
+            f"iptables -A FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
+        ]
     )
-    print(
-        "PostDown = "
-        + "; ".join(
-            [
-                f"iptables -t nat -D POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
-                f"iptables -D FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
-                f"iptables -D FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
-            ]
-        )
+
+    yield "PostDown = " + "; ".join(
+        [
+            f"iptables -t nat -D POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
+            f"iptables -D FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
+            f"iptables -D FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
+        ]
     )
-    print("")
-    print("# Server")
-    print("[Peer]")
-    print("PublicKey = " + read_file(f"peer-data/server.public-key").strip())
-    print(f"AllowedIPs = {VPN_NETWORK}")
-    print(f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}")
-    print("PersistentKeepalive = 15")
+
+    yield ""
+    yield "# Server"
+    yield "[Peer]"
+    yield "PublicKey = " + read_file(f"/opt/vpn/server/public.key").strip()
+    yield f"AllowedIPs = {VPN_NETWORK}"
+    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
+    yield "PersistentKeepalive = 15"
 
 
 def read_file(path):
