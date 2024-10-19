@@ -82,7 +82,7 @@ def client_home_lan_wireguard_config(client_name, client_ip):
     yield f"Address = {client_ip}/32"
     yield ""
     yield "[Peer]"
-    yield "PublicKey = " + read_file("/opt/vpn/public.key").strip()
+    yield "PublicKey = " + read_file("/opt/vpn/server/public.key").strip()
     yield f"AllowedIPs = {VPN_NETWORK}, {HOME_NETWORK}"
     yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
 
