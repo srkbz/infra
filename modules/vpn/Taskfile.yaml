@@ -28,7 +28,7 @@ tasks:
     deps: [wireguard, qrencode]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - ./configure.py '{{.PROFILE}}'
+      - ./configure.py
     sources:
       - configure.py
 
