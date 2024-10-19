@@ -4,6 +4,15 @@ shopt: [globstar]
 
 tasks:
   server:
+    deps: [up]
+
+  home-gateway:
+    deps: [configure]
+    cmds:
+      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
+      - task: up
+
+  up:
     deps: [wireguard, ip-forwarding]
     cmds:
       - systemctl enable wg-quick@wg0
@@ -14,19 +23,6 @@ tasks:
     preconditions:
       - test -f /etc/wireguard/wg0.conf
     status:
-      - systemctl status wg-quick@wg0
-
-  home-gateway:
-    deps: [wireguard, ip-forwarding, configure]
-    cmds:
-      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
-      - systemctl enable wg-quick@wg0
-      - systemctl start wg-quick@wg0
-      - wg syncconf wg0 <(wg-quick strip wg0)
-    sources:
-      - /opt/vpn/home-gateway/wg0.conf
-    status:
-      - test -f /etc/wireguard/wg0.conf
       - systemctl status wg-quick@wg0
 
   reset:
