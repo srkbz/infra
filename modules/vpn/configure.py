@@ -3,6 +3,9 @@ from ipaddress import ip_address, ip_network
 from configparser import ConfigParser
 from io import StringIO
 from sys import argv
+from os import makedirs
+from os.path import join, exists
+from subprocess import run
 
 WG_PORT = 51820
 VPN_NETWORK = ip_network("10.0.0.0/24")
@@ -24,41 +27,57 @@ for _, ip in CLIENTS:
 
 def main():
     if len(argv) <= 1:
-        print("Usage: config-builder.py <server|home-gateway>")
+        print("Usage: configure.py <server|home-gateway>")
         exit(1)
 
     match argv[1]:
         case "server":
-            server_config()
+            server_configure()
         case "home-gateway":
-            home_gateway_config()
+            home_gateway_configure()
         case _:
             print("Unrecognized option " + argv[1])
             exit(1)
 
 
-def server_config():
-    print("[Interface]")
-    print(f"Address = {SERVER_IP}/{VPN_NETWORK.prefixlen}")
-    print(f"ListenPort = {WG_PORT}")
-    print("PrivateKey = " + read_file("iface-keys/private").strip())
-    print("")
-    print("PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT")
-    print("PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT")
-    print("")
-    print("# Home Gateway")
-    print("[Peer]")
-    print("PublicKey = " + read_file("peer-data/home-gateway.public-key").strip())
-    print(f"AllowedIPs = {HOME_GATEWAY_IP}/32,{HOME_NETWORK}")
-    print("")
+def server_configure():
+    for client, client_ip in CLIENTS:
+        if not exists(join("/opt/vpn/clients", client, "private.key")):
+            makedirs(join("/opt/vpn/clients", client), exist_ok=True)
+            run(
+                ["bash", "-c", "wg genkey | tee private | wg pubkey>public"],
+                cwd=join("/opt/vpn/clients", client),
+            )
+
+        print(client_ip)
+
+    with open("/opt/vpn/wg0.conf", "w") as f:
+        for line in server_wireguard_config():
+            f.write(line + "\n")
+
+
+def server_wireguard_config():
+    yield "[Interface]"
+    yield f"Address = {SERVER_IP}/{VPN_NETWORK.prefixlen}"
+    yield f"ListenPort = {WG_PORT}"
+    yield "PrivateKey = " + read_file("iface-keys/private").strip()
+    yield ""
+    yield "PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT"
+    yield "PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT"
+    yield ""
+    yield "# Home Gateway"
+    yield "[Peer]"
+    yield "PublicKey = " + read_file("peer-data/home-gateway.public-key").strip()
+    yield f"AllowedIPs = {HOME_GATEWAY_IP}/32,{HOME_NETWORK}"
+    yield ""
     for name, ip in CLIENTS:
-        print(f"# Client: {name}")
-        print("[Peer]")
-        print("PublicKey = " + read_file(f"peer-data/{name}.public-key").strip())
-        print(f"AllowedIPs = {ip}/32")
+        yield f"# Client: {name}"
+        yield "[Peer]"
+        yield "PublicKey = " + read_file(f"peer-data/{name}.public-key").strip()
+        yield f"AllowedIPs = {ip}/32"
 
 
-def home_gateway_config():
+def home_gateway_configure():
     print("[Interface]")
     print(f"Address = {HOME_GATEWAY_IP}/{VPN_NETWORK.prefixlen}")
     print(f"ListenPort = {WG_PORT}")
