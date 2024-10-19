@@ -23,7 +23,7 @@ for _, ip in CLIENTS:
 
 
 def main():
-    umask(0o066)
+    umask(0o077)
 
     makedirs("/opt/vpn", exist_ok=True)
 
