@@ -4,11 +4,10 @@ services:
     restart: always
     labels:
       com.centurylinklabs.watchtower.enable: "true"
-    command: ["bash", "/custom-scripts/start.sh"]
     environment:
-      NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/ThawteTLSRSACAG1.crt
+      NODE_EXTRA_CA_CERTS: /custom-ca/ThawteTLSRSACAG1.crt
     volumes:
-      - ./scripts:/custom-scripts:ro
+      - ./.state/ca:/custom-ca:ro
       - ./.state/data:/app/data
     ports:
       - 10.0.0.1:3001:3001
