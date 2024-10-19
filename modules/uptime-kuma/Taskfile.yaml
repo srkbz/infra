@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
   default:
-    deps: [custom-cert]
+    deps: [":vpn:server", custom-cert]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - docker compose up --detach --wait --remove-orphans
