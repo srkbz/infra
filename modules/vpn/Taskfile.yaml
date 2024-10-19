@@ -28,7 +28,7 @@ tasks:
 
   home-gateway-reset:
     cmds:
-      - wg-quick down wg0
+      - wg-quick down wg0 || true
       - rm /etc/wireguard/wg0.conf
       - task: home-gateway
 
