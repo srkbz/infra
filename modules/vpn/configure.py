@@ -70,7 +70,7 @@ def server_configure():
             f.write(line + "\n")
 
     with open("/opt/vpn/home-gateway/wg0.conf", "w") as f:
-        for line in server_wireguard_config():
+        for line in home_gateway_wireguard_config():
             f.write(line + "\n")
 
 
