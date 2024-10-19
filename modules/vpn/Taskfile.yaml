@@ -11,7 +11,7 @@ tasks:
     cmds:
       - ./configure.py '{{.PROFILE}}'
     sources:
-      - config-builder.py
+      - configure.py
 # vars:
 #   WG_HOME: /etc/wireguard
 
