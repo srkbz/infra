@@ -73,6 +73,7 @@ def client_home_lan_wireguard_config(client_name, client_ip):
     yield "[Peer]"
     yield "PublicKey = " + read_file("/opt/vpn/public.key").strip()
     yield f"AllowedIPs = {VPN_NETWORK}/24, {HOME_NETWORK}/24"
+    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
 
 
 def server_wireguard_config():
