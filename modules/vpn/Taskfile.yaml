@@ -11,6 +11,8 @@ tasks:
       - wg syncconf wg0 <(wg-quick strip wg0)
     sources:
       - /etc/wireguard/wg0.conf
+    preconditions:
+      - test -f /etc/wireguard/wg0.conf
 
   home-gateway:
     deps: [wireguard, ip-forwarding, configure]
