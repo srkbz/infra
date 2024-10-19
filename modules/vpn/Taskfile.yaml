@@ -23,6 +23,8 @@ tasks:
       - wg syncconf wg0 <(wg-quick strip wg0)
     sources:
       - /opt/vpn/home-gateway/wg0.conf
+    status:
+      - test -f /etc/wireguard/wg0.conf
 
   configure:
     deps: [wireguard, qrencode]
