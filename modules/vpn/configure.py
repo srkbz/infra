@@ -41,15 +41,17 @@ def main():
 
 
 def server_configure():
-    for client, client_ip in CLIENTS:
+    for client, _ in CLIENTS:
         if not exists(join("/opt/vpn/clients", client, "private.key")):
             makedirs(join("/opt/vpn/clients", client), exist_ok=True)
             run(
-                ["bash", "-c", "wg genkey | tee private | wg pubkey>public"],
+                ["bash", "-c", "rm -rf *"],
                 cwd=join("/opt/vpn/clients", client),
             )
-
-        print(client_ip)
+            run(
+                ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
+                cwd=join("/opt/vpn/clients", client),
+            )
 
     # with open("/opt/vpn/wg0.conf", "w") as f:
     #     for line in server_wireguard_config():
