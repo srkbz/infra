@@ -5,16 +5,16 @@ from os.path import join, exists
 from subprocess import run
 
 WG_PORT = 51820
-VPN_NETWORK = ip_network("10.0.0.0/24")
+VPN_NETWORK = ip_network("10.10.0.0/24")
 HOME_NETWORK = ip_network("192.168.1.0/24")
 
-SERVER_IP = ip_address("10.0.0.1")
+SERVER_IP = ip_address("10.10.0.1")
 SERVER_PUBLIC_ADDRESS = "vpn.srk.bz"
 
-HOME_GATEWAY_IP = ip_address("10.0.0.2")
+HOME_GATEWAY_IP = ip_address("10.10.0.2")
 HOME_GATEWAY_DEFAULT_INTERFACE = "eth0"
 
-CLIENTS = [("phone", ip_address("10.0.0.3"))]
+CLIENTS = [("phone", ip_address("10.10.0.3"))]
 
 assert SERVER_IP in VPN_NETWORK
 assert HOME_GATEWAY_IP in VPN_NETWORK
