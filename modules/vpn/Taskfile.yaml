@@ -7,9 +7,18 @@ tasks:
     deps: [up]
 
   home-gateway:
-    deps: [configure]
+    deps: [configure-home-gateway]
     cmds:
       - task: up
+
+  configure-home-gateway:
+    deps: [gen]
+    cmds:
+      - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
+    sources:
+      - /opt/vpn/home-gateway/wg0.conf
+    status:
+      - test -f /etc/wireguard/wg0.conf
 
   up:
     deps: [wireguard, ip-forwarding]
@@ -30,14 +39,14 @@ tasks:
       - wg-quick down wg0 || true
       - systemctl stop wg-quick@wg0
 
-  configure:
+  gen:
     deps: [wireguard, qrencode]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - ./configure.py
+      - ./gen.py
       - cp /opt/vpn/home-gateway/wg0.conf /etc/wireguard/wg0.conf
     sources:
-      - configure.py
+      - gen.py
 
   wireguard:
     cmds:
