@@ -113,8 +113,8 @@ def server_wireguard_config():
     yield "[Peer]"
     yield "PublicKey = " + read_file("/opt/vpn/home-gateway/public.key").strip()
     yield f"AllowedIPs = {HOME_GATEWAY_IP}/32,{HOME_NETWORK}"
-    yield ""
     for client_name, client_ip in CLIENTS:
+        yield ""
         yield f"# Client: {client_name}"
         yield "[Peer]"
         yield "PublicKey = " + read_file(
