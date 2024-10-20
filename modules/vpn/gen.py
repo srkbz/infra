@@ -14,7 +14,7 @@ SERVER_PUBLIC_ADDRESS = "vpn.srk.bz"
 HOME_GATEWAY_IP = ip_address("10.10.0.2")
 HOME_GATEWAY_DEFAULT_INTERFACE = "eth0"
 
-CLIENTS = [("phone", ip_address("10.10.0.3"))]
+CLIENTS = [("phone", ip_address("10.10.0.3")), ("macbook", ip_address("10.10.0.4"))]
 
 assert SERVER_IP in VPN_NETWORK
 assert HOME_GATEWAY_IP in VPN_NETWORK
