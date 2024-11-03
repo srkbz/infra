@@ -1,6 +1,8 @@
 tasks:
   default:
     script: apt-get install -y "$(cat "${EBRO_ROOT}/.cache/apt/packages.txt")"
+    sources:
+      - ../../.cache/apt/packages.txt
 
   clean:
     script: |
