@@ -55,6 +55,7 @@ includes:
       DOMAIN: ebro.srk.bz
       REPOSITORY: https://github.com/sirikon/ebro.git
       BRANCH: master
+      BROWSE: true
 
 tasks:
   default:

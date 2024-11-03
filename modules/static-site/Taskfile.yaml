@@ -30,6 +30,7 @@ tasks:
     deps: [":caddy"]
     env:
       DOMAIN: "{{.DOMAIN}}"
+      BROWSE: "{{if .BROWSE}}browse{{else}}{{end}}"
     cmds:
       - cat {{.TASKFILE_DIR}}/Caddyfile | envsubst > /etc/caddy/conf.d/{{.DOMAIN}}.caddyfile
     sources:
