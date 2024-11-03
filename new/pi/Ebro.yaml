@@ -1,0 +1,9 @@
+imports:
+  apt:
+    from: ./modules/apt
+  minidlna:
+    from: ./modules/minidlna
+
+tasks:
+  default:
+    requires: [minidlna]

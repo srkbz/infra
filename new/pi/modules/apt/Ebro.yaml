@@ -1,0 +1,8 @@
+tasks:
+  default:
+    script: echo "${EBRO_ROOT}/.cache/apt/packages.txt"
+
+  clean:
+    script: |
+      rm -rf  "${EBRO_ROOT}/.cache/apt"
+      touch "${EBRO_ROOT}/.cache/apt/packages.txt"

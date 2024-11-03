@@ -1,0 +1,11 @@
+tasks:
+  default:
+    requires: [bin]
+
+  bin:
+    requires: [":apt", bin-apt-config]
+
+  bin-apt-config:
+    requires: [":apt:clean"]
+    required_by: [":apt"]
+    script: echo minidlna >> "${EBRO_ROOT}/.cache/apt/packages.txt"
