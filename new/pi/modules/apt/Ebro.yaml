@@ -4,7 +4,6 @@ tasks:
 
   clean:
     script: |
-      set -x
       rm -rf  "${EBRO_ROOT}/.cache/apt"
       mkdir -p "${EBRO_ROOT}/.cache/apt"
       touch "${EBRO_ROOT}/.cache/apt/packages.txt"
