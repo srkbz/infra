@@ -1,16 +1,18 @@
 tasks:
   default:
     requires: [bin]
-    sources:
-      - minidlna.conf
     script: |
       cp minidlna.conf /etc/minidlna.conf
       systemctl restart minidlna.service
+    when:
+      output_changes: cat minidlna.conf
 
   bin:
-    requires: [":apt", bin-config]
+    requires: [":apt", bin-apt-config]
 
-  bin-config:
-    requires: [":apt:clean"]
+  bin-apt-config:
+    requires: [":apt:pre-config"]
     required_by: [":apt"]
-    script: echo minidlna >> "${EBRO_ROOT}/.cache/apt/packages.txt"
+    script: echo minidlna > "${EBRO_ROOT}/.cache/apt/packages/minidlna.txt"
+    when:
+      output_changes: echo minidlna

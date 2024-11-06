@@ -1,12 +1,11 @@
 tasks:
   default:
-    requires: [clean]
-    sources:
-      - ${EBRO_ROOT}/.cache/apt/packages.txt
+    requires: [pre-config]
     script: apt-get install -y "$(cat "${EBRO_ROOT}/.cache/apt/packages.txt")"
+    when:
+      output_changes: cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt
 
-  clean:
-    script: |
-      rm -rf  "${EBRO_ROOT}/.cache/apt"
-      mkdir -p "${EBRO_ROOT}/.cache/apt"
-      touch "${EBRO_ROOT}/.cache/apt/packages.txt"
+  pre-config:
+    script: mkdir -p "${EBRO_ROOT}/.cache/apt/packages"
+    when:
+      check_fails: test -d "${EBRO_ROOT}/.cache/apt/packages"
