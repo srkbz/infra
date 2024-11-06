@@ -3,7 +3,16 @@ imports:
     from: ./modules/apt
   minidlna:
     from: ./modules/minidlna
+  samba:
+    from: ./modules/samba
 
 tasks:
   default:
-    requires: [minidlna]
+    requires: [minidlna, samba, public-dir]
+
+  public-dir:
+    script:
+      - mkdir -p /srv/public
+      - chmod -R 777 /srv/public
+    when:
+      check_fails: test -d /srv/public

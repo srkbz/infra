@@ -1,0 +1,25 @@
+tasks:
+  default:
+    requires: [bin, samba-guest-user]
+    script: |
+      cp smb.conf /etc/samba/smb.conf
+      systemctl restart smbd.service
+    when:
+      check_fails: test -f /etc/samba/smb.conf
+      output_changes: cat smb.conf
+
+  bin:
+    requires: [":apt", bin-apt-config]
+
+  bin-apt-config:
+    requires: [":apt:pre-config"]
+    required_by: [":apt"]
+    script: echo samba > "${EBRO_ROOT}/.cache/apt/packages/samba.txt"
+    when:
+      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/samba.txt"
+      output_changes: echo samba
+
+  samba-guest-user:
+    script: adduser --system samba-guest
+    when:
+      check_fails: cat /etc/passwd | grep samba-guest
