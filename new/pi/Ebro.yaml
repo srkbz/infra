@@ -11,8 +11,8 @@ tasks:
     requires: [minidlna, samba, public-dir]
 
   public-dir:
-    script:
-      - mkdir -p /srv/public
-      - chmod -R 777 /srv/public
+    script: |
+      mkdir -p /srv/public
+      chmod -R 777 /srv/public
     when:
       check_fails: test -d /srv/public
