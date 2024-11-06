@@ -15,4 +15,5 @@ tasks:
     required_by: [":apt"]
     script: echo minidlna > "${EBRO_ROOT}/.cache/apt/packages/minidlna.txt"
     when:
+      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/minidlna.txt"
       output_changes: echo minidlna
