@@ -1,7 +1,9 @@
 tasks:
   default:
     requires: [prepare]
-    script: apt-get install -y $(cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt)
+    script: |
+      apt-get update
+      apt-get install -y $(cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt)
     when:
       output_changes: cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt
 

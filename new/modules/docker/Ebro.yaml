@@ -1,0 +1,22 @@
+tasks:
+  default:
+    requires: [bin]
+    script: ./install-docker-debian.sh
+    when:
+    status:
+      - command -v docker
+
+  bin:
+    requires: [repository, ":apt:prepare"]
+    required_by: [":apt"]
+    script: cp apt-packages.txt "${EBRO_ROOT}/.cache/apt/packages/docker.txt"
+    when:
+      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/docker.txt"
+      output_changes: cat apt-packages.txt
+
+  repository:
+    script: ./docker-debian-repository.sh
+    when:
+      check_fails: |
+        test -f /etc/apt/keyrings/docker.asc
+        test -f /etc/apt/sources.list.d/docker.list

@@ -3,7 +3,9 @@ imports:
     from: ../../modules/apt
   vpn:
     from: ../../modules/vpn
+  docker:
+    from: ../../modules/docker
 
 tasks:
   default:
-    requires: [apt, vpn:server]
+    requires: [apt, vpn:server, docker]
