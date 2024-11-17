@@ -8,7 +8,7 @@ imports:
 
 tasks:
   default:
-    requires: [minidlna, samba, public-dir]
+    requires: [apt, minidlna, samba, public-dir]
 
   public-dir:
     script: |
