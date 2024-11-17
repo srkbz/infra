@@ -1,6 +1,8 @@
 imports:
   apt:
     from: ../../modules/apt
+  vpn:
+    from: ../../modules/vpn
   minidlna:
     from: ./modules/minidlna
   samba:
@@ -8,7 +10,7 @@ imports:
 
 tasks:
   default:
-    requires: [apt, minidlna, samba, public-dir]
+    requires: [apt, minidlna, samba, vpn:home-gateway, public-dir]
 
   public-dir:
     script: |
