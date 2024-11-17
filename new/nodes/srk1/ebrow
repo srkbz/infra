@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export EBRO_INSTALLER_VERSION="refs/heads/master"
+export EBRO_BIN=".ebro/bin/ebro"
+if [ ! -f "$EBRO_BIN" ]; then
+    curl -L "https://raw.githubusercontent.com/sirikon/ebro/${EBRO_INSTALLER_VERSION}/scripts/ebro-installer.sh" | bash
+fi
+exec "$EBRO_BIN" "$@"
