@@ -1,10 +1,6 @@
 tasks:
   default:
     requires: [bin]
-    script: ./install-docker-debian.sh
-    when:
-    status:
-      - command -v docker
 
   bin:
     requires: [repository, ":apt:prepare"]
