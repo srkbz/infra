@@ -8,9 +8,6 @@ tasks:
       output_changes: cat minidlna.conf
 
   bin:
-    requires: [":apt", bin-apt-config]
-
-  bin-apt-config:
     requires: [":apt:prepare"]
     required_by: [":apt"]
     script: echo minidlna > "${EBRO_ROOT}/.cache/apt/packages/minidlna.txt"
