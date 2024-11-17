@@ -1,0 +1,9 @@
+imports:
+  apt:
+    from: ../../modules/apt
+  vpn:
+    from: ../../modules/vpn
+
+tasks:
+  default:
+    requires: [apt, vpn:server]
