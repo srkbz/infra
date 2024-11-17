@@ -1,6 +1,6 @@
 imports:
   apt:
-    from: ../modules/apt
+    from: ../../modules/apt
   minidlna:
     from: ./modules/minidlna
   samba:
