@@ -1,11 +1,11 @@
 tasks:
   default:
-    requires: [pre-config]
+    requires: [prepare]
     script: apt-get install -y $(cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt)
     when:
       output_changes: cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt
 
-  pre-config:
+  prepare:
     script: mkdir -p "${EBRO_ROOT}/.cache/apt/packages"
     when:
       check_fails: test -d "${EBRO_ROOT}/.cache/apt/packages"

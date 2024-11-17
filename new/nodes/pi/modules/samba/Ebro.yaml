@@ -12,7 +12,7 @@ tasks:
     requires: [":apt", bin-apt-config]
 
   bin-apt-config:
-    requires: [":apt:pre-config"]
+    requires: [":apt:prepare"]
     required_by: [":apt"]
     script: echo samba > "${EBRO_ROOT}/.cache/apt/packages/samba.txt"
     when:

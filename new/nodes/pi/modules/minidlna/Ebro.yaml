@@ -11,7 +11,7 @@ tasks:
     requires: [":apt", bin-apt-config]
 
   bin-apt-config:
-    requires: [":apt:pre-config"]
+    requires: [":apt:prepare"]
     required_by: [":apt"]
     script: echo minidlna > "${EBRO_ROOT}/.cache/apt/packages/minidlna.txt"
     when:

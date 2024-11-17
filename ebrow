@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+exec "$(realpath "$(dirname "${BASH_SOURCE[0]}")")/new/nodes/$(hostname)/ebrow"
