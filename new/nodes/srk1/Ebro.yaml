@@ -5,7 +5,9 @@ imports:
     from: ../../modules/vpn
   docker:
     from: ../../modules/docker
+  secrets:
+    from: ../../modules/secrets
 
 tasks:
   default:
-    requires: [apt, vpn:server, docker]
+    requires: [apt, vpn:server, docker, secrets]
