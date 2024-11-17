@@ -2,4 +2,4 @@
 set -euo pipefail
 
 cd "$(realpath "$(dirname "${BASH_SOURCE[0]}")")/new/nodes/$(hostname)"
-exec ./ebrow
+exec ./ebrow "$@"
