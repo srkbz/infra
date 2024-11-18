@@ -7,7 +7,9 @@ imports:
     from: ../../modules/docker
   secrets:
     from: ../../modules/secrets
+  caddy:
+    from: ../../modules/caddy
 
 tasks:
   default:
-    requires: [apt, vpn:server, docker, secrets]
+    requires: [apt, vpn:server, docker, secrets, caddy]

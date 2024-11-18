@@ -1,0 +1,37 @@
+environment:
+  CADDY_VERSION: "2.8.4"
+
+tasks:
+  default:
+    requires: [prepare, install]
+    script: |
+      cp Caddyfile /etc/caddy/Caddyfile
+      systemctl reload caddy
+    when:
+      output_changes: |
+        cat Caddyfile
+        cat /etc/caddy/conf.d/*
+      check_fails: test -f /etc/caddy/Caddyfile
+
+  prepare:
+    script: |
+      mkdir -p /etc/caddy/conf.d
+    when:
+      check_fails: test -d /etc/caddy/conf.d
+
+  install:
+    requires: [deb]
+    script: |
+      apt-get install -y "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
+    when:
+      check_fails: |
+        command -v caddy
+        [[ "$(caddy --version)" == "v${CADDY_VERSION} "* ]]
+
+  deb:
+    script: |
+      mkdir -p "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}"
+      cd "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}"
+      curl -L -o caddy.deb "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.deb"
+    when:
+      check_fails: test -f "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
