@@ -9,7 +9,9 @@ imports:
     from: ../../modules/secrets
   caddy:
     from: ../../modules/caddy
+  webhook:
+    from: ../../modules/webhook
 
 tasks:
   default:
-    requires: [apt, vpn:server, docker, secrets, caddy]
+    requires: [apt, vpn:server, docker, secrets, caddy, webhook]
