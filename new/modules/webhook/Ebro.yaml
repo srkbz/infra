@@ -8,7 +8,7 @@ tasks:
     when:
       output_changes: |
         cat write-config.py
-        cat "${EBRO_ROOT}/.cache/webhook/conf/"*
+        cat "${EBRO_ROOT}/.cache/webhook/conf/"* || true
       check_fails: test -f /etc/webhook.conf
 
   prepare:
