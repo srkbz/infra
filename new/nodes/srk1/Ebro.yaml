@@ -1,4 +1,6 @@
 imports:
+  ebrow-service:
+    from: ../../modules/ebrow-service
   apt:
     from: ../../modules/apt
   vpn:
@@ -14,4 +16,11 @@ imports:
 
 tasks:
   default:
-    requires: [apt, vpn:server, docker, secrets, caddy, webhook]
+    requires:
+      - ebrow-service
+      - apt
+      - vpn:server
+      - docker
+      - secrets
+      - caddy
+      - webhook

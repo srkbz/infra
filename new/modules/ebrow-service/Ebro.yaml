@@ -1,0 +1,42 @@
+environment:
+  TRIGGER_HOME: /opt/ebrow/trigger
+  TRIGGER_GROUP: ebrow-trigger
+  TRIGGER_BIN: /usr/local/bin/ebrow-trigger
+
+tasks:
+  default:
+    requires: [trigger-home, trigger-bin]
+    script: |
+      cat ebrow.service | envsubst > /etc/systemd/system/ebrow.service
+      cat ebrow.path | envsubst > /etc/systemd/system/ebrow.path
+      systemctl daemon-reload
+      systemctl enable ebrow.path
+      systemctl start ebrow.path
+    when:
+      check_fails: |
+        test -f /etc/systemd/system/ebrow.path
+        test -f /etc/systemd/system/ebrow.service
+      output_changes: |
+        cat ebrow.service
+        cat ebrow.path
+
+  trigger-bin:
+    script: |
+      cat ebrow-trigger | envsubst > "${TRIGGER_BIN}"
+    when:
+      check_fails: test -f "${TRIGGER_BIN}"
+      output_changes: cat ebrow-trigger | envsubst
+
+  trigger-home:
+    requires: [trigger-group]
+    script: |
+      mkdir -p "${TRIGGER_HOME}"
+      chown root:"${TRIGGER_GROUP}" "${TRIGGER_HOME}"
+      chmod --recursive 775 "${TRIGGER_HOME}"
+    when:
+      check_fails: test -d "${TRIGGER_HOME}"
+
+  trigger-group:
+    script: groupadd --force "${TRIGGER_GROUP}"
+    when:
+      check_fails: cat /etc/group | grep "${TRIGGER_GROUP}"

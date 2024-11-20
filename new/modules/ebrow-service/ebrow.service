@@ -1,0 +1,8 @@
+[Unit]
+Description=ebrow
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=${EBRO_ROOT}/ebrow
+WorkingDirectory=${EBRO_ROOT}

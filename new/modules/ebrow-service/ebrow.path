@@ -1,0 +1,5 @@
+[Path]
+PathChanged=${TRIGGER_HOME}/RUN
+
+[Install]
+WantedBy=multi-user.target
