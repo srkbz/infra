@@ -23,6 +23,7 @@ tasks:
   trigger-bin:
     script: |
       cat ebrow-trigger | envsubst > "${TRIGGER_BIN}"
+      chmod +x "${TRIGGER_BIN}"
     when:
       check_fails: test -f "${TRIGGER_BIN}"
       output_changes: cat ebrow-trigger | envsubst
