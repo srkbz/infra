@@ -23,8 +23,8 @@ tasks:
       check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
 
   caddy:
-    requires: [":caddy"]
-    required_by: [":caddy:prepare"]
+    requires: [":caddy:prepare"]
+    required_by: [":caddy"]
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
