@@ -1,7 +1,7 @@
 environment:
   SITE_HOME: "/opt/static-sites/${DOMAIN}"
   SITE_WEBHOOK_CONF: "${EBRO_ROOT}/.cache/webhook/conf/static-site-${DOMAIN}.json"
-  SITE_CADDY_CONF: "/etc/caddy/conf.d/${DOMAIN}.caddyfile"
+  SITE_CADDY_CONF: "/etc/caddy/conf.d/static-site-${DOMAIN}.caddyfile"
   SITE_SECRETS: "${EBRO_ROOT}/.state/secrets/static-sites/${DOMAIN}.env"
 
 tasks:
