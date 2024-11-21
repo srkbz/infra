@@ -1,0 +1,55 @@
+environment:
+  SITE_HOME: "/opt/static-sites/${DOMAIN}"
+  SITE_WEBHOOK_CONF: "${EBRO_ROOT}/.cache/webhook/conf/static-site-${DOMAIN}.json"
+  SITE_CADDY_CONF: "/etc/caddy/conf.d/${DOMAIN}.caddyfile"
+  SITE_SECRETS: "${EBRO_ROOT}/.state/secrets/static-sites/${DOMAIN}.env"
+
+tasks:
+  default:
+    requires: [site, caddy, webhook]
+
+  site:
+    requires: [home, target-commit, ":docker"]
+    script: ./build-site.sh
+    when:
+      check_fails: |
+        test -f "${SITE_HOME}/LIVE_COMMIT"
+        [ "$(cat "${SITE_HOME}/TARGET_COMMIT")" == "$(cat "${SITE_HOME}/LIVE_COMMIT")" ]
+
+  target-commit:
+    requires: [home]
+    script: ./update-target-commit.sh
+    when:
+      check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
+
+  caddy:
+    requires: [":caddy"]
+    script: |
+      FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
+      export FILE_SERVER_FLAGS
+      cat Caddyfile | envsubst > "${SITE_CADDY_CONF}"
+    when:
+      check_fails: test -f "${SITE_CADDY_CONF}"
+      output_changes: cat Caddyfile
+
+  home:
+    script: |
+      mkdir -p "${SITE_HOME}/live"
+      mkdir -p "${SITE_HOME}/builds"
+    when:
+      check_fails: |
+        test -d "${SITE_HOME}/live"
+        test -f "${SITE_HOME}/builds"
+
+  webhook:
+    requires: [":webhook:prepare", ":secrets"]
+    required_by: [":webhook"]
+    script: |
+      . "${SITE_SECRETS}"
+      export WEBHOOK_SECRET
+      ./webhook-build.py
+    when:
+      check_fails: test -f "${SITE_WEBHOOK_CONF}"
+      output_changes: |
+        cat webhook-build.py
+        cat "${SITE_SECRETS}" | grep "WEBHOOK_SECRET"

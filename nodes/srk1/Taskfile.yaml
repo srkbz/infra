@@ -13,49 +13,6 @@ includes:
   uptime-kuma: ../../modules/uptime-kuma
   vpn: ../../modules/vpn
 
-  static-site-sirikon.me:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: sirikon.me
-      REPOSITORY: https://github.com/sirikon/sirikon.me.git
-      BRANCH: master
-
-  static-site-osoondo.com:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: osoondo.com
-      REPOSITORY: https://github.com/sirikon/osoondo.com.git
-      BRANCH: master
-
-  static-site-egin.sirikon.me:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: egin.sirikon.me
-      REPOSITORY: https://github.com/sirikon/egin.git
-      BRANCH: master
-
-  static-site-astenagusia.eus:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: astenagusia.eus
-      REPOSITORY: https://github.com/sirikon/astenagusia.git
-      BRANCH: master
-
-  static-site-2048.sirikon.me:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: 2048.sirikon.me
-      REPOSITORY: https://github.com/sirikon/2048.git
-      BRANCH: master
-
-  static-site-ebro.srk.bz:
-    taskfile: ../../modules/static-site
-    vars:
-      DOMAIN: ebro.srk.bz
-      REPOSITORY: https://github.com/sirikon/ebro.git
-      BRANCH: master
-      BROWSE: true
-
 tasks:
   default:
     deps:
@@ -64,13 +21,4 @@ tasks:
       - webhook
       - freshrss
       - uptime-kuma
-      - static-site-sirikon.me
-      - static-site-osoondo.com
-      - static-site-egin.sirikon.me
-      - static-site-astenagusia.eus
-      - static-site-2048.sirikon.me
-      - static-site-ebro.srk.bz
       - vpn:server
-    cmds:
-      - task: webhook:after-all
-      - task: caddy:after-all
