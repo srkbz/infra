@@ -1,0 +1,13 @@
+environment:
+  SECRETS_ENV_FILE: ${EBRO_ROOT}/.state/secrets/watchtower.env
+
+tasks:
+  default:
+    requires: [":docker", ":secrets"]
+    script: |
+      cp "${SECRETS_ENV_FILE}" .env
+      docker compose up --detach --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+        cat "${SECRETS_ENV_FILE}"

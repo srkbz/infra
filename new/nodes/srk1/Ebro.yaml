@@ -13,6 +13,8 @@ imports:
     from: ../../modules/caddy
   webhook:
     from: ../../modules/webhook
+  watchtower:
+    from: ../../modules/watchtower
 
 tasks:
   default:
@@ -24,3 +26,4 @@ tasks:
       - secrets
       - caddy
       - webhook
+      - watchtower
