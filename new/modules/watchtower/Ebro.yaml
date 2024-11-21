@@ -1,13 +1,21 @@
 environment:
+  WATCHTOWER_HOME: ${EBRO_ROOT}/.state/watchtower
   SECRETS_ENV_FILE: ${EBRO_ROOT}/.state/secrets/watchtower.env
 
 tasks:
   default:
     requires: [":docker", ":secrets"]
     script: |
-      cp "${SECRETS_ENV_FILE}" .env
+      mkdir -p "${WATCHTOWER_HOME}"
+      cp docker-compose.yml "${WATCHTOWER_HOME}/docker-compose.yml"
+      cp "${SECRETS_ENV_FILE}" "${WATCHTOWER_HOME}/.env"
+      cd "${WATCHTOWER_HOME}"
       docker compose up --detach --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml
         cat "${SECRETS_ENV_FILE}"
+      check_fails: |
+        test -d "${WATCHTOWER_HOME}"
+        test -f "${WATCHTOWER_HOME}/docker-compose.yml"
+        test -f "${WATCHTOWER_HOME}/.env"
