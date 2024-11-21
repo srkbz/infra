@@ -1,5 +1,0 @@
-[Path]
-PathChanged=/opt/taskw/triggers/RUN
-
-[Install]
-WantedBy=multi-user.target
