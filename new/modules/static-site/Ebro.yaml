@@ -24,6 +24,7 @@ tasks:
 
   caddy:
     requires: [":caddy"]
+    required_by: [":caddy:prepare"]
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
@@ -31,15 +32,6 @@ tasks:
     when:
       check_fails: test -f "${SITE_CADDY_CONF}"
       output_changes: cat Caddyfile
-
-  home:
-    script: |
-      mkdir -p "${SITE_HOME}/live"
-      mkdir -p "${SITE_HOME}/builds"
-    when:
-      check_fails: |
-        test -d "${SITE_HOME}/live"
-        test -f "${SITE_HOME}/builds"
 
   webhook:
     requires: [":webhook:prepare", ":secrets"]
@@ -53,3 +45,12 @@ tasks:
       output_changes: |
         cat webhook-build.py
         cat "${SITE_SECRETS}" | grep "WEBHOOK_SECRET"
+
+  home:
+    script: |
+      mkdir -p "${SITE_HOME}/live"
+      mkdir -p "${SITE_HOME}/builds"
+    when:
+      check_fails: |
+        test -d "${SITE_HOME}/live"
+        test -f "${SITE_HOME}/builds"

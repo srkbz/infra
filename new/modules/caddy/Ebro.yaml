@@ -10,7 +10,7 @@ tasks:
     when:
       output_changes: |
         cat Caddyfile
-        cat /etc/caddy/conf.d/*
+        cat /etc/caddy/conf.d/* || true
       check_fails: test -f /etc/caddy/Caddyfile
 
   prepare:
