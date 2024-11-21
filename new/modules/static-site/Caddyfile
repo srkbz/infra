@@ -1,4 +1,4 @@
 https://${DOMAIN} {
   root * ${SITE_HOME}/live
-  file_server ${BROWSE}
+  file_server ${FILE_SERVER_FLAGS}
 }
