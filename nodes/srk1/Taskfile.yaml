@@ -4,12 +4,9 @@ output: prefixed
 run: when_changed
 
 includes:
-  docker: ../../modules/docker
   freshrss: ../../modules/freshrss
-  uptime-kuma: ../../modules/uptime-kuma
 
 tasks:
   default:
     deps:
       - freshrss
-      - uptime-kuma

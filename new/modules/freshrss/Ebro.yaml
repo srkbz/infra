@@ -1,0 +1,19 @@
+environment:
+  FRESHRSS_HOME: ${EBRO_ROOT}/.state/freshrss
+
+tasks:
+  default:
+    requires: [":docker"]
+    script: |
+      mkdir -p "${FRESHRSS_HOME}"
+      cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
+      cd "${FRESHRSS_HOME}"
+      docker compose up --detach --wait --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+      check_fails: |
+        test -d "${FRESHRSS_HOME}"
+        cd "${FRESHRSS_HOME}"
+        test -f "docker-compose.yml"
+        [ "$(docker compose ps -q)" != "" ]
