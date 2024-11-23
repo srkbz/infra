@@ -15,6 +15,8 @@ imports:
     from: ../../modules/webhook
   watchtower:
     from: ../../modules/watchtower
+  uptime-kuma:
+    from: ../../modules/uptime-kuma
 
   static-site-sirikon.me:
     from: ../../modules/static-site
@@ -70,6 +72,7 @@ tasks:
       - caddy
       - webhook
       - watchtower
+      - uptime-kuma
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me

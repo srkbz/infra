@@ -1,0 +1,25 @@
+environment:
+  UPTIME_KUMA_HOME: ${EBRO_ROOT}/.state/uptime-kuma
+
+tasks:
+  default:
+    requires: [":docker", extra-ca]
+    script: |
+      mkdir -p "${UPTIME_KUMA_HOME}"
+      cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
+      cd "${UPTIME_KUMA_HOME}"
+      docker compose up --detach --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+        cat "${UPTIME_KUMA_HOME}/extra-ca/"* || true
+      check_fails: |
+        test -d "${UPTIME_KUMA_HOME}"
+        test -f "${UPTIME_KUMA_HOME}/docker-compose.yml"
+
+  extra-ca:
+    cmds:
+      - mkdir -p "${UPTIME_KUMA_HOME}/extra-ca"
+      - curl 'https://cacerts.digicert.com/ThawteTLSRSACAG1.crt.pem'>"${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
+    status:
+      - test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"

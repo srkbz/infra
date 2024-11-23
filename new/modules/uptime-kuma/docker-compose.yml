@@ -1,0 +1,13 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    environment:
+      NODE_EXTRA_CA_CERTS: /extra-ca/ThawteTLSRSACAG1.crt
+    volumes:
+      - ./extra-ca:/extra-ca:ro
+      - ./data:/app/data
+    ports:
+      - 10.10.0.1:3001:3001
