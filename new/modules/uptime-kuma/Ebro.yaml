@@ -18,8 +18,8 @@ tasks:
         test -f "${UPTIME_KUMA_HOME}/docker-compose.yml"
 
   extra-ca:
-    script:
-      - mkdir -p "${UPTIME_KUMA_HOME}/extra-ca"
-      - curl 'https://cacerts.digicert.com/ThawteTLSRSACAG1.crt.pem'>"${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
+    script: |
+      mkdir -p "${UPTIME_KUMA_HOME}/extra-ca"
+      curl 'https://cacerts.digicert.com/ThawteTLSRSACAG1.crt.pem'>"${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
     when:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
