@@ -17,5 +17,7 @@ tasks:
         cat "${SECRETS_ENV_FILE}"
       check_fails: |
         test -d "${WATCHTOWER_HOME}"
-        test -f "${WATCHTOWER_HOME}/docker-compose.yml"
-        test -f "${WATCHTOWER_HOME}/.env"
+        cd "${WATCHTOWER_HOME}"
+        test -f "docker-compose.yml"
+        test -f ".env"
+        [ "$(docker compose ps -q)" != "" ]
