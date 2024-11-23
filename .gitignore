@@ -1,5 +1,3 @@
+**/.ebro
 **/.cache
 **/.state
-**/.task
-**/nodes/*/secrets
-**/nodes/*/secrets.env
