@@ -10,7 +10,7 @@ tasks:
       cp docker-compose.yml "${WATCHTOWER_HOME}/docker-compose.yml"
       cp "${SECRETS_ENV_FILE}" "${WATCHTOWER_HOME}/.env"
       cd "${WATCHTOWER_HOME}"
-      docker compose up --detach --remove-orphans
+      docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml

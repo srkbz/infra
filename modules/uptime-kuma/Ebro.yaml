@@ -8,7 +8,7 @@ tasks:
       mkdir -p "${UPTIME_KUMA_HOME}"
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
       cd "${UPTIME_KUMA_HOME}"
-      docker compose up --detach --remove-orphans
+      docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml
