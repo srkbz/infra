@@ -8,6 +8,6 @@ services:
       TZ: Europe/Madrid
       CRON_MIN: "15,45"
     volumes:
-      - ./.state/data:/var/www/FreshRSS/data
+      - ./data:/var/www/FreshRSS/data
     ports:
       - 10.10.0.1:3000:80
