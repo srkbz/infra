@@ -15,7 +15,9 @@ tasks:
         cat "${UPTIME_KUMA_HOME}/extra-ca/"* || true
       check_fails: |
         test -d "${UPTIME_KUMA_HOME}"
-        test -f "${UPTIME_KUMA_HOME}/docker-compose.yml"
+        cd "${UPTIME_KUMA_HOME}"
+        test -f "docker-compose.yml"
+        [ "$(docker compose ps -q)" != "" ]
 
   extra-ca:
     script: |
