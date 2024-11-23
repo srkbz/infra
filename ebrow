@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(realpath "$(dirname "${BASH_SOURCE[0]}")")/new/nodes/$(hostname)"
+cd "$(realpath "$(dirname "${BASH_SOURCE[0]}")")/nodes/$(hostname)"
 exec ./ebrow "$@"
