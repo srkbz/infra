@@ -26,5 +26,5 @@ tasks:
     script: |
       cp venue.caddyfile "${VENUE_CADDY_CONF}"
     when:
-      output_changes: cat Caddyfile
+      output_changes: cat venue.caddyfile
       check_fails: test -f "${VENUE_CADDY_CONF}"
