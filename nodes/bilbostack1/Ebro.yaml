@@ -8,6 +8,9 @@ imports:
   caddy:
     from: ../../modules/caddy
 
+  venue:
+    from: ./venue
+
 tasks:
   default:
     requires:
@@ -15,3 +18,4 @@ tasks:
       - apt
       - docker
       - caddy
+      - venue

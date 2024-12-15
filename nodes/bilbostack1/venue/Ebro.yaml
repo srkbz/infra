@@ -1,0 +1,19 @@
+environment:
+  VENUE_HOME: ${EBRO_ROOT}/.state/venue
+
+tasks:
+  default:
+    requires: [":docker"]
+    script: |
+      mkdir -p "${VENUE_HOME}"
+      cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
+      cd "${VENUE_HOME}"
+      docker compose up --detach --wait --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+      check_fails: |
+        test -d "${VENUE_HOME}"
+        cd "${VENUE_HOME}"
+        test -f "docker-compose.yml"
+        [ "$(docker compose ps -q)" != "" ]
