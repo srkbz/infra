@@ -11,7 +11,8 @@ tasks:
       cd "${VENUE_HOME}"
       test -f .env
       mkdir -p data/app
-      chown -R venue:venue data/app
+      mkdir -p data/db
+      chown -R venue:venue data
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
