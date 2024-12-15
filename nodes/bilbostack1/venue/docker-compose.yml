@@ -5,6 +5,8 @@ services:
     environment:
       VENUE_DB_HOST: db
       VENUE_SECRET_KEY: ${VENUE_SECRET_KEY}
+      VENUE_WORKERS: 2
+      VENUE_THREADS: 2
     volumes:
       - ./data/app:/w
     ports:
