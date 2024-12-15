@@ -8,6 +8,7 @@ tasks:
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       cd "${VENUE_HOME}"
+      test -f .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
