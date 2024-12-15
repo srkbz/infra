@@ -1,0 +1,17 @@
+imports:
+  ebrow-service:
+    from: ../../modules/ebrow-service
+  apt:
+    from: ../../modules/apt
+  docker:
+    from: ../../modules/docker
+  caddy:
+    from: ../../modules/caddy
+
+tasks:
+  default:
+    requires:
+      - ebrow-service
+      - apt
+      - docker
+      - caddy
