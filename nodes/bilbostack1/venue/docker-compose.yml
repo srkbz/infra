@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/sirikon/venue:20241215_211035
+    image: ghcr.io/sirikon/venue:20241215_211506
     restart: always
     environment:
       VENUE_DB_HOST: db
@@ -18,7 +18,7 @@ services:
         condition: service_healthy
         restart: true
   app-migrate:
-    image: ghcr.io/sirikon/venue:20241215_211035
+    image: ghcr.io/sirikon/venue:20241215_211506
     command: ["venue-migrate"]
     environment:
       VENUE_DB_HOST: db
