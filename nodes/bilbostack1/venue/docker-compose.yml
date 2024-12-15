@@ -2,6 +2,7 @@ services:
   app:
     image: ghcr.io/sirikon/venue:20241215_214834
     restart: always
+    user: venue
     environment:
       VENUE_DB_HOST: db
       VENUE_SECRET_KEY: ${VENUE_SECRET_KEY}
@@ -19,6 +20,7 @@ services:
         restart: true
   app-migrate:
     image: ghcr.io/sirikon/venue:20241215_214834
+    user: venue
     command: ["venue-migrate"]
     environment:
       VENUE_DB_HOST: db

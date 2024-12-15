@@ -4,12 +4,14 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", caddy]
+    requires: [":docker", caddy, venue-user]
     script: |
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       cd "${VENUE_HOME}"
       test -f .env
+      mkdir -p data/app
+      chown -R venue:venue data/app
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
@@ -28,3 +30,8 @@ tasks:
     when:
       output_changes: cat venue.caddyfile
       check_fails: test -f "${VENUE_CADDY_CONF}"
+
+  venue-user:
+    script: useradd --system --shell /bin/false venue
+    when:
+      check_fails: cat /etc/passwd | grep venue
