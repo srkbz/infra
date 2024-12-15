@@ -26,7 +26,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-        restart: true
   db:
     image: postgres:16-alpine
     restart: always
