@@ -30,7 +30,6 @@ services:
         condition: service_healthy
   db:
     image: postgres:16-alpine
-    user: ${VENUE_USER_ID}
     restart: always
     environment:
       POSTGRES_DB: venue

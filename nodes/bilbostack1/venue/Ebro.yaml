@@ -11,8 +11,7 @@ tasks:
       cd "${VENUE_HOME}"
       test -f venue.env
       mkdir -p data/app
-      mkdir -p data/db
-      chown -R venue:venue data
+      chown -R venue:venue data/app
       echo "VENUE_USER_ID=$(id -u venue)" > .env
       docker compose up --detach --wait --remove-orphans
     when:
