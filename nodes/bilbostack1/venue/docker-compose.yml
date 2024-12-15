@@ -2,10 +2,10 @@ services:
   app:
     image: ghcr.io/sirikon/venue:20241215_214834
     restart: always
-    user: venue
+    user: ${VENUE_USER_ID}
+    env_file: venue.env
     environment:
       VENUE_DB_HOST: db
-      VENUE_SECRET_KEY: ${VENUE_SECRET_KEY}
       VENUE_WORKERS: 2
       VENUE_THREADS: 2
     volumes:
@@ -20,17 +20,17 @@ services:
         restart: true
   app-migrate:
     image: ghcr.io/sirikon/venue:20241215_214834
-    user: venue
+    user: ${VENUE_USER_ID}
     command: ["venue-migrate"]
+    env_file: venue.env
     environment:
       VENUE_DB_HOST: db
-      VENUE_SECRET_KEY: ${VENUE_SECRET_KEY}
     depends_on:
       db:
         condition: service_healthy
   db:
     image: postgres:16-alpine
-    user: venue
+    user: ${VENUE_USER_ID}
     restart: always
     environment:
       POSTGRES_DB: venue

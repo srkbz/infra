@@ -9,10 +9,11 @@ tasks:
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       cd "${VENUE_HOME}"
-      test -f .env
+      test -f venue.env
       mkdir -p data/app
       mkdir -p data/db
       chown -R venue:venue data
+      echo "VENUE_USER_ID=$(id -u venue)" > .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
