@@ -55,14 +55,6 @@ imports:
       REPOSITORY: https://github.com/sirikon/2048.git
       BRANCH: master
 
-  static-site-ebro.srk.bz:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: ebro.srk.bz
-      REPOSITORY: https://github.com/sirikon/ebro.git
-      BRANCH: master
-      FILE_SERVER_FLAGS: browse
-
 tasks:
   default:
     requires:
@@ -81,4 +73,3 @@ tasks:
       - static-site-egin.sirikon.me
       - static-site-astenagusia.eus
       - static-site-2048.sirikon.me
-      - static-site-ebro.srk.bz
