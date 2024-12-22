@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EBRO_VERSION="0.0.0"
+EBRO_VERSION="0.1.0"
 declare -A EBRO_SUMS=(
-    ["Linux__aarch64"]="4a4bdc1a2c9de8f8ef4d1be012d7961db87d0d393830845076c07fc7294d09c3"
-    ["Linux__x86_64"]="a130f6841a0e7df139bc3ddec1db95c5952fc7820d4deeae59e8139d88a395bc"
-    ["Darwin__arm64"]="ee28211d9eb2eb0e7348e4986f514147fca1525a25aa19c3dc04d1c173ab97f6"
+    ["Linux__aarch64"]="db8a5c0eacac69d3208db487dd0eec05d920fbee30007e9387217b378a60b54b"
+    ["Linux__x86_64"]="ee415ac1957bcd4b52a3ffddd6989c55efa12ccf5fe3e9aaf83ab020ff9ebca4"
+    ["Darwin__arm64"]="7c0fdadc3ea764483676fbe145fc294aa3df24d362502ce8ce7da20cfe1e2267"
 )
 
-EBRO_BIN=".ebro/bin/ebro"
+EBRO_BIN=".ebro/bin/${EBRO_VERSION}/ebro"
 if [ ! -f "$EBRO_BIN" ] || [ ! -x "$EBRO_BIN" ]; then
     variant="$(uname -s)__$(uname -m)"
     if [ ! "${EBRO_SUMS[$variant]+ok}" ]; then
