@@ -12,7 +12,7 @@ mkdir -p "${BUILD_WORKSPACE}"
     cd "${BUILD_WORKSPACE}"
     git init
     git remote add origin "${REPOSITORY}"
-    git fetch origin "${TARGET_COMMIT}"
+    git fetch --tags origin "${TARGET_COMMIT}"
     git reset --hard "${TARGET_COMMIT}"
 
     if [ "$DOMAIN" == "ebro.sirikon.me" ]; then
