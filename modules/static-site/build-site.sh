@@ -15,7 +15,10 @@ mkdir -p "${BUILD_WORKSPACE}"
     git fetch origin "${TARGET_COMMIT}"
     git reset --hard "${TARGET_COMMIT}"
 
-    if [ -f "Dockerfile" ]; then
+    if [ "$DOMAIN" == "ebro.sirikon.me" ]; then
+        ./meta/docker/build.sh website
+        cp -r "out/website" "${SITE_LIVE}"
+    elif [ -f "Dockerfile" ]; then
         docker build -t "site_${BUILD_ID}" .
         container_id=$(docker create "site_${BUILD_ID}")
         rm -rf "${SITE_LIVE}"

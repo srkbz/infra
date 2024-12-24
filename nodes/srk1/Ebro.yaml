@@ -55,6 +55,13 @@ imports:
       REPOSITORY: https://github.com/sirikon/2048.git
       BRANCH: master
 
+  static-site-ebro.sirikon.me:
+    from: ../../modules/static-site
+    environment:
+      DOMAIN: ebro.sirikon.me
+      REPOSITORY: https://github.com/sirikon/ebro.git
+      BRANCH: master
+
 tasks:
   default:
     requires:
