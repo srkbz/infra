@@ -17,6 +17,7 @@ mkdir -p "${BUILD_WORKSPACE}"
 
     if [ "$DOMAIN" == "ebro.sirikon.me" ]; then
         ./meta/docker/build.sh website
+        rm -rf "${SITE_LIVE}"
         cp -r "out/website" "${SITE_LIVE}"
     elif [ -f "Dockerfile" ]; then
         docker build -t "site_${BUILD_ID}" .
