@@ -1,13 +1,20 @@
+environment:
+  APT_PACKAGES_ROOT: ${EBRO_ROOT}/.cache/apt/packages
+
 tasks:
   default:
     requires: [prepare]
     script: |
       apt-get update
-      apt-get install -y $(cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt)
+      apt-get install -y $(cat "${APT_PACKAGES_ROOT}"/*.txt)
     when:
-      output_changes: cat "${EBRO_ROOT}"/.cache/apt/packages/*.txt
+      output_changes: cat "${APT_PACKAGES_ROOT}"/*.txt
 
   prepare:
-    script: mkdir -p "${EBRO_ROOT}/.cache/apt/packages"
-    when:
-      check_fails: test -d "${EBRO_ROOT}/.cache/apt/packages"
+    script: rm -rf "${APT_PACKAGES_ROOT}" && mkdir -p "${APT_PACKAGES_ROOT}"
+    quiet: true
+
+  configure:
+    abstract: true
+    requires: [prepare]
+    required_by: [default]

@@ -3,12 +3,10 @@ tasks:
     requires: [bin]
 
   bin:
-    requires: [repository, ":apt:prepare"]
-    required_by: [":apt"]
-    script: cp apt-packages.txt "${EBRO_ROOT}/.cache/apt/packages/docker.txt"
-    when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/docker.txt"
-      output_changes: cat apt-packages.txt
+    extends: [":apt:configure"]
+    requires: [repository]
+    script: cp apt-packages.txt "${APT_PACKAGES_ROOT}/docker.txt"
+    quiet: true
 
   repository:
     script: ./docker-debian-repository.sh

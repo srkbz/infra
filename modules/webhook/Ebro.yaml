@@ -16,12 +16,9 @@ tasks:
       check_fails: test -f /etc/webhook.conf
 
   bin:
-    requires: [":apt:prepare"]
-    required_by: [":apt"]
-    script: echo webhook > "${EBRO_ROOT}/.cache/apt/packages/webhook.txt"
-    when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/webhook.txt"
-      output_changes: echo webhook
+    extends: [":apt:configure"]
+    script: echo webhook > "${APT_PACKAGES_ROOT}/webhook.txt"
+    quiet: true
 
   prepare:
     script: rm -rf "${WEBHOOK_CONF_ROOT}" && mkdir -p "${WEBHOOK_CONF_ROOT}"

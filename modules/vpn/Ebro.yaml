@@ -49,17 +49,11 @@ tasks:
         [ "$(cat /proc/sys/net/ipv4/ip_forward)" == "1" ]
 
   qrencode:
-    requires: [":apt:prepare"]
-    required_by: [":apt"]
-    script: echo qrencode > "${EBRO_ROOT}/.cache/apt/packages/qrencode.txt"
-    when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/qrencode.txt"
-      output_changes: echo qrencode
+    extends: [":apt:configure"]
+    script: echo qrencode > "${APT_PACKAGES_ROOT}/qrencode.txt"
+    quiet: true
 
   wireguard:
-    requires: [":apt:prepare"]
-    required_by: [":apt"]
-    script: echo wireguard > "${EBRO_ROOT}/.cache/apt/packages/wireguard.txt"
-    when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/wireguard.txt"
-      output_changes: echo wireguard
+    extends: [":apt:configure"]
+    script: echo wireguard > "${APT_PACKAGES_ROOT}/wireguard.txt"
+    quiet: true

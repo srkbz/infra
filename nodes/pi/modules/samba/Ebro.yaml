@@ -9,12 +9,9 @@ tasks:
       output_changes: cat smb.conf
 
   bin:
-    requires: [":apt:prepare"]
-    required_by: [":apt"]
-    script: echo samba > "${EBRO_ROOT}/.cache/apt/packages/samba.txt"
-    when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/samba.txt"
-      output_changes: echo samba
+    extends: [":apt:configure"]
+    script: echo samba > "${APT_PACKAGES_ROOT}/samba.txt"
+    quiet: true
 
   samba-guest-user:
     script: adduser --system samba-guest
