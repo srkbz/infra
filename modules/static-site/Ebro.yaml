@@ -39,7 +39,7 @@ tasks:
       . "${SITE_SECRETS}"
       export WEBHOOK_SECRET
       ./webhook-build.py
-    silent: true
+    quiet: true
 
   home:
     script: |
