@@ -1,21 +1,19 @@
+environment:
+  WEBHOOK_CONF_ROOT: ${EBRO_ROOT}/.cache/webhook/conf
+
 tasks:
   default:
     requires: [bin, prepare]
     script: |
       WD="$(pwd)"
-      cd "${EBRO_ROOT}/.cache/webhook/conf"
+      cd "${WEBHOOK_CONF_ROOT}"
       "$WD/write-config.py"
       systemctl restart webhook.service
     when:
       output_changes: |
         cat write-config.py
-        cat "${EBRO_ROOT}/.cache/webhook/conf/"* || true
+        cat "${WEBHOOK_CONF_ROOT}/"* || true
       check_fails: test -f /etc/webhook.conf
-
-  prepare:
-    script: mkdir -p "${EBRO_ROOT}/.cache/webhook/conf"
-    when:
-      check_fails: test -d "${EBRO_ROOT}/.cache/webhook/conf"
 
   bin:
     requires: [":apt:prepare"]
@@ -24,3 +22,12 @@ tasks:
     when:
       check_fails: test -f "${EBRO_ROOT}/.cache/apt/packages/webhook.txt"
       output_changes: echo webhook
+
+  prepare:
+    script: rm -rf "${WEBHOOK_CONF_ROOT}" && mkdir -p "${WEBHOOK_CONF_ROOT}"
+    quiet: true
+
+  configure:
+    abstract: true
+    requires: [prepare]
+    required_by: [default]
