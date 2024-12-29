@@ -10,4 +10,3 @@ tasks:
   bin:
     extends: [":apt:configure"]
     script: echo minidlna > "${APT_PACKAGES_ROOT}/minidlna.txt"
-    quiet: true

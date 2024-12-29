@@ -26,7 +26,6 @@ tasks:
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
       cat Caddyfile | envsubst > "${CADDY_CONF_ROOT}/static-site-${DOMAIN}.caddyfile"
-    quiet: true
 
   webhook:
     extends: [":webhook:configure"]
@@ -35,7 +34,6 @@ tasks:
       . "${SITE_SECRETS}"
       export WEBHOOK_SECRET
       ./webhook-build.py
-    quiet: true
 
   home:
     script: |

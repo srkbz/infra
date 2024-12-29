@@ -11,7 +11,6 @@ tasks:
   bin:
     extends: [":apt:configure"]
     script: echo samba > "${APT_PACKAGES_ROOT}/samba.txt"
-    quiet: true
 
   samba-guest-user:
     script: adduser --system samba-guest

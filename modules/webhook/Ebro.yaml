@@ -18,7 +18,6 @@ tasks:
   bin:
     extends: [":apt:configure"]
     script: echo webhook > "${APT_PACKAGES_ROOT}/webhook.txt"
-    quiet: true
 
   prepare:
     script: rm -rf "${WEBHOOK_CONF_ROOT}" && mkdir -p "${WEBHOOK_CONF_ROOT}"
@@ -28,3 +27,4 @@ tasks:
     abstract: true
     requires: [prepare]
     required_by: [default]
+    quiet: true

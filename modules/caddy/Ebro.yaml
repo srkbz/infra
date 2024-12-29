@@ -39,3 +39,4 @@ tasks:
     abstract: true
     requires: [prepare]
     required_by: [default]
+    quiet: true

@@ -6,7 +6,6 @@ tasks:
     extends: [":apt:configure"]
     requires: [repository]
     script: cp apt-packages.txt "${APT_PACKAGES_ROOT}/docker.txt"
-    quiet: true
 
   repository:
     script: ./docker-debian-repository.sh

@@ -51,9 +51,7 @@ tasks:
   qrencode:
     extends: [":apt:configure"]
     script: echo qrencode > "${APT_PACKAGES_ROOT}/qrencode.txt"
-    quiet: true
 
   wireguard:
     extends: [":apt:configure"]
     script: echo wireguard > "${APT_PACKAGES_ROOT}/wireguard.txt"
-    quiet: true

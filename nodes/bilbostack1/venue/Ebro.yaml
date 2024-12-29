@@ -25,7 +25,6 @@ tasks:
   caddy:
     extends: [":caddy:configure"]
     script: cp venue.caddyfile "${CADDY_CONF_ROOT}/venue.caddyfile"
-    quiet: true
 
   venue-user:
     script: useradd --system --shell /bin/false venue
