@@ -1,6 +1,5 @@
 environment:
   SITE_HOME: "/opt/static-sites/${DOMAIN}"
-  SITE_CADDY_CONF: "/etc/caddy/conf.d/static-site-${DOMAIN}.caddyfile"
   SITE_SECRETS: "${EBRO_ROOT}/.state/secrets/static-sites/${DOMAIN}.env"
 
 tasks:
@@ -22,15 +21,12 @@ tasks:
       check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
 
   caddy:
-    requires: [":caddy:prepare"]
-    required_by: [":caddy"]
+    extends: [":caddy:configure"]
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
-      cat Caddyfile | envsubst > "${SITE_CADDY_CONF}"
-    when:
-      check_fails: test -f "${SITE_CADDY_CONF}"
-      output_changes: cat Caddyfile
+      cat Caddyfile | envsubst > "${CADDY_CONF_ROOT}/static-site-${DOMAIN}.caddyfile"
+    quiet: true
 
   webhook:
     extends: [":webhook:configure"]

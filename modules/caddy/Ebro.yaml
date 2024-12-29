@@ -1,5 +1,6 @@
 environment:
   CADDY_VERSION: "2.8.4"
+  CADDY_CONF_ROOT: /etc/caddy/conf.d
 
 tasks:
   default:
@@ -10,14 +11,8 @@ tasks:
     when:
       output_changes: |
         cat Caddyfile
-        cat /etc/caddy/conf.d/* || true
+        cat "$CADDY_CONF_ROOT"/* || true
       check_fails: test -f /etc/caddy/Caddyfile
-
-  prepare:
-    script: |
-      mkdir -p /etc/caddy/conf.d
-    when:
-      check_fails: test -d /etc/caddy/conf.d
 
   install:
     requires: [deb]
@@ -35,3 +30,12 @@ tasks:
       curl -L -o caddy.deb "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.deb"
     when:
       check_fails: test -f "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
+
+  prepare:
+    script: rm -rf "$CADDY_CONF_ROOT" && mkdir -p "$CADDY_CONF_ROOT"
+    quiet: true
+
+  configure:
+    abstract: true
+    requires: [prepare]
+    required_by: [default]

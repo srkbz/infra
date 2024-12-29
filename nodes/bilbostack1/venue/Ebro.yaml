@@ -1,6 +1,5 @@
 environment:
   VENUE_HOME: ${EBRO_ROOT}/.state/venue
-  VENUE_CADDY_CONF: /etc/caddy/conf.d/venue.caddyfile
 
 tasks:
   default:
@@ -24,13 +23,9 @@ tasks:
         [ "$(docker compose ps -q)" != "" ]
 
   caddy:
-    requires: [":caddy:prepare"]
-    required_by: [":caddy"]
-    script: |
-      cp venue.caddyfile "${VENUE_CADDY_CONF}"
-    when:
-      output_changes: cat venue.caddyfile
-      check_fails: test -f "${VENUE_CADDY_CONF}"
+    extends: [":caddy:configure"]
+    script: cp venue.caddyfile "${CADDY_CONF_ROOT}/venue.caddyfile"
+    quiet: true
 
   venue-user:
     script: useradd --system --shell /bin/false venue
