@@ -1,4 +1,5 @@
 https://${DOMAIN} {
   root * ${SITE_HOME}/live
+  encode zstd gzip
   file_server ${FILE_SERVER_FLAGS}
 }
