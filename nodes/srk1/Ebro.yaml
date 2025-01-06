@@ -72,6 +72,7 @@ tasks:
       - apt
       - vpn:server
       - docker
+      - docker:cleanup-regularly
       - secrets
       - caddy
       - webhook

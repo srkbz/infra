@@ -1,6 +1,6 @@
 tasks:
   default:
-    requires: [bin, cron]
+    requires: [bin]
 
   bin:
     extends: [":apt:configure"]
@@ -14,7 +14,7 @@ tasks:
         test -f /etc/apt/keyrings/docker.asc
         test -f /etc/apt/sources.list.d/docker.list
 
-  cron:
+  cleanup-regularly:
     extends: [":cron:configure"]
     environment:
-      CRON_ENTRY: "40 16 * * * docker system prune -af"
+      CRON_ENTRY: "0 4 * * 0 docker system prune -af"
