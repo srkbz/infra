@@ -32,6 +32,7 @@ tasks:
       check_fails: test -f "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
 
   prepare:
+    requires: [install]
     script: rm -rf "$CADDY_CONF_ROOT" && mkdir -p "$CADDY_CONF_ROOT"
     quiet: true
 
