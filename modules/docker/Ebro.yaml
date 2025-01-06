@@ -1,6 +1,6 @@
 tasks:
   default:
-    requires: [bin]
+    requires: [bin, cron]
 
   bin:
     extends: [":apt:configure"]
@@ -13,3 +13,8 @@ tasks:
       check_fails: |
         test -f /etc/apt/keyrings/docker.asc
         test -f /etc/apt/sources.list.d/docker.list
+
+  cron:
+    extends: [":cron:configure"]
+    environment:
+      CRON_ENTRY: "* * * * * echo test"
