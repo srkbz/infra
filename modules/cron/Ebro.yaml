@@ -11,4 +11,4 @@ tasks:
 
   prepare:
     quiet: true
-    script: echo '' > crontab -
+    script: crontab -r
