@@ -17,4 +17,4 @@ tasks:
   cron:
     extends: [":cron:configure"]
     environment:
-      CRON_ENTRY: "* * * * * echo test"
+      CRON_ENTRY: "40 16 * * * docker system prune -af"
