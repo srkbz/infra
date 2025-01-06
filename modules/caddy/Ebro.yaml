@@ -17,7 +17,7 @@ tasks:
   install:
     requires: [deb]
     script: |
-      apt-get install -y "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
+      apt-get install -y --allow-downgrades "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
     when:
       check_fails: |
         command -v caddy
