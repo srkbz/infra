@@ -1,0 +1,14 @@
+tasks:
+  default:
+    requires: [prepare]
+
+  configure:
+    abstract: true
+    quiet: true
+    requires: [prepare]
+    required_by: [default]
+    script: (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
+
+  prepare:
+    quiet: true
+    script: echo '' > crontab -
