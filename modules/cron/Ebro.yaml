@@ -7,7 +7,7 @@ tasks:
     quiet: true
     requires: [prepare]
     required_by: [default]
-    script: (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
+    script: (crontab -l 2>/dev/null || true; echo "$CRON_ENTRY") | crontab -
 
   prepare:
     quiet: true
