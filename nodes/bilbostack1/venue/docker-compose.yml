@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/sirikon/venue:20241215_230356
+    image: ghcr.io/sirikon/venue:20250107_192043
     restart: always
     user: ${VENUE_USER_ID}
     env_file: venue.env
@@ -19,7 +19,7 @@ services:
         condition: service_healthy
         restart: true
   app-migrate:
-    image: ghcr.io/sirikon/venue:20241215_230356
+    image: ghcr.io/sirikon/venue:20250107_192043
     user: ${VENUE_USER_ID}
     command: ["venue-migrate"]
     env_file: venue.env
