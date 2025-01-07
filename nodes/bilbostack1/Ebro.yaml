@@ -1,6 +1,8 @@
 imports:
   ebrow-service:
     from: ../../modules/ebrow-service
+  cron:
+    from: ../../modules/cron
   apt:
     from: ../../modules/apt
   docker:
