@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-for backup_name in ./conf/*; do
+for file in ./conf/*; do
+    backup_name="$(basename "$file")"
     echo "- $backup_name"
 done
