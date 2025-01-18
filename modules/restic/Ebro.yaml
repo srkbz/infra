@@ -22,4 +22,6 @@ tasks:
       )
     when:
       output_changes: echo "${RESTIC_VERSION}" && cat SHA256SUMS
-      check_fails: test -f "$RESTIC_ROOT/restic"
+      check_fails: |
+        test -f "$RESTIC_ROOT/restic"
+        [[ "$("$RESTIC_ROOT/restic" version)" == "restic ${RESTIC_VERSION} "* ]]
