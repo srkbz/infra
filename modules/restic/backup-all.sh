@@ -11,19 +11,21 @@ for file in ./conf/*; do
     backup_repo="${BASE_URL}/${BUCKET_NAME}/${backup_name}"
     export AWS_ACCESS_KEY_ID="$KEY_ID"
     export AWS_SECRET_ACCESS_KEY="$APP_KEY"
-    echo "- $backup_name"
-    echo "  $backup_location"
 
-    set -x
+    echo "### ### $backup_name"
 
+    echo "### checking repo exists"
     set +e
     ./bin/restic -r "$backup_repo" snapshots --insecure-no-password >/dev/null
     check_result=$?
     set -e
+
     if [ "$check_result" != 0 ]; then
+        echo "### trying to init repo"
         ./bin/restic -r "$backup_repo" init --insecure-no-password
     fi
 
+    echo "### backing up"
     ./bin/restic -r "$backup_repo" backup \
         --skip-if-unchanged \
         --insecure-no-password \
