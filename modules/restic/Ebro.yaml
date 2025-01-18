@@ -15,7 +15,10 @@ tasks:
         "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
       (
         cd "$RESTIC_ROOT"
+        cat "${EBRO_WORKING_DIRECTORY}/SHA256SUMS" | grep "${RESTIC_VARIANT}" | sha256sum --check
         bzip2 -dk "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
+        mv "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}" restic
+        chmod +x restic
       )
     when:
       output_changes: echo "${RESTIC_VERSION}" && cat SHA256SUMS
