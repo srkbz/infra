@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SECRETS_FILE="$1"
-
-. "$SECRETS_FILE"
-
 for file in ./conf/*; do
     backup_name="$(basename "$file")"
     backup_location="$(cat "$file")"
