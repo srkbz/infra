@@ -30,7 +30,7 @@ tasks:
     quiet: true
     script: |
       mkdir -p "${RESTIC_HOME}/conf"
-      rm -rf "${RESTIC_HOME}/conf/*"
+      rm -rf "${RESTIC_HOME}/conf"/*
 
   configure:
     abstract: true
