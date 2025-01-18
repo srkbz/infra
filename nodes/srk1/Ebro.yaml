@@ -21,6 +21,8 @@ imports:
     from: ../../modules/uptime-kuma
   freshrss:
     from: ../../modules/freshrss
+  restic:
+    from: ../../modules/restic
 
   static-site-sirikon.me:
     from: ../../modules/static-site
@@ -79,6 +81,7 @@ tasks:
       - watchtower
       - uptime-kuma
       - freshrss
+      - restic
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me

@@ -4,6 +4,9 @@ environment:
   RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic/bin/${RESTIC_VERSION}
 
 tasks:
+  default:
+    requires: [install]
+
   install:
     script: |
       RESTIC_VARIANT="$(./restic-variant.sh)"
