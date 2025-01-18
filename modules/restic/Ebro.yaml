@@ -4,7 +4,7 @@ environment:
 
 tasks:
   default:
-    requires: [install, ":secrets"]
+    requires: [install, ":secrets", backup-regularly]
 
   install:
     script: |
@@ -36,3 +36,8 @@ tasks:
     quiet: true
     requires: [config-dir]
     script: echo "$RESTIC_BACKUP_LOCATION" > "${RESTIC_ROOT}/conf/${RESTIC_BACKUP_NAME}"
+
+  backup-regularly:
+    extends: [":cron:configure"]
+    environment:
+      CRON_ENTRY: "0 3 * * * cd '${RESTIC_ROOT}' && '${EBRO_TASK_WORKING_DIRECTORY}/backup-all.sh' '${EBRO_ROOT}/.state/secrets/restic.env'"
