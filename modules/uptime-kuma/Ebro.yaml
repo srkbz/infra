@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", extra-ca]
+    requires: [":docker", extra-ca, configure-backups?]
     script: |
       mkdir -p "${UPTIME_KUMA_HOME}"
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
@@ -25,3 +25,10 @@ tasks:
       curl 'https://cacerts.digicert.com/ThawteTLSRSACAG1.crt.pem'>"${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
     when:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
+
+  configure-backups:
+    if_tasks_exist: [":restic"]
+    extends: [":restic:configure"]
+    environment:
+      RESTIC_BACKUP_NAME: "uptime-kuma"
+      RESTIC_BACKUP_LOCATION: "${UPTIME_KUMA_HOME}/data"

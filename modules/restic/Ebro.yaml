@@ -5,7 +5,7 @@ environment:
 
 tasks:
   default:
-    requires: [install]
+    requires: [install, ":secrets"]
 
   install:
     script: |
@@ -25,3 +25,15 @@ tasks:
       check_fails: |
         test -f "$RESTIC_ROOT/restic"
         [[ "$("$RESTIC_ROOT/restic" version)" == "restic ${RESTIC_VERSION} "* ]]
+
+  config-dir:
+    quiet: true
+    script: |
+      mkdir -p "${RESTIC_HOME}/conf"
+      rm -rf "${RESTIC_HOME}/conf/*"
+
+  configure:
+    abstract: true
+    quiet: true
+    requires: [config-dir]
+    script: echo "$RESTIC_BACKUP_LOCATION" > "${RESTIC_HOME}/conf/${RESTIC_BACKUP_NAME}"
