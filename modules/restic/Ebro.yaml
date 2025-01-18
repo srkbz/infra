@@ -1,7 +1,7 @@
 environment:
   RESTIC_VERSION: "0.17.3"
   RESTIC_HOME: ${EBRO_ROOT}/.state/restic
-  RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic/bin/${RESTIC_VERSION}
+  RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic/bin
 
 tasks:
   default:
