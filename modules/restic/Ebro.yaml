@@ -9,6 +9,7 @@ tasks:
 
   install:
     script: |
+      rm -rf $RESTIC_ROOT/*
       RESTIC_VARIANT="$(./restic-variant.sh)"
       curl --fail --location --create-dirs --output "$RESTIC_ROOT/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2" \
         "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
