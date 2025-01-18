@@ -17,12 +17,12 @@ for file in ./conf/*; do
     set -x
 
     set +e
-    restic -r "$backup_repo" check --insecure-no-password
+    ./bin/restic -r "$backup_repo" check --insecure-no-password
     check_result=$?
     set -e
     if [ "$check_result" != 0 ]; then
-        restic -r "$backup_repo" init --insecure-no-password
+        ./bin/restic -r "$backup_repo" init --insecure-no-password
     fi
 
-    restic -r "$backup_repo" backup --insecure-no-password "$backup_location"
+    ./bin/restic -r "$backup_repo" backup --insecure-no-password "$backup_location"
 done
