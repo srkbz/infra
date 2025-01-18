@@ -26,7 +26,6 @@ for file in ./conf/*; do
 
     ./bin/restic -r "$backup_repo" backup \
         --skip-if-unchanged \
-        --ignore-inode \
         --insecure-no-password \
         "$backup_location"
 done
