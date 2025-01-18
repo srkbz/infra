@@ -1,0 +1,17 @@
+environment:
+  RESTIC_VERSION: "0.17.3"
+  RESTIC_HOME: ${EBRO_ROOT}/.state/restic
+  RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic/bin/${RESTIC_VERSION}
+
+tasks:
+  install:
+    script: |
+      RESTIC_VARIANT="$(./restic-variant.sh)"
+      curl --fail --location --create-dirs --output "$RESTIC_ROOT/archive.bz2" \
+        "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
+      (
+        cd "$RESTIC_ROOT"
+        bzip2 -dk archive.bz2
+      )
+    when:
+      output_changes: echo "${RESTIC_VERSION}" && cat SHA256SUMS
