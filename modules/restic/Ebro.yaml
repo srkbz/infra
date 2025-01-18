@@ -16,7 +16,7 @@ tasks:
       (
         cd "$RESTIC_ROOT"
         cat "${EBRO_TASK_WORKING_DIRECTORY}/SHA256SUMS" | grep "${RESTIC_VARIANT}" | sha256sum --check
-        bzip2 -dk "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
+        bzip2 -d "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
         mv "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}" restic
         chmod +x restic
       )
