@@ -1,6 +1,5 @@
 environment:
   RESTIC_VERSION: "0.17.3"
-  RESTIC_HOME: ${EBRO_ROOT}/.state/restic
   RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic/bin
 
 tasks:
@@ -29,11 +28,11 @@ tasks:
   config-dir:
     quiet: true
     script: |
-      mkdir -p "${RESTIC_HOME}/conf"
-      rm -rf "${RESTIC_HOME}/conf"/*
+      mkdir -p "${RESTIC_ROOT}/conf"
+      rm -rf "${RESTIC_ROOT}/conf"/*
 
   configure:
     abstract: true
     quiet: true
     requires: [config-dir]
-    script: echo "$RESTIC_BACKUP_LOCATION" > "${RESTIC_HOME}/conf/${RESTIC_BACKUP_NAME}"
+    script: echo "$RESTIC_BACKUP_LOCATION" > "${RESTIC_ROOT}/conf/${RESTIC_BACKUP_NAME}"
