@@ -17,7 +17,7 @@ for file in ./conf/*; do
     set -x
 
     set +e
-    ./bin/restic -r "$backup_repo" check --insecure-no-password
+    ./bin/restic -r "$backup_repo" snapshots --insecure-no-password >/dev/null
     check_result=$?
     set -e
     if [ "$check_result" != 0 ]; then
