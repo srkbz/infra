@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker"]
+    requires: [":docker", configure-backups?]
     script: |
       mkdir -p "${FRESHRSS_HOME}"
       cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
@@ -17,3 +17,10 @@ tasks:
         cd "${FRESHRSS_HOME}"
         test -f "docker-compose.yml"
         [ "$(docker compose ps -q)" != "" ]
+
+  configure-backups:
+    if_tasks_exist: [":restic"]
+    extends: [":restic:configure"]
+    environment:
+      RESTIC_BACKUP_NAME: "freshrss"
+      RESTIC_BACKUP_LOCATION: "${FRESHRSS_HOME}/data"
