@@ -10,7 +10,7 @@ tasks:
   install:
     script: |
       RESTIC_VARIANT="$(./restic-variant.sh)"
-      curl --fail --location --create-dirs --output "$RESTIC_ROOT/archive.bz2" \
+      curl --fail --location --create-dirs --output "$RESTIC_ROOT/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2" \
         "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
       (
         cd "$RESTIC_ROOT"
@@ -18,3 +18,4 @@ tasks:
       )
     when:
       output_changes: echo "${RESTIC_VERSION}" && cat SHA256SUMS
+      check_fails: test -f "$RESTIC_ROOT/restic"
