@@ -15,6 +15,11 @@ function main {
 
         echo "### ### $backup_name"
 
+        if test -f "$dir/script"; then
+            echo "### running script"
+            bash "$dir/script"
+        fi
+
         echo "### checking repo exists"
         set +e
         ./bin/restic -r "$backup_repo" snapshots --insecure-no-password >/dev/null
