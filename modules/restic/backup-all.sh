@@ -5,9 +5,10 @@ SECRETS_FILE="$1"
 . "$SECRETS_FILE"
 
 function main {
-    for file in ./conf/*; do
-        backup_name="$(basename "$file")"
-        backup_location="$(cat "$file")"
+    for dir in ./conf/*; do
+        backup_name="$(basename "$dir")"
+        backup_location="$(cat "$dir/location")"
+
         backup_repo="${BASE_URL}/${BUCKET_NAME}/${backup_name}"
         export AWS_ACCESS_KEY_ID="$KEY_ID"
         export AWS_SECRET_ACCESS_KEY="$APP_KEY"
