@@ -21,6 +21,5 @@ tasks:
   configure-backups:
     if_tasks_exist: [":restic"]
     extends: [":restic:configure"]
-    environment:
-      RESTIC_BACKUP_NAME: "freshrss"
-      RESTIC_BACKUP_LOCATION: "${FRESHRSS_HOME}/data"
+    script: |
+      set-backup-location freshrss "${FRESHRSS_HOME}/data"

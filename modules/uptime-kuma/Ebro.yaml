@@ -29,6 +29,5 @@ tasks:
   configure-backups:
     if_tasks_exist: [":restic"]
     extends: [":restic:configure"]
-    environment:
-      RESTIC_BACKUP_NAME: "uptime-kuma"
-      RESTIC_BACKUP_LOCATION: "${UPTIME_KUMA_HOME}/data"
+    script: |
+      set-backup-location uptime-kuma "${UPTIME_KUMA_HOME}/data"

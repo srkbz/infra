@@ -35,7 +35,8 @@ tasks:
     abstract: true
     quiet: true
     requires: [config-dir]
-    script: echo "$RESTIC_BACKUP_LOCATION" > "${RESTIC_ROOT}/conf/${RESTIC_BACKUP_NAME}"
+    environment:
+      PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
 
   backup-all-regularly:
     extends: [":cron:configure"]
