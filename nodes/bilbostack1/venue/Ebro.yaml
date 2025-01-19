@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", caddy, venue-user]
+    requires: [":docker", caddy, venue-user, configure-backups?]
     script: |
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
@@ -30,3 +30,10 @@ tasks:
     script: useradd --system --shell /bin/false venue
     when:
       check_fails: cat /etc/passwd | grep venue
+
+  configure-backups:
+    if_tasks_exist: [":restic"]
+    extends: [":restic:configure"]
+    script: |
+      set-backup-script venue "cd '${VENUE_HOME}' && mkdir -p backup && rm -rf backup/* && (docker compose exec db pg_dumpall -U venue) > backup/dump.sql"
+      set-backup-location venue "${VENUE_HOME}/backup"

@@ -9,6 +9,10 @@ imports:
     from: ../../modules/docker
   caddy:
     from: ../../modules/caddy
+  secrets:
+    from: ../../modules/secrets
+  restic:
+    from: ../../modules/restic
 
   venue:
     from: ./venue
@@ -20,4 +24,6 @@ tasks:
       - apt
       - docker
       - caddy
+      - secrets
+      - restic
       - venue
