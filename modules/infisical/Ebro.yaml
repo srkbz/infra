@@ -1,0 +1,27 @@
+environment:
+  INFISICAL_HOME: ${EBRO_ROOT}/.state/infisical
+
+tasks:
+  default:
+    requires: [":docker"]
+    script: |
+      mkdir -p "${INFISICAL_HOME}"
+      cp docker-compose.yml "${INFISICAL_HOME}/docker-compose.yml"
+      cp .env.base "${INFISICAL_HOME}/.env.base"
+      cd "${INFISICAL_HOME}"
+      if ! test -f .env; then
+        echo "ENCRYPTION_KEY=$(openssl rand -hex 16)" >> .env
+        echo "AUTH_SECRET=$(openssl rand -base64 32)" >> .env
+        echo "SITE_URL=${SITE_URL}" >> .env
+      fi
+      docker compose up --detach --wait --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+      check_fails: |
+        test -d "${INFISICAL_HOME}"
+        cd "${INFISICAL_HOME}"
+        test -f "docker-compose.yml"
+        test -f ".env.base"
+        test -f ".env"
+        [ "$(docker compose ps -q)" != "" ]

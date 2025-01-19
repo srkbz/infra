@@ -23,6 +23,8 @@ imports:
     from: ../../modules/freshrss
   restic:
     from: ../../modules/restic
+  infisical:
+    from: ../../modules/infisical
 
   static-site-sirikon.me:
     from: ../../modules/static-site
@@ -82,6 +84,7 @@ tasks:
       - uptime-kuma
       - freshrss
       - restic
+      - infisical
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
