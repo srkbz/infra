@@ -25,6 +25,8 @@ imports:
     from: ../../modules/restic
   infisical:
     from: ../../modules/infisical
+    environment:
+      SITE_URL: https://vault.srk.bz
 
   static-site-sirikon.me:
     from: ../../modules/static-site
