@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker"]
+    requires: [":docker", caddy]
     script: |
       mkdir -p "${INFISICAL_HOME}"
       cp docker-compose.yml "${INFISICAL_HOME}/docker-compose.yml"
@@ -25,3 +25,7 @@ tasks:
         test -f ".env.base"
         test -f ".env"
         [ "$(docker compose ps -q)" != "" ]
+
+  caddy:
+    extends: [":caddy:configure"]
+    script: cat infisical.caddyfile | envsubst > "${CADDY_CONF_ROOT}/infisical.caddyfile"
