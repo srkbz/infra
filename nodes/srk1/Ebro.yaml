@@ -86,7 +86,6 @@ tasks:
       - uptime-kuma
       - freshrss
       - restic
-      - infisical
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me

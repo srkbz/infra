@@ -29,3 +29,9 @@ tasks:
   caddy:
     extends: [":caddy:configure"]
     script: cat infisical.caddyfile | envsubst > "${CADDY_CONF_ROOT}/infisical.caddyfile"
+
+  destroy:
+    requires: [":docker"]
+    script: |
+      cd "${INFISICAL_HOME}"
+      docker compose down --volumes
