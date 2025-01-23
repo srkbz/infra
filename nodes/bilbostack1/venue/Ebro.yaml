@@ -19,6 +19,7 @@ tasks:
     when:
       output_changes: |
         cat docker-compose.yml
+        cat venue.caddyfile
         cat laespuela/*
       check_fails: |
         test -d "${VENUE_HOME}"
