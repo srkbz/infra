@@ -1,5 +1,6 @@
 environment:
   VENUE_HOME: ${EBRO_ROOT}/.state/venue
+  LAESPUELA_HOME: /srv/laespuela
 
 tasks:
   default:
@@ -7,8 +8,8 @@ tasks:
     script: |
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
-      rm -rf "${VENUE_HOME}/laespuela"
-      cp -r laespuela "${VENUE_HOME}/laespuela"
+      rm -rf "${LAESPUELA_HOME}"/*
+      cp -r laespuela "${LAESPUELA_HOME}"
       cd "${VENUE_HOME}"
       test -f venue.env
       mkdir -p data/app
