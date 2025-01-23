@@ -4,12 +4,10 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", caddy, venue-user, configure-backups?]
+    requires: [":docker", laespuela, caddy, venue-user, configure-backups?]
     script: |
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
-      rm -rf "${LAESPUELA_HOME}"/*
-      cp -r laespuela/* "${LAESPUELA_HOME}"
       cd "${VENUE_HOME}"
       test -f venue.env
       mkdir -p data/app
@@ -19,18 +17,26 @@ tasks:
     when:
       output_changes: |
         cat docker-compose.yml
-        cat venue.caddyfile
-        cat laespuela/*
       check_fails: |
         test -d "${VENUE_HOME}"
-        test -d "${LAESPUELA_HOME}"
         cd "${VENUE_HOME}"
         test -f "docker-compose.yml"
         [ "$(docker compose ps -q)" != "" ]
 
+  laespuela:
+    script: |
+      rm -rf "${LAESPUELA_HOME}"/*
+      cp -r laespuela/* "${LAESPUELA_HOME}"
+    when:
+      output_changes: cat laespuela/*
+      check_fails: test -d "${LAESPUELA_HOME}"
+
   caddy:
     extends: [":caddy:configure"]
     script: cat venue.caddyfile | envsubst > "${CADDY_CONF_ROOT}/venue.caddyfile"
+    when:
+      output_changes: cat venue.caddyfile
+      check_fails: test -f "${CADDY_CONF_ROOT}/venue.caddyfile"
 
   venue-user:
     script: useradd --system --shell /bin/false venue
