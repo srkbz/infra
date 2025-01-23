@@ -22,6 +22,7 @@ tasks:
         cat laespuela/*
       check_fails: |
         test -d "${VENUE_HOME}"
+        test -d "${LAESPUELA_HOME}"
         cd "${VENUE_HOME}"
         test -f "docker-compose.yml"
         [ "$(docker compose ps -q)" != "" ]
