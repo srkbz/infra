@@ -9,7 +9,7 @@ tasks:
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       rm -rf "${LAESPUELA_HOME}"/*
-      cp -r laespuela "${LAESPUELA_HOME}"
+      cp -r laespuela/* "${LAESPUELA_HOME}"
       cd "${VENUE_HOME}"
       test -f venue.env
       mkdir -p data/app
