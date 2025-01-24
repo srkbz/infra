@@ -24,12 +24,10 @@ tasks:
         [ "$(docker compose ps -q)" != "" ]
 
   laespuela:
+    quiet: true
     script: |
       rm -rf "${LAESPUELA_HOME}"/*
       cp -r laespuela/* "${LAESPUELA_HOME}"
-    when:
-      output_changes: cat laespuela/*
-      check_fails: test -d "${LAESPUELA_HOME}"
 
   caddy:
     extends: [":caddy:configure"]
