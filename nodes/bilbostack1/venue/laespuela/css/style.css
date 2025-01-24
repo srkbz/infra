@@ -8,7 +8,7 @@ body {
 }
 
 .x-header .-logo {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
   margin-top: 2rem;
   padding: 0 2rem;
@@ -18,42 +18,73 @@ body {
 .x-header .-name {
   font-weight: normal;
   color: #f1bd49;
-  font-size: 2.8rem;
-  margin: 0.5rem 0;
+  font-size: 10vw;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+@media (min-width: 800px) {
+  .x-header .-name {
+    font-size: 80px;
+  }
 }
 
 .x-menu img {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
-  margin: 1rem 0;
-  padding: 0 2rem;
+  margin: 1rem auto;
+  padding: 0 1rem;
   box-sizing: border-box;
+  display: block;
+}
+
+.x-sport {
+  margin: 1rem 0 0 0;
+  background: linear-gradient(transparent 80%, #00000024);
 }
 
 .x-sport img {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
-  margin: 1rem 0;
+  display: block;
+  margin: auto;
+}
+
+.x-music {
+  margin: 0 0 1rem 0;
+  background: linear-gradient(transparent 80%, #00000024);
 }
 
 .x-music img {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.x-when-where {
   margin: 1rem 0;
 }
 
 .x-when-where img {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
-  margin: 1rem 0;
-  padding: 0 2rem;
+  padding: 0 1rem;
   box-sizing: border-box;
+  display: block;
+  margin: auto;
 }
 
 .x-footer {
   background-color: #f1bd49;
-  font-size: 2rem;
+  font-size: 7vw;
   font-weight: 500;
   padding: 2rem 0;
   color: #10252d;
+}
+
+
+@media (min-width: 800px) {
+  .x-footer {
+    font-size: 56px;
+  }
 }
