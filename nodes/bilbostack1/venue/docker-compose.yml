@@ -6,8 +6,8 @@ services:
     env_file: venue.env
     environment:
       VENUE_DB_HOST: db
-      VENUE_WORKERS: 2
-      VENUE_THREADS: 2
+      VENUE_WORKERS: 8
+      VENUE_THREADS: 8
     volumes:
       - ./data/app:/w
     ports:
