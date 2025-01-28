@@ -6,4 +6,5 @@ tasks:
       rsync --checksum --archive --delete --itemize-changes "${SYNC_FROM}/" "${SYNC_TO}/"
     when:
       check_fails: |
-        [ ! -n "$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")" ]
+        result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")"
+        [ ! -n "$result" ]

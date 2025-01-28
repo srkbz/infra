@@ -11,4 +11,7 @@ declare -A ARCH_MAP=(
     ["arm64"]="arm64"
 )
 
-echo "${KERNEL_MAP["$(uname -s)"]}_${ARCH_MAP["$(uname -m)"]}"
+kernel="$(uname -s)"
+arch="$(uname -m)"
+
+echo "${KERNEL_MAP["$kernel"]}_${ARCH_MAP["$arch"]}"

@@ -16,7 +16,8 @@ tasks:
         test -d "${FRESHRSS_HOME}"
         cd "${FRESHRSS_HOME}"
         test -f "docker-compose.yml"
-        [ "$(docker compose ps -q)" != "" ]
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
 
   configure-backups:
     if_tasks_exist: [":restic"]

@@ -21,7 +21,8 @@ tasks:
     when:
       check_fails: |
         command -v caddy
-        [[ "$(caddy --version)" == "v${CADDY_VERSION} "* ]]
+        actual_caddy_version="$(caddy --version)"
+        [[ "$actual_caddy_version" == "v${CADDY_VERSION} "* ]]
 
   deb:
     script: |

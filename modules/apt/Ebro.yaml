@@ -2,6 +2,7 @@ environment:
   APT_PACKAGES_ROOT: ${EBRO_ROOT}/.cache/apt/packages
 
 tasks:
+  # TODO: Rewrite to use apt metapackage
   default:
     requires: [prepare]
     script: |

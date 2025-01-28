@@ -23,7 +23,8 @@ tasks:
       output_changes: echo "${RESTIC_VERSION}" && cat SHA256SUMS
       check_fails: |
         test -f "$RESTIC_ROOT/bin/restic"
-        [[ "$("$RESTIC_ROOT/bin/restic" version)" == "restic ${RESTIC_VERSION} "* ]]
+        restic_version_info="$("$RESTIC_ROOT/bin/restic" version)"
+        [[ "$restic_version_info" == "restic ${RESTIC_VERSION} "* ]]
 
   config-dir:
     quiet: true

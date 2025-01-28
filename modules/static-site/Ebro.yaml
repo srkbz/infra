@@ -12,7 +12,9 @@ tasks:
     when:
       check_fails: |
         test -f "${SITE_HOME}/LIVE_COMMIT"
-        [ "$(cat "${SITE_HOME}/TARGET_COMMIT")" == "$(cat "${SITE_HOME}/LIVE_COMMIT")" ]
+        target_commit="$(cat "${SITE_HOME}/TARGET_COMMIT")"
+        live_commit="$(cat "${SITE_HOME}/LIVE_COMMIT")"
+        [ "$target_commit" == "$live_commit" ]
 
   target-commit:
     requires: [home]

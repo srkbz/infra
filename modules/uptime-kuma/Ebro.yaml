@@ -17,7 +17,8 @@ tasks:
         test -d "${UPTIME_KUMA_HOME}"
         cd "${UPTIME_KUMA_HOME}"
         test -f "docker-compose.yml"
-        [ "$(docker compose ps -q)" != "" ]
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
 
   extra-ca:
     script: |

@@ -10,8 +10,10 @@ tasks:
       cp .env.base "${INFISICAL_HOME}/.env.base"
       cd "${INFISICAL_HOME}"
       if ! test -f .env; then
-        echo "ENCRYPTION_KEY=$(openssl rand -hex 16)" >> .env
-        echo "AUTH_SECRET=$(openssl rand -base64 32)" >> .env
+        encryption_key="$(openssl rand -hex 16)"
+        auth_secret="$(openssl rand -base64 32)"
+        echo "ENCRYPTION_KEY=${encryption_key}" >> .env
+        echo "AUTH_SECRET=${auth_secret}" >> .env
         echo "SITE_URL=${SITE_URL}" >> .env
       fi
       docker compose up --detach --wait --remove-orphans
@@ -24,7 +26,8 @@ tasks:
         test -f "docker-compose.yml"
         test -f ".env.base"
         test -f ".env"
-        [ "$(docker compose ps -q)" != "" ]
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
 
   caddy:
     extends: [":caddy:configure"]

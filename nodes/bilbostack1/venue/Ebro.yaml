@@ -22,7 +22,8 @@ tasks:
         test -d "${VENUE_HOME}"
         cd "${VENUE_HOME}"
         test -f "docker-compose.yml"
-        [ "$(docker compose ps -q)" != "" ]
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
 
   laespuela:
     extends: [":utils:sync-directories"]

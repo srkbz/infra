@@ -13,7 +13,6 @@ function main {
         export AWS_ACCESS_KEY_ID="$KEY_ID"
         export AWS_SECRET_ACCESS_KEY="$APP_KEY"
 
-        realpath ./bin/restic >/dev/null
         restic="$(realpath ./bin/restic)"
 
         echo "### ### $backup_name"
