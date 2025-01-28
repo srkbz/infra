@@ -1,33 +1,33 @@
 services:
-  # app:
-  #   image: ghcr.io/sirikon/venue:20250120_203111
-  #   restart: always
-  #   user: ${VENUE_USER_ID}
-  #   env_file: venue.env
-  #   environment:
-  #     VENUE_DB_HOST: db
-  #     VENUE_WORKERS: 2
-  #     VENUE_THREADS: 2
-  #   volumes:
-  #     - ./data/app:/w
-  #   ports:
-  #     - 127.0.0.1:8080:80
-  #   depends_on:
-  #     app-migrate:
-  #       condition: service_completed_successfully
-  #     db:
-  #       condition: service_healthy
-  #       restart: true
-  # app-migrate:
-  #   image: ghcr.io/sirikon/venue:20250120_203111
-  #   user: ${VENUE_USER_ID}
-  #   command: ["venue-migrate"]
-  #   env_file: venue.env
-  #   environment:
-  #     VENUE_DB_HOST: db
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  app:
+    image: ghcr.io/sirikon/venue:20250120_203111
+    restart: always
+    user: ${VENUE_USER_ID}
+    env_file: venue.env
+    environment:
+      VENUE_DB_HOST: db
+      VENUE_WORKERS: 2
+      VENUE_THREADS: 2
+    volumes:
+      - ./data/app:/w
+    ports:
+      - 127.0.0.1:8080:80
+    depends_on:
+      app-migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+        restart: true
+  app-migrate:
+    image: ghcr.io/sirikon/venue:20250120_203111
+    user: ${VENUE_USER_ID}
+    command: ["venue-migrate"]
+    env_file: venue.env
+    environment:
+      VENUE_DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres:16-alpine
     restart: always
