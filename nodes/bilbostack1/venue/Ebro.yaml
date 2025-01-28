@@ -6,6 +6,7 @@ tasks:
   default:
     requires: [":docker", laespuela, caddy, venue-user, configure-backups?]
     script: |
+      set -x
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       cd "${VENUE_HOME}"
