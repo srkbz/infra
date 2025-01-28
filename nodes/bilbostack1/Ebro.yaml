@@ -1,4 +1,6 @@
 imports:
+  utils:
+    from: ../../modules/utils
   ebrow-service:
     from: ../../modules/ebrow-service
   cron:

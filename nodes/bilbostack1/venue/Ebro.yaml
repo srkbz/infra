@@ -24,10 +24,10 @@ tasks:
         [ "$(docker compose ps -q)" != "" ]
 
   laespuela:
-    quiet: true
-    script: |
-      rm -rf "${LAESPUELA_HOME}"/*
-      cp -r laespuela/* "${LAESPUELA_HOME}"
+    extends: [":utils:sync-directories"]
+    environment:
+      SYNC_FROM: "laespuela"
+      SYNC_TO: "${LAESPUELA_HOME}"
 
   caddy:
     extends: [":caddy:configure"]
