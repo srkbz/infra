@@ -10,7 +10,10 @@ tasks:
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
       cd "${VENUE_HOME}"
-      test -f venue.env
+      if ! test -f venue.env; then
+        secret_key="$(openssl rand -hex 64)"
+        echo "VENUE_SECRET_KEY=${secret_key}" >> venue.env
+      fi
       mkdir -p data/app
       chown -R venue:venue data/app
       echo "VENUE_USER_ID=$(id -u venue)" > .env
@@ -22,6 +25,7 @@ tasks:
         test -d "${VENUE_HOME}"
         cd "${VENUE_HOME}"
         test -f "docker-compose.yml"
+        test -f "venue.env"
         active_containers="$(docker compose ps -q)"
         [ "$active_containers" != "" ]
 
