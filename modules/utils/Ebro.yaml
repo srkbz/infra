@@ -2,8 +2,7 @@ tasks:
   sync-directories:
     abstract: true
     script: |
-      rsync --checksum --archive --delete --itemize-changes "$(realpath "$SYNC_FROM")"/ "$(realpath "$SYNC_TO")"/
+      rsync --checksum --archive --delete --itemize-changes "${SYNC_FROM}/" "${SYNC_TO}/"
     when:
       check_fails: |
-        set -x
-        [ ! -n "$(rsync --checksum --archive --delete --itemize-changes --dry-run "$(realpath "$SYNC_FROM")"/ "$(realpath "$SYNC_TO")"/)" ]
+        [ ! -n "$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")" ]
