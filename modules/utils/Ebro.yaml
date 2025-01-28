@@ -4,4 +4,4 @@ tasks:
       rsync --checksum --archive --delete "$(realpath "$SYNC_FROM")"/ "$(realpath "$SYNC_TO")"/
     when:
       check_fails: |
-        [ -n "$(rsync --checksum --archive --delete --itemize-changes --dry-run "$(realpath "$SYNC_FROM")"/ "$(realpath "$SYNC_TO")"/)" ]
+        [ ! -n "$(rsync --checksum --archive --delete --itemize-changes --dry-run "$(realpath "$SYNC_FROM")"/ "$(realpath "$SYNC_TO")"/)" ]
