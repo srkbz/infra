@@ -13,6 +13,8 @@ function main {
         export AWS_ACCESS_KEY_ID="$KEY_ID"
         export AWS_SECRET_ACCESS_KEY="$APP_KEY"
 
+        restic="$(realpath ./bin/restic)"
+
         echo "### ### $backup_name"
 
         if test -f "$dir/script"; then
@@ -22,18 +24,18 @@ function main {
 
         echo "### checking repo exists"
         set +e
-        ./bin/restic -r "$backup_repo" snapshots --insecure-no-password >/dev/null
+        "$restic" -r "$backup_repo" snapshots --insecure-no-password >/dev/null
         check_result=$?
         set -e
 
         if [ "$check_result" != 0 ]; then
             echo "### trying to init repo"
-            ./bin/restic -r "$backup_repo" init --insecure-no-password
+            "$restic" -r "$backup_repo" init --insecure-no-password
         fi
 
         echo "### backing up"
         set +e
-        cd "$backup_location" && ./bin/restic -r "$backup_repo" backup \
+        cd "$backup_location" && "$restic" -r "$backup_repo" backup \
             --skip-if-unchanged \
             --insecure-no-password .
         backup_result=$?
