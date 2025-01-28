@@ -2,6 +2,7 @@ tasks:
   sync-directories:
     abstract: true
     script: |
+      mkdir -p "${SYNC_TO}/"
       rsync --checksum --archive --delete --itemize-changes "${SYNC_FROM}/" "${SYNC_TO}/"
     when:
       check_fails: |
