@@ -33,10 +33,9 @@ function main {
 
         echo "### backing up"
         set +e
-        ./bin/restic -r "$backup_repo" backup \
+        cd "$backup_location" && ./bin/restic -r "$backup_repo" backup \
             --skip-if-unchanged \
-            --insecure-no-password \
-            "$backup_location"
+            --insecure-no-password .
         backup_result=$?
         set -e
 
