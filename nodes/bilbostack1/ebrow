@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EBRO_VERSION="0.10.0"
+EBRO_VERSION="0.11.0"
 declare -A EBRO_SUMS=(
-  ["Linux__aarch64"]="59b9279acd782f87787400fe5cdac7253f6afb379efd842600f1a084ff83b025"
-  ["Linux__x86_64"]="06ecc12f64cc00d0abf0166c25e4c3598e3c2a2b964a704dbb40730237cc70f0"
-  ["Darwin__arm64"]="b20ceeac68c61363316f90317dad699f74a0675d36543b497943317dfdd11ae7"
+  ["Linux__aarch64"]="cb1caaa94102a2ab7995eab56b1665c0f54f17b203e0c070f5523518c448546b"
+  ["Linux__x86_64"]="cd7841c72cc57006b011ee25a5f55d4ff9dd55ba5181c5af3df25cf1e4460dd5"
+  ["Darwin__arm64"]="bdbb755cf8a3ad83782ff57891bf0f4a78f63faf8146c249fcf6299e195203e0"
 )
 
 EBRO_BIN=".ebro/bin/${EBRO_VERSION}/ebro"
@@ -18,7 +18,7 @@ if [ ! -f "$EBRO_BIN" ] || [ ! -x "$EBRO_BIN" ]; then
   fi
   curl --fail --location --create-dirs --output "$EBRO_BIN" \
     "https://github.com/sirikon/ebro/releases/download/${EBRO_VERSION}/ebro-${variant}"
-  echo "${EBRO_SUMS[$variant]} ${EBRO_BIN}" | sha256sum --check --status
+  echo "${EBRO_SUMS[$variant]}  ${EBRO_BIN}" | shasum --algorithm 256 --check 2>/dev/null
   chmod +x "$EBRO_BIN"
 fi
 exec "$EBRO_BIN" "$@"
