@@ -4,7 +4,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", laespuela, caddy, venue-user, configure-backups?]
+    requires: [":docker", caddy, user, configure-backups?]
     script: |
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
@@ -37,7 +37,7 @@ tasks:
         active_containers="$(docker compose ps -q)"
         [ "$active_containers" != "" ]
 
-  venue-user:
+  user:
     script: useradd --system --shell /bin/false venue
     when:
       check_fails: cat /etc/passwd | grep venue
