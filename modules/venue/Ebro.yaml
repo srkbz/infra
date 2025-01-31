@@ -1,46 +1,41 @@
 environment:
+  VENUE_VERSION: "20250120_203111"
   VENUE_HOME: ${EBRO_ROOT}/.state/venue
-  LAESPUELA_HOME: /etc/caddy/static/laespuela
 
 tasks:
   default:
     requires: [":docker", laespuela, caddy, venue-user, configure-backups?]
     script: |
-      set -x
       mkdir -p "${VENUE_HOME}"
       cp docker-compose.yml "${VENUE_HOME}/docker-compose.yml"
+
       cd "${VENUE_HOME}"
+
       if ! test -f venue.env; then
         secret_key="$(openssl rand -hex 64)"
         echo "VENUE_SECRET_KEY=${secret_key}" >> venue.env
       fi
+      venue_user_id="$(id -u venue)"
+      echo "VENUE_USER_ID=${venue_user_id}" > .env
+      echo "VENUE_VERSION=${VENUE_VERSION}" >> .env
+
       mkdir -p data/app
       chown -R venue:venue data/app
-      echo "VENUE_USER_ID=$(id -u venue)" > .env
+
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml
       check_fails: |
         test -d "${VENUE_HOME}"
+
         cd "${VENUE_HOME}"
         test -f "docker-compose.yml"
         test -f "venue.env"
+        test -f ".env"
+
         active_containers="$(docker compose ps -q)"
         [ "$active_containers" != "" ]
-
-  laespuela:
-    extends: [":utils:sync-directories"]
-    environment:
-      SYNC_FROM: "laespuela"
-      SYNC_TO: "${LAESPUELA_HOME}"
-
-  caddy:
-    extends: [":caddy:configure"]
-    script: cat venue.caddyfile | envsubst > "${CADDY_CONF_ROOT}/venue.caddyfile"
-    when:
-      output_changes: cat venue.caddyfile
-      check_fails: test -f "${CADDY_CONF_ROOT}/venue.caddyfile"
 
   venue-user:
     script: useradd --system --shell /bin/false venue

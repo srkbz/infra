@@ -1,9 +1,0 @@
-https://app.bilbostack.com {
-    reverse_proxy 127.0.0.1:8080
-
-    handle_path /laespuela/* {
-        root * ${LAESPUELA_HOME}
-        encode zstd gzip
-        file_server
-    }
-}
