@@ -1,10 +1,10 @@
 tasks:
   default:
     script: |
-      crontab -r || true
-      tasks_with_cron="$(cd "${EBRO_ROOT}" && ${EBRO_BIN} -i --query 'tasks | filter("cron" in .labels) | map(.id) | join("\n")')"
-      for task_id in ${tasks_with_cron}; do
-        task_cron="$(cd "${EBRO_ROOT}" && ${EBRO_BIN} -i --query "filter(tasks, .id == '${task_id}')[0].labels.cron")"
-        cron_line="${task_cron} cd '${EBRO_ROOT}' && '${EBRO_BIN}' ${task_id}"
-        (crontab -l 2>/dev/null || true; echo "$cron_line") | crontab -
-      done
+      crontab_content="$(./build-crontab.sh)"
+      echo "$crontab_content" | crontab -
+    when:
+      check_fails: |
+        crontab_expected_content="$(./build-crontab.sh)"
+        crontab_actual_content="$(crontab -l || true)"
+        [ "$crontab_expected_content" == "$crontab_actual_content" ]
