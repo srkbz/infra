@@ -1,8 +1,10 @@
 tasks:
   default:
     script: |
+      crontab -r || true
       tasks_with_cron="$(cd "${EBRO_ROOT}" && ${EBRO_BIN} -i --query 'tasks | filter("cron" in .labels) | map(.id) | join("\n")')"
       for task_id in ${tasks_with_cron}; do
         task_cron="$(cd "${EBRO_ROOT}" && ${EBRO_BIN} -i --query "filter(tasks, .id == '${task_id}')[0].labels.cron")"
-        echo "${task_cron} cd '${EBRO_ROOT}' && '${EBRO_BIN}' ${task_id}"
+        cron_line="${task_cron} cd '${EBRO_ROOT}' && '${EBRO_BIN}' ${task_id}"
+        (crontab -l 2>/dev/null || true; echo "$cron_line") | crontab -
       done
