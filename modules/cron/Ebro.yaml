@@ -1,7 +1,6 @@
 tasks:
   default:
     script: |
-      set -x
       crontab_content="$(./build-crontab.sh)"
       echo "$crontab_content" | crontab -
     when:
