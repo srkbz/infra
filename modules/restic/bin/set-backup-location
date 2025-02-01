@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-backup_name="$1"
-backup_location="$2"
-
-mkdir -p "${RESTIC_ROOT}/conf/${backup_name}"
-echo "$backup_location" >"${RESTIC_ROOT}/conf/${backup_name}/location"

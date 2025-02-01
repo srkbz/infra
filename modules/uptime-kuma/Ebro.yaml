@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", extra-ca, configure-backups?]
+    requires: [":docker", extra-ca]
     script: |
       mkdir -p "${UPTIME_KUMA_HOME}"
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
@@ -27,8 +27,8 @@ tasks:
     when:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
 
-  configure-backups:
-    if_tasks_exist: [":restic"]
-    extends: [":restic:configure"]
-    script: |
-      set-backup-location uptime-kuma "${UPTIME_KUMA_HOME}/data"
+  # configure-backups:
+  #   if_tasks_exist: [":restic"]
+  #   extends: [":restic:configure"]
+  #   script: |
+  #     set-backup-location uptime-kuma "${UPTIME_KUMA_HOME}/data"

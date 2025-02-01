@@ -29,22 +29,9 @@ tasks:
         restic_version_info="$("$RESTIC_ROOT/bin/restic" version)"
         [[ "$restic_version_info" == "restic ${RESTIC_VERSION} "* ]]
 
-  config-dir:
-    quiet: true
-    script: |
-      mkdir -p "${RESTIC_ROOT}/conf"
-      rm -rf "${RESTIC_ROOT}/conf"/*
-
-  configure:
+  operation:
     abstract: true
-    quiet: true
-    requires: [config-dir]
     environment:
+      RESTIC_SECRETS_FILE: "${EBRO_ROOT}/.state/secrets/restic.env"
+      RESTIC_BIN: "${RESTIC_ROOT}/restic/bin/restic"
       PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
-
-  backup-all:
-    labels:
-      cron: "0 3 * * 0"
-    script: |
-      cd "${RESTIC_ROOT}"
-      "${EBRO_TASK_WORKING_DIRECTORY}/backup-all.sh" "${EBRO_ROOT}/.state/secrets/restic.env"
