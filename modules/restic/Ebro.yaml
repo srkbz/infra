@@ -4,7 +4,7 @@ environment:
 
 tasks:
   default:
-    requires: [":secrets", install, backup-all-regularly]
+    requires: [":secrets", install]
 
   install:
     script: |
@@ -42,10 +42,10 @@ tasks:
     environment:
       PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
 
-  backup-all-regularly:
-    extends: [":cron:configure"]
-    environment:
-      CRON_ENTRY: "0 3 * * 0 cd '${RESTIC_ROOT}' && '${EBRO_TASK_WORKING_DIRECTORY}/backup-all.sh' '${EBRO_ROOT}/.state/secrets/restic.env'"
+  # backup-all-regularly:
+  #   extends: [":cron:configure"]
+  #   environment:
+  #     CRON_ENTRY: "0 3 * * 0 cd '${RESTIC_ROOT}' && '${EBRO_TASK_WORKING_DIRECTORY}/backup-all.sh' '${EBRO_ROOT}/.state/secrets/restic.env'"
 
   backup-all:
     script: |
