@@ -21,6 +21,8 @@ tasks:
 
   backup:
     if_tasks_exist: [":restic"]
+    labels:
+      cron: "0 3 * * 0"
     extends: [":restic:operation"]
     script: |
       cd "${FRESHRSS_HOME}/data"
