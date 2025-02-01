@@ -31,6 +31,7 @@ tasks:
 
   operation:
     abstract: true
+    requires: [install]
     environment:
       RESTIC_SECRETS_FILE: "${EBRO_ROOT}/.state/secrets/restic.env"
       RESTIC_BIN: "${RESTIC_ROOT}/bin/restic"
