@@ -33,5 +33,5 @@ tasks:
     abstract: true
     environment:
       RESTIC_SECRETS_FILE: "${EBRO_ROOT}/.state/secrets/restic.env"
-      RESTIC_BIN: "${RESTIC_ROOT}/restic/bin/restic"
+      RESTIC_BIN: "${RESTIC_ROOT}/bin/restic"
       PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
