@@ -14,7 +14,8 @@ tasks:
         test -f /etc/apt/keyrings/docker.asc
         test -f /etc/apt/sources.list.d/docker.list
 
-  cleanup-regularly:
-    extends: [":cron:configure"]
-    environment:
-      CRON_ENTRY: "0 4 * * 0 docker system prune -af"
+  cleanup:
+    labels:
+      cron: "0 4 * * 0"
+    script: |
+      docker system prune -af
