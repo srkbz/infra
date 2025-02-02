@@ -1,7 +1,8 @@
-tasks:
+environment:
   PORT_REGISTRY: "${EBRO_ROOT}/.state/utils/port-registry"
   PORT_REGISTRY_RANDOM_INITIAL_PORT: "10000"
 
+tasks:
   sync-directories:
     abstract: true
     script: |
