@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker", extra-ca]
+    requires: [":docker", extra-ca, port]
     script: |
       mkdir -p "${UPTIME_KUMA_HOME}"
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
@@ -26,6 +26,9 @@ tasks:
       curl 'https://cacerts.digicert.com/ThawteTLSRSACAG1.crt.pem'>"${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
     when:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
+
+  port:
+    extends: [":utils:reserve-port"]
 
   backup:
     if_tasks_exist: [":restic"]

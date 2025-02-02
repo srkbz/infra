@@ -19,6 +19,9 @@ tasks:
         active_containers="$(docker compose ps -q)"
         [ "$active_containers" != "" ]
 
+  port:
+    extends: [":utils:reserve-port"]
+
   backup:
     if_tasks_exist: [":restic"]
     labels:

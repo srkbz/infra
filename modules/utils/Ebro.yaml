@@ -1,4 +1,7 @@
 tasks:
+  PORT_REGISTRY: "${EBRO_ROOT}/.state/utils/port-registry"
+  PORT_REGISTRY_RANDOM_INITIAL_PORT: "10000"
+
   sync-directories:
     abstract: true
     script: |
@@ -8,3 +11,30 @@ tasks:
       check_fails: |
         result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")"
         [ ! -n "$result" ]
+
+  reserve-port:
+    abstract: true
+    requires: [port-registry]
+    script: |
+      cd "$PORT_REGISTRY"
+
+      if ! test -f "allocations/${EBRO_TASK_ID}"; then
+        next="$(cat next)"
+        echo "$next" > "allocations/${EBRO_TASK_ID}"
+        next=$((next+1))
+        echo "$next" > next
+      fi
+
+      if [ -n "$PORT_FILE" ]; then
+        cp "allocations/${EBRO_TASK_ID}" "${PORT_FILE}"
+      fi
+  port-registry:
+    script: |
+      mkdir -p "$PORT_REGISTRY"
+      cd "$PORT_REGISTRY"
+
+      mkdir -p allocations
+      echo "$PORT_REGISTRY_INITIAL_PORT" > next
+    when:
+      check_fails: |
+        test -f "$PORT_REGISTRY"
