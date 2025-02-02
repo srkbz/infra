@@ -30,6 +30,7 @@ tasks:
     when:
       check_fails: |
         test -f "${PORT_REGISTRY}/allocations/${EBRO_TASK_ID}"
+
   port-registry:
     script: |
       mkdir -p "$PORT_REGISTRY"
@@ -40,3 +41,6 @@ tasks:
     when:
       check_fails: |
         test -d "$PORT_REGISTRY"
+
+  reset-port-registry:
+    script: rm -rf "$PORT_REGISTRY"

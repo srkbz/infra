@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    requires: [":docker"]
+    requires: [":docker", port]
     script: |
       mkdir -p "${FRESHRSS_HOME}"
       cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
