@@ -7,9 +7,14 @@ tasks:
     requires: [":docker", ":secrets"]
     script: |
       mkdir -p "${WATCHTOWER_HOME}"
+
       cp docker-compose.yml "${WATCHTOWER_HOME}/docker-compose.yml"
-      cp "${SECRETS_ENV_FILE}" "${WATCHTOWER_HOME}/.env"
       cd "${WATCHTOWER_HOME}"
+
+      hostname="$(hostname)"
+      cp "${SECRETS_ENV_FILE}" .env
+      echo "WATCHTOWER_NOTIFICATIONS_HOSTNAME=${hostname}" >> .env
+
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
@@ -20,4 +25,5 @@ tasks:
         cd "${WATCHTOWER_HOME}"
         test -f "docker-compose.yml"
         test -f ".env"
-        [ "$(docker compose ps -q)" != "" ]
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
