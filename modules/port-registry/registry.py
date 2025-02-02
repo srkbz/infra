@@ -48,7 +48,7 @@ def get_port(task_id):
     if task_id not in db["task_ids"]:
         print(f"Task {task_id} has no port assigned")
         exit(1)
-    return db["task_ids"]
+    return db["task_ids"][task_id]
 
 
 def read_db():
