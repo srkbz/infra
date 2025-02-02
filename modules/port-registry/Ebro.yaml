@@ -28,11 +28,6 @@ tasks:
   home:
     script: |
       mkdir -p "$PORT_REGISTRY_HOME"
-      cd "$PORT_REGISTRY_HOME"
-
-      mkdir -p allocations/task-id
-      mkdir -p allocations/port
-      echo "$PORT_REGISTRY_INITIAL_PORT" > next
     when:
       check_fails: |
         test -d "$PORT_REGISTRY_HOME"

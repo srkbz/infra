@@ -19,7 +19,7 @@ def main():
         case ["reserve", task_id, port]:
             reserve(task_id, port)
         case ["get-port", task_id]:
-            print(f"get port for {task_id}")
+            print(get_port(task_id))
     write_db()
 
 
@@ -38,6 +38,7 @@ def get_port(task_id):
     if task_id not in db["task_ids"]:
         print(f"Task {task_id} has no port assigned")
         exit(1)
+    return db["task_ids"]
 
 
 def read_db():
