@@ -24,6 +24,9 @@ tasks:
         echo "${PORT_FILE:-}"
       check_fails: |
         "$PORT_REGISTRY_WD/registry.py" get-port "$EBRO_TASK_ID"
+        if [ -n "${PORT_FILE:-}" ]; then
+          test -f "${PORT_FILE}"
+        fi
 
   home:
     script: |
