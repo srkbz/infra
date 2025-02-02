@@ -15,6 +15,7 @@ tasks:
 
   reserve-port:
     abstract: true
+    quiet: true
     requires: [port-registry]
     script: |
       cd "$PORT_REGISTRY"
@@ -26,7 +27,7 @@ tasks:
         echo "$next" > next
       fi
 
-      if [ -n "$PORT_FILE" ]; then
+      if [ -n "${PORT_FILE:-}" ]; then
         cp "allocations/${EBRO_TASK_ID}" "${PORT_FILE}"
       fi
   port-registry:
