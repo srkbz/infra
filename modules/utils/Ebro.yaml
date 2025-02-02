@@ -41,6 +41,7 @@ tasks:
       fi
     when:
       output_changes: |
+        echo "${PORT:-}"
         echo "${PORT_FILE:-}"
       check_fails: |
         test -f "${PORT_REGISTRY}/allocations/task-id/${EBRO_TASK_ID}"
