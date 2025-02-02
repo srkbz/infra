@@ -60,7 +60,7 @@ def read_db():
 
 def write_db():
     with open(DB_PATH, "w") as f:
-        f.write(json.dumps(db, indent=2))
+        f.write(json.dumps(db, indent=2) + "\n")
 
 
 main()
