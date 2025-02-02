@@ -10,4 +10,4 @@ services:
     volumes:
       - ./data:/var/www/FreshRSS/data
     ports:
-      - 10.10.0.1:3000:80
+      - 10.10.0.1:${PORT}:80

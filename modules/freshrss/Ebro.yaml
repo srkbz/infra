@@ -1,17 +1,20 @@
 environment:
   FRESHRSS_HOME: ${EBRO_ROOT}/.state/freshrss
+  FRESHRSS_PORT_FILE: "${FRESHRSS_HOME}/PORT"
 
 tasks:
   default:
-    requires: [":docker", port]
+    requires: [":docker", home, port]
     script: |
-      mkdir -p "${FRESHRSS_HOME}"
       cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
       cd "${FRESHRSS_HOME}"
+      port="$(cat "$FRESHRSS_PORT_FILE")"
+      echo "PORT=${port}" > .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml
+        cat "${FRESHRSS_PORT_FILE}"
       check_fails: |
         test -d "${FRESHRSS_HOME}"
         cd "${FRESHRSS_HOME}"
@@ -21,8 +24,15 @@ tasks:
 
   port:
     extends: [":port-registry:reserve"]
+    requires: [home]
     environment:
       PORT: "3000"
+      PORT_FILE: "${FRESHRSS_PORT_FILE}"
+
+  home:
+    script: mkdir -p "$FRESHRSS_HOME"
+    when:
+      check_fails: test -f "$FRESHRSS_HOME"
 
   backup:
     if_tasks_exist: [":restic"]
