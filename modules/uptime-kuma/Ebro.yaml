@@ -28,7 +28,7 @@ tasks:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
 
   port:
-    extends: [":utils:reserve-port"]
+    extends: [":port-registry:reserve"]
     environment:
       PORT: "3001"
 

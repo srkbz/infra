@@ -3,6 +3,8 @@ imports:
     from: ../../modules/ebrow-service
   utils:
     from: ../../modules/utils
+  port-registry:
+    from: ../../modules/port-registry
   cron:
     from: ../../modules/cron
   apt:

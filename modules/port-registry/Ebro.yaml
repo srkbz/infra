@@ -1,0 +1,41 @@
+environment:
+  PORT_REGISTRY_HOME: "${EBRO_ROOT}/.state/port-registry"
+  PORT_REGISTRY_INITIAL_PORT: "10000"
+
+tasks:
+  reserve:
+    abstract: true
+    requires: [home]
+    environment:
+      PORT_REGISTRY_WD: "${EBRO_TASK_WORKING_DIRECTORY}"
+    script: |
+      if [ -n "${PORT:-}" ]; then
+        "$PORT_REGISTRY_WD/registry.py" reserve "$EBRO_TASK_ID" "$PORT" 
+      else
+        "$PORT_REGISTRY_WD/registry.py" reserve "$EBRO_TASK_ID"
+      fi
+
+      if [ -n "${PORT_FILE:-}" ]; then
+        "$PORT_REGISTRY_WD/registry.py" get-port "$EBRO_TASK_ID" > "${PORT_FILE}"
+      fi
+    when:
+      output_changes: |
+        echo "${PORT:-}"
+        echo "${PORT_FILE:-}"
+      check_fails: |
+        "$PORT_REGISTRY_WD/registry.py" get-port "$EBRO_TASK_ID"
+
+  home:
+    script: |
+      mkdir -p "$PORT_REGISTRY_HOME"
+      cd "$PORT_REGISTRY_HOME"
+
+      mkdir -p allocations/task-id
+      mkdir -p allocations/port
+      echo "$PORT_REGISTRY_INITIAL_PORT" > next
+    when:
+      check_fails: |
+        test -d "$PORT_REGISTRY_HOME"
+
+  reset:
+    script: rm -rf "$PORT_REGISTRY_HOME"

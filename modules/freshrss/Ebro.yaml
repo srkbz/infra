@@ -20,7 +20,7 @@ tasks:
         [ "$active_containers" != "" ]
 
   port:
-    extends: [":utils:reserve-port"]
+    extends: [":port-registry:reserve"]
     environment:
       PORT: "3000"
 

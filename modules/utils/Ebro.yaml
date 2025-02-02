@@ -1,7 +1,3 @@
-environment:
-  PORT_REGISTRY: "${EBRO_ROOT}/.state/utils/port-registry"
-  PORT_REGISTRY_RANDOM_INITIAL_PORT: "10000"
-
 tasks:
   sync-directories:
     abstract: true
@@ -12,51 +8,3 @@ tasks:
       check_fails: |
         result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")"
         [ ! -n "$result" ]
-
-  reserve-port:
-    abstract: true
-    requires: [port-registry]
-    script: |
-      cd "$PORT_REGISTRY"
-
-      if ! test -f "allocations/task-id/${EBRO_TASK_ID}"; then
-        if [ -n "${PORT:-}" ]; then
-          if test -f "allocations/port/${PORT}"; then
-            echo "Port ${PORT} is already allocated"
-            exit 1
-          fi
-          echo "$PORT" > "allocations/task-id/${EBRO_TASK_ID}"
-          echo "$EBRO_TASK_ID" > "allocations/port/${PORT}"
-        else
-          next="$(cat next)"
-          echo "$next" > "allocations/task-id/${EBRO_TASK_ID}"
-          echo "$EBRO_TASK_ID" > "allocations/port/${next}"
-          next=$((next+1))
-          echo "$next" > next
-        fi
-      fi
-
-      if [ -n "${PORT_FILE:-}" ]; then
-        cp "allocations/task-id/${EBRO_TASK_ID}" "${PORT_FILE}"
-      fi
-    when:
-      output_changes: |
-        echo "${PORT:-}"
-        echo "${PORT_FILE:-}"
-      check_fails: |
-        test -f "${PORT_REGISTRY}/allocations/task-id/${EBRO_TASK_ID}"
-
-  port-registry:
-    script: |
-      mkdir -p "$PORT_REGISTRY"
-      cd "$PORT_REGISTRY"
-
-      mkdir -p allocations/task-id
-      mkdir -p allocations/port
-      echo "$PORT_REGISTRY_RANDOM_INITIAL_PORT" > next
-    when:
-      check_fails: |
-        test -d "$PORT_REGISTRY"
-
-  reset-port-registry:
-    script: rm -rf "$PORT_REGISTRY"
