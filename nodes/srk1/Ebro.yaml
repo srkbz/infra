@@ -1,6 +1,8 @@
 imports:
   ebrow-service:
     from: ../../modules/ebrow-service
+  utils:
+    from: ../../modules/utils
   cron:
     from: ../../modules/cron
   apt:
