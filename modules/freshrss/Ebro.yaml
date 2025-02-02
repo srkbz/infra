@@ -21,6 +21,8 @@ tasks:
 
   port:
     extends: [":utils:reserve-port"]
+    environment:
+      PORT: "3000"
 
   backup:
     if_tasks_exist: [":restic"]
