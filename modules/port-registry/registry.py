@@ -38,7 +38,7 @@ def reserve(task_id, port):
 
 def next_available_port():
     while True:
-        port = db["next_port"]
+        port = str(db["next_port"])
         db["next_port"] = db["next_port"] + 1
         if port not in db["ports"]:
             return port
