@@ -12,10 +12,9 @@ db = {"ports": {}, "task_ids": {}, "next_port": 10000}
 
 def main():
     read_db()
-    args = sys.argv[1:]
-    match args:
+    match sys.argv[1:]:
         case ["reserve", task_id]:
-            reserve(task_id, next())
+            reserve(task_id, next_available_port())
         case ["reserve", task_id, port]:
             reserve(task_id, port)
         case ["get-port", task_id]:
@@ -37,10 +36,12 @@ def reserve(task_id, port):
     db["ports"][port] = task_id
 
 
-def next_port():
-    r = db["next_port"]
-    db["next_port"] = db["next_port"] + 1
-    return r
+def next_available_port():
+    while True:
+        port = db["next_port"]
+        db["next_port"] = db["next_port"] + 1
+        if port not in db["ports"]:
+            return port
 
 
 def get_port(task_id):
