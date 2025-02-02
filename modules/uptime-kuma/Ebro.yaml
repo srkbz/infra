@@ -30,7 +30,7 @@ tasks:
   port:
     extends: [":port-registry:reserve"]
     environment:
-      PORT: "3001"
+      PORT: "3002"
 
   backup:
     if_tasks_exist: [":restic"]
