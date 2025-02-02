@@ -32,7 +32,7 @@ tasks:
   home:
     script: mkdir -p "$FRESHRSS_HOME"
     when:
-      check_fails: test -f "$FRESHRSS_HOME"
+      check_fails: test -d "$FRESHRSS_HOME"
 
   backup:
     if_tasks_exist: [":restic"]
