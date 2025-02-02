@@ -5,4 +5,4 @@ rm -rf ./*
 chmod -R 700 .
 umask 077
 
-"${WD}/secrets-xml-to-dir.py" "$@"
+"${EBRO_TASK_WORKING_DIRECTORY}/secrets-xml-to-dir.py" "$@"
