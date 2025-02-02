@@ -24,6 +24,14 @@ def main():
 
 
 def reserve(task_id, port):
+    if port in db["ports"] and db["ports"][port] != task_id:
+        raise Exception(f"Port {port} is already reserved to {db["ports"][port]}")
+
+    if task_id in db["task_ids"]:
+        old_port = db["task_ids"][task_id]
+        db["ports"].pop(old_port)
+        db["task_ids"].pop(task_id)
+
     db["task_ids"][task_id] = port
     db["ports"][port] = task_id
 
