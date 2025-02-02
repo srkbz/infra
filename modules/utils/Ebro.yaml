@@ -15,21 +15,21 @@ tasks:
 
   reserve-port:
     abstract: true
-    quiet: true
     requires: [port-registry]
     script: |
       cd "$PORT_REGISTRY"
 
-      if ! test -f "allocations/${EBRO_TASK_ID}"; then
-        next="$(cat next)"
-        echo "$next" > "allocations/${EBRO_TASK_ID}"
-        next=$((next+1))
-        echo "$next" > next
-      fi
+      next="$(cat next)"
+      echo "$next" > "allocations/${EBRO_TASK_ID}"
+      next=$((next+1))
+      echo "$next" > next
 
       if [ -n "${PORT_FILE:-}" ]; then
         cp "allocations/${EBRO_TASK_ID}" "${PORT_FILE}"
       fi
+    when:
+      check_fails: |
+        test -f "${PORT_REGISTRY}/allocations/${EBRO_TASK_ID}"
   port-registry:
     script: |
       mkdir -p "$PORT_REGISTRY"
@@ -39,4 +39,4 @@ tasks:
       echo "$PORT_REGISTRY_RANDOM_INITIAL_PORT" > next
     when:
       check_fails: |
-        test -f "$PORT_REGISTRY"
+        test -d "$PORT_REGISTRY"
