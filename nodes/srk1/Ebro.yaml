@@ -102,6 +102,7 @@ tasks:
       - uptime-kuma
       - freshrss
       - restic
+      - mtproxy
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
