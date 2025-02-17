@@ -28,11 +28,6 @@ imports:
   restic:
     from: ../../modules/restic
 
-  mtproxy:
-    from: ../../modules/mtproxy
-    environment:
-      MTPROXY_HOST: "0.0.0.0"
-
   uptime-kuma:
     from: ../../modules/uptime-kuma
     environment:
@@ -102,7 +97,6 @@ tasks:
       - uptime-kuma
       - freshrss
       - restic
-      - mtproxy
       - static-site-sirikon.me
       - static-site-osoondo.com
       - static-site-egin.sirikon.me
