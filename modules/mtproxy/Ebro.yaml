@@ -39,7 +39,7 @@ tasks:
       mkdir -p "$MTPROXY_HOME"
     when:
       check_fails: |
-        test -f "$MTPROXY_HOME"
+        test -d "$MTPROXY_HOME"
 
   restart:
     # labels:
