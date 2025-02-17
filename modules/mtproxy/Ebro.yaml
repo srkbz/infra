@@ -1,0 +1,50 @@
+environment:
+  MTPROXY_HOME: "${STATE_DIR}/mtproxy"
+  MTPROXY_HOST: "${MTPROXY_HOST:-127.0.0.1}"
+  MTPROXY_PORT: "${MTPROXY_PORT:-random}"
+  MTPROXY_PORT_FILE: "${MTPROXY_HOME}/PORT"
+
+tasks:
+  default:
+    requires: [":docker", home, port]
+    script: |
+      cp docker-compose.yml "${MTPROXY_HOME}/docker-compose.yml"
+      cd "${MTPROXY_HOME}"
+
+      port="$(cat "$MTPROXY_PORT_FILE")"
+      echo "PORT=${port}" > .env
+      echo "HOST=${MTPROXY_HOST}" >> .env
+
+      docker compose up --detach --wait --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+        cat "${MTPROXY_PORT_FILE}"
+      check_fails: |
+        test -d "${MTPROXY_HOME}"
+        cd "${MTPROXY_HOME}"
+        test -f "docker-compose.yml"
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
+
+  port:
+    extends: [":port-registry:reserve"]
+    requires: [home]
+    environment:
+      PORT: "${MTPROXY_PORT}"
+      PORT_FILE: "${MTPROXY_PORT_FILE}"
+
+  home:
+    script: |
+      mkdir -p "$MTPROXY_HOME"
+    when:
+      check_fails: |
+        test -f "$MTPROXY_HOME"
+
+  restart:
+    labels:
+      # cron: "0/5 * * * *"
+    script: |
+      cd "${MTPROXY_HOME}"
+      docker compose exec mtproxy mtproxy-cli refresh-config
+      docker compose restart --wait mtproxy

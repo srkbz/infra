@@ -1,5 +1,5 @@
 environment:
-  INFISICAL_HOME: ${EBRO_ROOT}/.state/infisical
+  INFISICAL_HOME: ${STATE_DIR}/infisical
 
 tasks:
   default:

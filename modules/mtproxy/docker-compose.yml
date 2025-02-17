@@ -1,0 +1,11 @@
+services:
+  mtproxy:
+    image: ghcr.io/sirikon/mtproxy:latest
+    restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    volumes:
+      - ./data:/data
+      - ./cache:/cache
+    ports:
+      - ${HOST}:${PORT}:80
