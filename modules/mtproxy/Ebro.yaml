@@ -43,7 +43,7 @@ tasks:
 
   restart:
     labels:
-      cron: "0/5 * * * *"
+      cron: "* * * * *"
     script: |
       cd "${MTPROXY_HOME}"
       docker compose exec mtproxy mtproxy-cli refresh-config
