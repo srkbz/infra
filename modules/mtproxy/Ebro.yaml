@@ -46,5 +46,5 @@ tasks:
       cron: "* * * * *"
     script: |
       cd "${MTPROXY_HOME}"
-      docker compose exec mtproxy mtproxy-cli refresh-config
+      docker compose exec --no-tty mtproxy mtproxy-cli refresh-config
       docker compose restart --wait mtproxy
