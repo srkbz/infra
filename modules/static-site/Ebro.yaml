@@ -27,7 +27,7 @@ tasks:
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
-      cat Caddyfile | envsubst > "${CADDY_CONF_ROOT}/static-site-${DOMAIN}.caddyfile"
+      cat Caddyfile | envsubst > "${CADDY_CONF_DIR}/static-site-${DOMAIN}.caddyfile"
 
   webhook:
     extends: [":webhook:configure"]
