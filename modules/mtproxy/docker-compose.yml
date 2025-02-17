@@ -8,4 +8,4 @@ services:
       - ./data:/data
       - ./cache:/cache
     ports:
-      - ${HOST}:${PORT}:80
+      - ${HOST}:${PORT}:443
