@@ -1,23 +1,28 @@
 environment:
   CADDY_VERSION: "2.9.1"
-  CADDY_CONF_ROOT: /etc/caddy/conf.d
+  CADDY_CONF: /etc/caddy/Caddyfile
+  CADDY_CONF_DIR: /etc/caddy/conf.d
+  CADDY_CACHE_DIR: "${CACHE_DIR}/caddy"
+  CADDY_DEB: "${CADDY_CACHE_DIR}/deb/${CADDY_VERSION}/caddy.deb"
+  CADDY_DEB_URL: "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.deb"
 
 tasks:
   default:
     requires: [prepare, install]
     script: |
-      cp Caddyfile /etc/caddy/Caddyfile
+      cp Caddyfile "$CADDY_CONF"
       systemctl reload caddy
     when:
       output_changes: |
         cat Caddyfile
-        cat "$CADDY_CONF_ROOT"/* || true
-      check_fails: test -f /etc/caddy/Caddyfile
+        cat "$CADDY_CONF_DIR"/* || true
+      check_fails: |
+        test -f "$CADDY_CONF"
 
   install:
     requires: [deb]
     script: |
-      apt-get install -y --allow-downgrades "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
+      apt-get install -y --allow-downgrades "${CADDY_DEB}"
     when:
       check_fails: |
         command -v caddy
@@ -26,15 +31,15 @@ tasks:
 
   deb:
     script: |
-      mkdir -p "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}"
-      cd "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}"
-      curl -L -o caddy.deb "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.deb"
+      caddy_deb_dir="$(dirname "$CADDY_DEB")"
+      mkdir -p "${caddy_deb_dir}"
+      curl -L -o "${CADDY_DEB}" "${CADDY_DEB_URL}"
     when:
-      check_fails: test -f "${EBRO_ROOT}/.cache/caddy/deb/${CADDY_VERSION}/caddy.deb"
+      check_fails: test -f "${CADDY_DEB}"
 
   prepare:
     requires: [install]
-    script: rm -rf "$CADDY_CONF_ROOT" && mkdir -p "$CADDY_CONF_ROOT"
+    script: mkdir -p "$CADDY_CONF_DIR" && rm -rf "$CADDY_CONF_DIR"/*
     quiet: true
 
   configure:

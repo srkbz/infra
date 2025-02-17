@@ -1,3 +1,6 @@
+environment:
+  CACHE_DIR: "${EBRO_ROOT}/.cache"
+
 imports:
   ebrow-service:
     from: ../../modules/ebrow-service
