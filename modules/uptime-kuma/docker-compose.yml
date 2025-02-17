@@ -10,4 +10,4 @@ services:
       - ./extra-ca:/extra-ca:ro
       - ./data:/app/data
     ports:
-      - 10.10.0.1:${PORT}:3001
+      - ${HOST}:${PORT}:3001

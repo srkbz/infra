@@ -1,5 +1,6 @@
 environment:
-  FRESHRSS_HOME: ${EBRO_ROOT}/.state/freshrss
+  FRESHRSS_HOME: ${STATE_DIR}/freshrss
+  FRESHRSS_HOST: "${FRESHRSS_HOST:-127.0.0.1}"
   FRESHRSS_PORT_FILE: "${FRESHRSS_HOME}/PORT"
 
 tasks:
@@ -10,6 +11,7 @@ tasks:
       cd "${FRESHRSS_HOME}"
       port="$(cat "$FRESHRSS_PORT_FILE")"
       echo "PORT=${port}" > .env
+      echo "HOST=${FRESHRSS_HOST}" >> .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |

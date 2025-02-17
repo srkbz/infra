@@ -1,4 +1,5 @@
 environment:
+  STATE_DIR: "${EBRO_ROOT}/.state"
   CACHE_DIR: "${EBRO_ROOT}/.cache"
 
 imports:
@@ -26,8 +27,12 @@ imports:
     from: ../../modules/watchtower
   uptime-kuma:
     from: ../../modules/uptime-kuma
+    environment:
+      UPTIME_KUMA_HOST: "10.10.0.1"
   freshrss:
     from: ../../modules/freshrss
+    environment:
+      FRESHRSS_HOST: "10.10.0.1"
   restic:
     from: ../../modules/restic
 

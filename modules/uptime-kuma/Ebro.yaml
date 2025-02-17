@@ -1,5 +1,6 @@
 environment:
-  UPTIME_KUMA_HOME: ${EBRO_ROOT}/.state/uptime-kuma
+  UPTIME_KUMA_HOME: ${STATE_DIR}/uptime-kuma
+  UPTIME_KUMA_HOST: ${UPTIME_KUMA_HOST:-127.0.0.1}
   UPTIME_KUMA_PORT_FILE: "${UPTIME_KUMA_HOME}/PORT"
 
 tasks:
@@ -10,6 +11,7 @@ tasks:
       cd "${UPTIME_KUMA_HOME}"
       port="$(cat "$UPTIME_KUMA_PORT_FILE")"
       echo "PORT=${port}" > .env
+      echo "HOST=${UPTIME_KUMA_HOST}" >> .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
@@ -30,17 +32,17 @@ tasks:
     when:
       check_fails: test -f "${UPTIME_KUMA_HOME}/extra-ca/ThawteTLSRSACAG1.crt"
 
-  home:
-    script: mkdir -p "${UPTIME_KUMA_HOME}"
-    when:
-      check_fails: test -d "${UPTIME_KUMA_HOME}"
-
   port:
     extends: [":port-registry:reserve"]
     requires: [home]
     environment:
       PORT: "3001"
       PORT_FILE: "${UPTIME_KUMA_PORT_FILE}"
+
+  home:
+    script: mkdir -p "${UPTIME_KUMA_HOME}"
+    when:
+      check_fails: test -d "${UPTIME_KUMA_HOME}"
 
   backup:
     if_tasks_exist: [":restic"]
