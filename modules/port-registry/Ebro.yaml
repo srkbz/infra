@@ -1,5 +1,5 @@
 environment:
-  PORT_REGISTRY_HOME: "${EBRO_ROOT}/.state/port-registry"
+  PORT_REGISTRY_HOME: "${STATE_DIR}/port-registry"
 
 tasks:
   reserve:
@@ -8,12 +8,7 @@ tasks:
     environment:
       PORT_REGISTRY_WD: "${EBRO_TASK_WORKING_DIRECTORY}"
     script: |
-      if [ -n "${PORT:-}" ]; then
-        "$PORT_REGISTRY_WD/registry.py" reserve "$EBRO_TASK_ID" "$PORT" 
-      else
-        "$PORT_REGISTRY_WD/registry.py" reserve "$EBRO_TASK_ID"
-      fi
-
+      "$PORT_REGISTRY_WD/registry.py" reserve "$EBRO_TASK_ID" "$PORT" 
       if [ -n "${PORT_FILE:-}" ]; then
         "$PORT_REGISTRY_WD/registry.py" get-port "$EBRO_TASK_ID" > "${PORT_FILE}"
       fi

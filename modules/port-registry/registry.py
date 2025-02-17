@@ -13,7 +13,7 @@ db = {"ports": {}, "task_ids": {}, "next_port": 10000}
 def main():
     read_db()
     match sys.argv[1:]:
-        case ["reserve", task_id]:
+        case ["reserve", task_id, "random"]:
             reserve(task_id, next_available_port())
         case ["reserve", task_id, port]:
             reserve(task_id, port)

@@ -25,16 +25,20 @@ imports:
     from: ../../modules/webhook
   watchtower:
     from: ../../modules/watchtower
+  restic:
+    from: ../../modules/restic
+
   uptime-kuma:
     from: ../../modules/uptime-kuma
     environment:
       UPTIME_KUMA_HOST: "10.10.0.1"
+      UPTIME_KUMA_PORT: "3001"
+
   freshrss:
     from: ../../modules/freshrss
     environment:
       FRESHRSS_HOST: "10.10.0.1"
-  restic:
-    from: ../../modules/restic
+      FRESHRSS_PORT: "3000"
 
   static-site-sirikon.me:
     from: ../../modules/static-site

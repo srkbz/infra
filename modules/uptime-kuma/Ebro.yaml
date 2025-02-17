@@ -1,6 +1,7 @@
 environment:
   UPTIME_KUMA_HOME: ${STATE_DIR}/uptime-kuma
   UPTIME_KUMA_HOST: ${UPTIME_KUMA_HOST:-127.0.0.1}
+  UPTIME_KUMA_PORT: ${UPTIME_KUMA_PORT:-random}
   UPTIME_KUMA_PORT_FILE: "${UPTIME_KUMA_HOME}/PORT"
 
 tasks:
@@ -36,7 +37,7 @@ tasks:
     extends: [":port-registry:reserve"]
     requires: [home]
     environment:
-      PORT: "3001"
+      PORT: "${UPTIME_KUMA_PORT}"
       PORT_FILE: "${UPTIME_KUMA_PORT_FILE}"
 
   home:
