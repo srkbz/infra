@@ -18,6 +18,9 @@ labels_cmd = run(
     cwd=environ.get("EBRO_ROOT"),
     stdout=PIPE,
 )
+
+print(str(labels_cmd.stdout))
+
 labels = json.loads(str(labels_cmd.stdout))
 
 print(labels)
