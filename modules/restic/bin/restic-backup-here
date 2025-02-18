@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-. "$RESTIC_SECRETS_FILE"
-
 function main {
     backup_name="$1"
     backup_repo="${BASE_URL}/${BUCKET_NAME}/${backup_name}"
