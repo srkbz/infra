@@ -86,4 +86,9 @@ tasks:
   default:
     requires:
       - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
-      - vpn:server
+
+  configure-vpn:
+    labels:
+      autorequire: "true"
+    requires: [vpn:server]
+    required_by: [uptime-kuma, freshrss]
