@@ -21,7 +21,11 @@ labels_cmd = run(
 
 labels: dict[str, str] = json.loads(labels_cmd.stdout.decode("utf-8"))
 
-for key, value in labels.items():
-    if key.startswith("secret."):
-        print(key)
-        print(value)
+for label_key, label_value in labels.items():
+    if label_key.startswith("secret."):
+        [secret_entry, secret_key] = label_value.split(":")
+        print(
+            label_key.removeprefix("secret.")
+            + "="
+            + f"'{secrets[secret_entry][secret_key]}'"
+        )
