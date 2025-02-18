@@ -47,7 +47,7 @@ class SecretsXMLWalker:
                 value = item.find("./Value").text
                 if key != "Title" and value is not None:
 
-                    entry = "/".join(*breadcrumb, entry_title)
+                    entry = "/".join([*breadcrumb, entry_title])
                     if entry not in self._db:
                         self._db[entry] = {}
                     self._db[entry][key.upper()] = value
