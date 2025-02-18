@@ -19,8 +19,9 @@ labels_cmd = run(
     stdout=PIPE,
 )
 
-print(labels_cmd.stdout.decode("utf-8"))
+labels = json.loads(labels_cmd.stdout.decode("utf-8"))
 
-labels = json.loads(str(labels_cmd.stdout))
-
-print(labels)
+for key, value in enumerate(labels):
+    if key.startswith("secret."):
+        print(key)
+        print(value)
