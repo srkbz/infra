@@ -3,6 +3,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [":docker", caddy]
     script: |
       mkdir -p "${INFISICAL_HOME}"

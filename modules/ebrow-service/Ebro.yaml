@@ -5,6 +5,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [trigger-home, trigger-bin]
     script: |
       cat ebrow.service | envsubst > /etc/systemd/system/ebrow.service

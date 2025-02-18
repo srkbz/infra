@@ -85,21 +85,5 @@ imports:
 tasks:
   default:
     requires:
-      - ebrow-service
-      - cron
-      - apt
+      - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
       - vpn:server
-      - docker
-      - secrets
-      - caddy
-      - webhook
-      - watchtower
-      - uptime-kuma
-      - freshrss
-      - restic
-      - static-site-sirikon.me
-      - static-site-osoondo.com
-      - static-site-egin.sirikon.me
-      - static-site-astenagusia.eus
-      - static-site-2048.sirikon.me
-      - static-site-ebro.sirikon.me

@@ -4,6 +4,8 @@ environment:
 tasks:
   # TODO: Rewrite to use apt metapackage
   default:
+    labels:
+      autorequire: "true"
     requires: [prepare]
     script: |
       apt-get update

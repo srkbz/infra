@@ -6,6 +6,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [":docker", home, extra-ca, port]
     script: |
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"

@@ -4,6 +4,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [":docker", ":secrets"]
     script: |
       mkdir -p "${WATCHTOWER_HOME}"

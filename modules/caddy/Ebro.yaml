@@ -8,6 +8,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [prepare, install]
     script: |
       cp Caddyfile "$CADDY_CONF"

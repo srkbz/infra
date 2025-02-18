@@ -3,6 +3,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [bin, prepare]
     script: |
       WD="$(pwd)"

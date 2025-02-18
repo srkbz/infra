@@ -1,5 +1,7 @@
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [bin]
 
   bin:

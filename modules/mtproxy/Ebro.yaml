@@ -6,6 +6,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [":docker", home, port]
     script: |
       cp docker-compose.yml "${MTPROXY_HOME}/docker-compose.yml"

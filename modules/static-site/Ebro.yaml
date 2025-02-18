@@ -4,6 +4,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      autorequire: "true"
     requires: [site, caddy, webhook]
 
   site:
