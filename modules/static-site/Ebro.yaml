@@ -35,6 +35,7 @@ tasks:
     labels:
       secret.WEBHOOK_SECRET: "static-sites/${DOMAIN}:WEBHOOK_SECRET"
     script: |
+      export WEBHOOK_SECRET
       ./webhook-build.py
 
   home:
