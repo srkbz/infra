@@ -4,28 +4,30 @@ environment:
 
 tasks:
   default:
+    extends: [":secrets:op"]
     labels:
       autorequire: "true"
-    requires: [":docker", ":secrets"]
-    script: |
-      mkdir -p "${WATCHTOWER_HOME}"
+      secret.WATCHTOWER_NOTIFICATION_URL: "watchtower:WATCHTOWER_NOTIFICATION_URL"
+    # requires: [":docker", ":secrets"]
+    # script: |
+    #   mkdir -p "${WATCHTOWER_HOME}"
 
-      cp docker-compose.yml "${WATCHTOWER_HOME}/docker-compose.yml"
-      cd "${WATCHTOWER_HOME}"
+    #   cp docker-compose.yml "${WATCHTOWER_HOME}/docker-compose.yml"
+    #   cd "${WATCHTOWER_HOME}"
 
-      hostname="$(hostname)"
-      cp "${SECRETS_ENV_FILE}" .env
-      echo "WATCHTOWER_NOTIFICATIONS_HOSTNAME=${hostname}" >> .env
+    #   hostname="$(hostname)"
+    #   cp "${SECRETS_ENV_FILE}" .env
+    #   echo "WATCHTOWER_NOTIFICATIONS_HOSTNAME=${hostname}" >> .env
 
-      docker compose up --detach --wait --remove-orphans
-    when:
-      output_changes: |
-        cat docker-compose.yml
-        cat "${SECRETS_ENV_FILE}"
-      check_fails: |
-        test -d "${WATCHTOWER_HOME}"
-        cd "${WATCHTOWER_HOME}"
-        test -f "docker-compose.yml"
-        test -f ".env"
-        active_containers="$(docker compose ps -q)"
-        [ "$active_containers" != "" ]
+    #   docker compose up --detach --wait --remove-orphans
+    # when:
+    #   output_changes: |
+    #     cat docker-compose.yml
+    #     cat "${SECRETS_ENV_FILE}"
+    #   check_fails: |
+    #     test -d "${WATCHTOWER_HOME}"
+    #     cd "${WATCHTOWER_HOME}"
+    #     test -f "docker-compose.yml"
+    #     test -f ".env"
+    #     active_containers="$(docker compose ps -q)"
+    #     [ "$active_containers" != "" ]
