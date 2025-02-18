@@ -19,7 +19,7 @@ labels_cmd = run(
     stdout=PIPE,
 )
 
-print(str(labels_cmd.stdout))
+print(labels_cmd.stdout.decode("utf-8"))
 
 labels = json.loads(str(labels_cmd.stdout))
 
