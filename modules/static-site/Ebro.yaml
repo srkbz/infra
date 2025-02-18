@@ -1,6 +1,5 @@
 environment:
   SITE_HOME: "/opt/static-sites/${DOMAIN}"
-  SITE_SECRETS: "${EBRO_ROOT}/.state/secrets/static-sites/${DOMAIN}.env"
 
 tasks:
   default:
@@ -32,11 +31,10 @@ tasks:
       cat Caddyfile | envsubst > "${CADDY_CONF_DIR}/static-site-${DOMAIN}.caddyfile"
 
   webhook:
-    extends: [":webhook:configure"]
-    requires: [":secrets"]
+    extends: [":secrets:op", ":webhook:configure"]
+    labels:
+      secret.WEBHOOK_SECRET: "static-sites/${DOMAIN}:WEBHOOK_SECRET"
     script: |
-      . "${SITE_SECRETS}"
-      export WEBHOOK_SECRET
       ./webhook-build.py
 
   home:
