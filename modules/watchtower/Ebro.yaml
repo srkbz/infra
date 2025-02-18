@@ -1,5 +1,5 @@
 environment:
-  WATCHTOWER_HOME: ${EBRO_ROOT}/.state/watchtower
+  WATCHTOWER_HOME: ${STATE_DIR}/watchtower
 
 tasks:
   default:
