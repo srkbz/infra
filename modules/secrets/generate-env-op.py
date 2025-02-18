@@ -21,7 +21,7 @@ labels_cmd = run(
 
 labels: dict[str, str] = json.loads(labels_cmd.stdout.decode("utf-8"))
 
-for key, value in labels:
+for key, value in labels.items():
     if key.startswith("secret."):
         print(key)
         print(value)
