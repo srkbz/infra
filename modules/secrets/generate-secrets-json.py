@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 from sys import argv
-from os import makedirs
-from os.path import join, dirname
 import xml.etree.ElementTree as ET
+import json
 
 
 class SecretsXMLWalker:
     _tree: ET.ElementTree
-    _files: dict[str, dict[str, str]]
+    _db: dict[str, dict[str, str]]
 
     def __init__(self, xml_path) -> None:
         self._tree = ET.parse(xml_path)
-        self._files = {}
+        self._db = {}
 
     def walk(self):
         doc = self._tree.getroot()
@@ -25,12 +24,8 @@ class SecretsXMLWalker:
                         self.walk_group(item, [], root=True)
 
     def dump(self):
-        for file, content in self._files.items():
-            if dirname(file) != "":
-                makedirs(dirname(file), exist_ok=True)
-            with open(file, "w") as f:
-                for key, value in content.items():
-                    f.write(f"{key}={value}\n")
+        with open(argv[2], "w") as f:
+            json.dump(self._db, f, indent=2)
 
     def walk_group(self, group: ET.Element, breadcrumb: list[str], root=False):
         group_name = group.find("./Name").text
@@ -52,10 +47,10 @@ class SecretsXMLWalker:
                 value = item.find("./Value").text
                 if key != "Title" and value is not None:
 
-                    file = join(*breadcrumb, entry_title + ".env")
-                    if file not in self._files:
-                        self._files[file] = {}
-                    self._files[file][key.upper()] = value
+                    entry = "/".join(*breadcrumb, entry_title)
+                    if entry not in self._db:
+                        self._db[entry] = {}
+                    self._db[entry][key.upper()] = value
 
 
 walker = SecretsXMLWalker(argv[1])
