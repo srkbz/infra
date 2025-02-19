@@ -3,7 +3,7 @@ environment:
 
 tasks:
   default:
-    extends: [":secrets:op"]
+    extends: [":secrets:op", ":secrets:when-secrets-change"]
     labels:
       autorequire: "true"
       secret.WATCHTOWER_NOTIFICATION_URL: "watchtower:WATCHTOWER_NOTIFICATION_URL"
