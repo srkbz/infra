@@ -1,0 +1,10 @@
+services:
+  shiori:
+    image: ghcr.io/go-shiori/shiori
+    restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    volumes:
+      - ./data:/shiori
+    ports:
+      - ${HOST}:${PORT}:8080

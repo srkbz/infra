@@ -1,0 +1,50 @@
+environment:
+  SHIORI_HOME: ${STATE_DIR}/shiori
+  SHIORI_HOST: ${SHIORI_HOST:-127.0.0.1}
+  SHIORI_PORT: ${SHIORI_PORT:-random}
+  SHIORI_PORT_FILE: "${SHIORI_HOME}/PORT"
+
+tasks:
+  default:
+    labels:
+      autorequire: "true"
+    requires: [":docker", home, port]
+    script: |
+      cp docker-compose.yml "${SHIORI_HOME}/docker-compose.yml"
+      cd "${SHIORI_HOME}"
+
+      port="$(cat "$SHIORI_PORT_FILE")"
+      echo "PORT=${port}" > .env
+      echo "HOST=${SHIORI_HOST}" >> .env
+
+      docker compose up --detach --wait --remove-orphans
+    when:
+      output_changes: |
+        cat docker-compose.yml
+        cat "${SHIORI_PORT_FILE}"
+      check_fails: |
+        cd "${SHIORI_HOME}"
+        test -f "docker-compose.yml"
+        active_containers="$(docker compose ps -q)"
+        [ "$active_containers" != "" ]
+
+  port:
+    extends: [":port-registry:reserve"]
+    requires: [home]
+    environment:
+      PORT: "${SHIORI_PORT}"
+      PORT_FILE: "${SHIORI_PORT_FILE}"
+
+  home:
+    script: mkdir -p "${SHIORI_HOME}"
+    when:
+      check_fails: test -d "${SHIORI_HOME}"
+
+  backup:
+    if_tasks_exist: [":restic"]
+    labels:
+      cron: "0 3 * * 0"
+    extends: [":restic:operation"]
+    script: |
+      cd "${SHIORI_HOME}/data"
+      restic-backup-here shiori

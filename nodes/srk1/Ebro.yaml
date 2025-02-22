@@ -40,6 +40,12 @@ imports:
       FRESHRSS_HOST: "10.10.0.1"
       FRESHRSS_PORT: "3000"
 
+  shiori:
+    from: ../../modules/shiori
+    environment:
+      SHIORI_HOST: "10.10.0.1"
+      SHIORI_PORT: "3002"
+
   static-site-sirikon.me:
     from: ../../modules/static-site
     environment:
@@ -104,4 +110,4 @@ tasks:
     labels:
       autorequire: "true"
     requires: [vpn:server]
-    required_by: [uptime-kuma, freshrss]
+    required_by: [uptime-kuma, freshrss, shiori]
