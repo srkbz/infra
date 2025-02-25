@@ -2,12 +2,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-      apt.packages: |
-        docker-ce
-        docker-ce-cli
-        containerd.io
-        docker-buildx-plugin
-        docker-compose-plugin
+      apt.packages: docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     requires: [repository]
 
   repository:
