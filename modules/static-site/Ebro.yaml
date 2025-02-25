@@ -32,6 +32,12 @@ tasks:
       export FILE_SERVER_FLAGS
       mkdir -p "${SITE_CACHE}"
       cat Caddyfile | envsubst > "${SITE_CACHE}/site.caddyfile"
+    when:
+      check_fails: test -f "${SITE_CACHE}/site.caddyfile"
+      output_changes: |
+        FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
+        export FILE_SERVER_FLAGS
+        cat Caddyfile
 
   webhook:
     extends: [":secrets:op", ":webhook:configure"]
