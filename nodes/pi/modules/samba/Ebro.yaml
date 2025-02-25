@@ -1,16 +1,14 @@
 tasks:
   default:
-    requires: [bin, samba-guest-user]
+    labels:
+      apt.packages: "samba"
+    requires: [samba-guest-user]
     script: |
       cp smb.conf /etc/samba/smb.conf
       systemctl restart smbd.service
     when:
       check_fails: test -f /etc/samba/smb.conf
       output_changes: cat smb.conf
-
-  bin:
-    extends: [":apt:configure"]
-    script: echo samba > "${APT_PACKAGES_ROOT}/samba.txt"
 
   samba-guest-user:
     script: adduser --system samba-guest

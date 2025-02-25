@@ -5,7 +5,8 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [bin, prepare]
+      apt.packages: "webhook"
+    requires: [prepare]
     script: |
       WD="$(pwd)"
       cd "${WEBHOOK_CONF_ROOT}"
@@ -16,10 +17,6 @@ tasks:
         cat write-config.py
         cat "${WEBHOOK_CONF_ROOT}/"* || true
       check_fails: test -f /etc/webhook.conf
-
-  bin:
-    extends: [":apt:configure"]
-    script: echo webhook > "${APT_PACKAGES_ROOT}/webhook.txt"
 
   prepare:
     script: rm -rf "${WEBHOOK_CONF_ROOT}" && mkdir -p "${WEBHOOK_CONF_ROOT}"

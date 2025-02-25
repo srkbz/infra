@@ -17,7 +17,9 @@ tasks:
       output_changes: cat "${VPN_HOME}/home-gateway/wg0.conf"
 
   up:
-    requires: [wireguard, ip-forwarding]
+    requires: [ip-forwarding]
+    labels:
+      apt.packages: "wireguard"
     script: |
       chmod 600 /etc/wireguard/wg0.conf
       systemctl enable wg-quick@wg0
@@ -28,7 +30,8 @@ tasks:
       output_changes: cat /etc/wireguard/wg0.conf
 
   gen:
-    requires: [wireguard, qrencode]
+    labels:
+      apt.packages: "wireguard qrencode"
     script: ./gen.py
     when:
       check_fails: test -d "${VPN_HOME}"
@@ -47,11 +50,3 @@ tasks:
       check_fails: |
         cat /etc/sysctl.conf | grep -E '^net\.ipv4\.ip_forward *= *1$'
         [ "$(cat /proc/sys/net/ipv4/ip_forward)" == "1" ]
-
-  qrencode:
-    extends: [":apt:configure"]
-    script: echo qrencode > "${APT_PACKAGES_ROOT}/qrencode.txt"
-
-  wireguard:
-    extends: [":apt:configure"]
-    script: echo wireguard > "${APT_PACKAGES_ROOT}/wireguard.txt"

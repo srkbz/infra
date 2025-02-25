@@ -1,12 +1,9 @@
 tasks:
   default:
-    requires: [bin]
+    labels:
+      apt.packages: "minidlna"
     script: |
       cp minidlna.conf /etc/minidlna.conf
       systemctl restart minidlna.service
     when:
       output_changes: cat minidlna.conf
-
-  bin:
-    extends: [":apt:configure"]
-    script: echo minidlna > "${APT_PACKAGES_ROOT}/minidlna.txt"

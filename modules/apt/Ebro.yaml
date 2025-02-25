@@ -1,24 +1,11 @@
-environment:
-  APT_PACKAGES_ROOT: ${EBRO_ROOT}/.cache/apt/packages
-
 tasks:
   # TODO: Rewrite to use apt metapackage
   default:
     labels:
       autorequire: "true"
-    requires: [prepare]
+    required_by: [query: 'tasks | filter("apt.packages" in .labels) | map(.id)']
     script: |
       apt-get update
-      apt-get install -y $(cat "${APT_PACKAGES_ROOT}"/*.txt)
+      apt-get install -y $(./packages.sh)
     when:
-      output_changes: cat "${APT_PACKAGES_ROOT}"/*.txt
-
-  prepare:
-    script: rm -rf "${APT_PACKAGES_ROOT}" && mkdir -p "${APT_PACKAGES_ROOT}"
-    quiet: true
-
-  configure:
-    abstract: true
-    requires: [prepare]
-    required_by: [default]
-    quiet: true
+      output_changes: ./packages.sh

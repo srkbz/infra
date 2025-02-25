@@ -2,12 +2,13 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [bin]
-
-  bin:
-    extends: [":apt:configure"]
+      apt.packages: |
+        docker-ce
+        docker-ce-cli
+        containerd.io
+        docker-buildx-plugin
+        docker-compose-plugin
     requires: [repository]
-    script: cp apt-packages.txt "${APT_PACKAGES_ROOT}/docker.txt"
 
   repository:
     script: ./docker-debian-repository.sh
