@@ -6,7 +6,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [":docker", caddy]
+    requires: [":docker"]
     script: |
       mkdir -p "${INFISICAL_HOME}"
       cp docker-compose.yml "${INFISICAL_HOME}/docker-compose.yml"
@@ -35,7 +35,9 @@ tasks:
   caddy:
     labels:
       caddy.conf: "${INFISICAL_CACHE}/infisical.caddyfile"
-    script: cat infisical.caddyfile | envsubst > "${INFISICAL_CACHE}/infisical.caddyfile"
+    script: |
+      mkdir -p "${INFISICAL_CACHE}"
+      cat infisical.caddyfile | envsubst > "${INFISICAL_CACHE}/infisical.caddyfile"
 
   destroy:
     requires: [":docker"]

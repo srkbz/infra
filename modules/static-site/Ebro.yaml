@@ -6,7 +6,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [site, caddy, webhook]
+    requires: [site, webhook]
 
   site:
     requires: [home, target-commit, ":docker"]
@@ -30,6 +30,7 @@ tasks:
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
+      mkdir -p "${SITE_CACHE}"
       cat Caddyfile | envsubst > "${SITE_CACHE}/site.caddyfile"
 
   webhook:
