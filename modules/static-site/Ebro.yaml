@@ -51,7 +51,7 @@ tasks:
       check_fails: |
         test -f "${SITE_CACHE}/hook.json"
       output_changes: |
-        ./webhook-build.py
+        cat ./webhook-build.py
 
   home:
     script: |
