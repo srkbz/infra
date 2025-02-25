@@ -10,6 +10,8 @@ query_cmd = run(
     stdout=PIPE,
 )
 
+print(query_cmd.stdout.decode("utf-8"))
+
 conf_files: list[str] = json.loads(query_cmd.stdout.decode("utf-8"))
 
 webhooks = []
