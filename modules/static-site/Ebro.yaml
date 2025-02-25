@@ -46,7 +46,12 @@ tasks:
       webhook.conf: "${SITE_CACHE}/hook.json"
     script: |
       export WEBHOOK_SECRET
-      ./webhook-build.py "${SITE_CACHE}/hook.json"
+      ./webhook-build.py > "${SITE_CACHE}/hook.json"
+    when:
+      check_fails: |
+        test -f "${SITE_CACHE}/hook.json"
+      output_changes: |
+        ./webhook-build.py
 
   home:
     script: |
