@@ -10,7 +10,6 @@ query_cmd = run(
     stdout=PIPE,
 )
 
-print(query_cmd.stdout.decode("utf-8"))
 
 conf_files: list[str] = json.loads(query_cmd.stdout.decode("utf-8"))
 
@@ -20,4 +19,4 @@ for conf_file in conf_files:
     with open(conf_file, "r") as f:
         webhooks = [*webhooks, *json.load(f)]
 
-json.dumps(webhooks, indent=2)
+print(json.dumps(webhooks, indent=2))

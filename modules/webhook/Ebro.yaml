@@ -9,6 +9,7 @@ tasks:
       systemctl restart webhook.service
     when:
       output_changes: |
+        cat ./config.py
         ./config.py
       check_fails: |
         test -f /etc/webhook.conf
