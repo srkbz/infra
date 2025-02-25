@@ -1,5 +1,6 @@
 environment:
   INFISICAL_HOME: ${STATE_DIR}/infisical
+  INFISICAL_CACHE: ${CACHE_DIR}/infisical
 
 tasks:
   default:
@@ -32,8 +33,9 @@ tasks:
         [ "$active_containers" != "" ]
 
   caddy:
-    extends: [":caddy:configure"]
-    script: cat infisical.caddyfile | envsubst > "${CADDY_CONF_DIR}/infisical.caddyfile"
+    labels:
+      caddy.conf: "${INFISICAL_CACHE}/infisical.caddyfile"
+    script: cat infisical.caddyfile | envsubst > "${INFISICAL_CACHE}/infisical.caddyfile"
 
   destroy:
     requires: [":docker"]

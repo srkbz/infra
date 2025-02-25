@@ -1,5 +1,6 @@
 environment:
   SITE_HOME: "/opt/static-sites/${DOMAIN}"
+  SITE_CACHE: "${CACHE_DIR}/static-sites/${DOMAIN}"
 
 tasks:
   default:
@@ -24,11 +25,12 @@ tasks:
       check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
 
   caddy:
-    extends: [":caddy:configure"]
+    labels:
+      caddy.conf: "${SITE_CACHE}/site.caddyfile"
     script: |
       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
       export FILE_SERVER_FLAGS
-      cat Caddyfile | envsubst > "${CADDY_CONF_DIR}/static-site-${DOMAIN}.caddyfile"
+      cat Caddyfile | envsubst > "${SITE_CACHE}/site.caddyfile"
 
   webhook:
     extends: [":secrets:op", ":webhook:configure"]

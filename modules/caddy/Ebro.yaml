@@ -10,7 +10,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [prepare, install]
+    requires: [conf, install]
     script: |
       cp Caddyfile "$CADDY_CONF"
       systemctl reload caddy
@@ -39,13 +39,17 @@ tasks:
     when:
       check_fails: test -f "${CADDY_DEB}"
 
-  prepare:
-    requires: [install]
-    script: mkdir -p "$CADDY_CONF_DIR" && rm -rf "$CADDY_CONF_DIR"/*
-    quiet: true
-
-  configure:
-    abstract: true
-    requires: [prepare]
-    required_by: [default]
-    quiet: true
+  conf:
+    requires: [query: 'tasks | filter("caddy.conf" in .labels) | map(.id)']
+    script: |
+      mkdir -p "$CADDY_CONF_DIR"
+      rm -rf "$CADDY_CONF_DIR"/*
+      task_ids="$(cd "${EBRO_ROOT}" && "${EBRO_BIN}" -i --query 'tasks | filter("caddy.conf" in .labels) | map(.id) | join("\n")')"
+      for task_id in ${task_ids}; do
+        conf_file="$(cd "${EBRO_ROOT}" && "${EBRO_BIN}" -i --query "filter(tasks, .id == '${task_id}')[0].labels['caddy.conf']")"
+        cp "$conf_file" "$CADDY_CONF_DIR/${task_id}.caddyfile"
+      done
+    when:
+      check_fails: test -d "$CADDY_CONF_DIR"
+      output_changes: |
+        cd "${EBRO_ROOT}" && "${EBRO_BIN}" -i --query 'tasks | filter("caddy.conf" in .labels) | map([.id, .labels["caddy.conf"]]) | toJSON()'
