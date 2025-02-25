@@ -40,12 +40,13 @@ tasks:
         cat Caddyfile
 
   webhook:
-    extends: [":secrets:op", ":webhook:configure"]
+    extends: [":secrets:op", ":secrets:when-secrets-change"]
     labels:
       secret.WEBHOOK_SECRET: "static-sites/${DOMAIN}:WEBHOOK_SECRET"
+      webhook.conf: "${SITE_CACHE}/hook.json"
     script: |
       export WEBHOOK_SECRET
-      ./webhook-build.py
+      ./webhook-build.py "${SITE_CACHE}/hook.json"
 
   home:
     script: |

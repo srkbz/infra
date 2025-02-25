@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 
 import json
-from os import environ, makedirs, getcwd
-from os.path import dirname, join
+from sys import argv
+from os import environ, getcwd
 
 DOMAIN = environ.get("DOMAIN")
 BRANCH = environ.get("BRANCH")
 WEBHOOK_SECRET = environ.get("WEBHOOK_SECRET")
 SITE_HOME = environ.get("SITE_HOME")
-WEBHOOK_CONF_ROOT = environ.get("WEBHOOK_CONF_ROOT")
-SITE_WEBHOOK_CONF = join(WEBHOOK_CONF_ROOT, f"static-site-{DOMAIN}.json")
 
 if WEBHOOK_SECRET is None:
     raise Exception("WEBHOOK_SECRET is not configured")
 
-makedirs(dirname(SITE_WEBHOOK_CONF), exist_ok=True)
-with open(SITE_WEBHOOK_CONF, "w") as f:
+with open(argv[1], "w") as f:
     json.dump(
         [
             {
