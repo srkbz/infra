@@ -1,6 +1,6 @@
 environment:
-  INFISICAL_HOME: ${STATE_DIR}/infisical
-  INFISICAL_CACHE: ${CACHE_DIR}/infisical
+  INFISICAL_HOME: ${STATE_DIR}/${EBRO_MODULE}
+  INFISICAL_CACHE: ${CACHE_DIR}/${EBRO_MODULE}
 
 tasks:
   default:
