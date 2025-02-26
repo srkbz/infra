@@ -27,6 +27,8 @@ imports:
     from: ../../modules/watchtower
   restic:
     from: ../../modules/restic
+  litestream:
+    from: ../../modules/litestream
 
   uptime-kuma:
     from: ../../modules/uptime-kuma
