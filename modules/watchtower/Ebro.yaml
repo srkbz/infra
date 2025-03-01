@@ -6,7 +6,8 @@ tasks:
     extends: [":secrets:op", ":secrets:when-secrets-change"]
     labels:
       autorequire: "true"
-      secret.WATCHTOWER_NOTIFICATION_URL: "watchtower:WATCHTOWER_NOTIFICATION_URL"
+      secret.BOT_TOKEN: "telegram:BOT_TOKEN"
+      secret.CHAT_ID: "telegram:CHAT_ID"
     requires: [":docker"]
     script: |
       mkdir -p "${WATCHTOWER_HOME}"
@@ -15,6 +16,7 @@ tasks:
       cd "${WATCHTOWER_HOME}"
 
       hostname="$(hostname)"
+      WATCHTOWER_NOTIFICATION_URL="telegram://${BOT_TOKEN}@telegram?chats=${CHAT_ID}"
       echo "WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL}" > .env
       echo "WATCHTOWER_NOTIFICATIONS_HOSTNAME=${hostname}" >> .env
 

@@ -36,12 +36,12 @@ tasks:
     extends: [":secrets:op"]
     requires: [install]
     labels:
-      secret.APP_KEY: "restic:APP_KEY"
-      secret.BASE_URL: "restic:BASE_URL"
-      secret.BUCKET_NAME: "restic:BUCKET_NAME"
-      secret.KEY_ID: "restic:KEY_ID"
-      secret.TELEGRAM_BOT_TOKEN: "restic:TELEGRAM_BOT_TOKEN"
-      secret.TELEGRAM_CHAT_ID: "restic:TELEGRAM_CHAT_ID"
+      secret.APP_KEY: "b2:APP_KEY"
+      secret.BASE_URL: "b2:BASE_URL"
+      secret.BUCKET_NAME: "b2:BUCKET_NAME"
+      secret.KEY_ID: "b2:KEY_ID"
+      secret.TELEGRAM_BOT_TOKEN: "telegram:BOT_TOKEN"
+      secret.TELEGRAM_CHAT_ID: "telegram:CHAT_ID"
     environment:
       RESTIC_BIN: "${RESTIC_ROOT}/bin/restic"
       PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
