@@ -8,7 +8,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [install]
+    requires: [configure]
 
   configure:
     requires: [install]
