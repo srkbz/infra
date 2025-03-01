@@ -6,8 +6,6 @@ import string
 from subprocess import run, PIPE
 import json
 
-LITESTREAM_CACHE = environ.get("LITESTREAM_CACHE")
-
 ACCESS_KEY_ID = environ.get("ACCESS_KEY_ID")
 SECRET_ACCESS_KEY = environ.get("SECRET_ACCESS_KEY")
 BUCKET = environ.get("BUCKET")
@@ -30,27 +28,11 @@ result = {
 }
 
 
-def task_generation(task_id: str):
-    generation_file = join(LITESTREAM_CACHE, "generations", task_id)
-    if isfile(generation_file):
-        with open(generation_file, "r") as f:
-            return f.read()
-    else:
-        generation = "".join(
-            random.choices(string.ascii_lowercase + string.digits, k=16)
-        )
-        makedirs(dirname(generation_file), exist_ok=True)
-        with open(generation_file, "w") as f:
-            return f.write(generation)
-        return generation
-
-
 for task_id, labels in data:
     for label in labels.keys():
         if label.startswith("litestream."):
             db_name = label.removeprefix("litestream.")
             db_path = labels[label]
-            generation = task_generation(task_id)
 
             result["dbs"].append(
                 {
@@ -59,7 +41,7 @@ for task_id, labels in data:
                         {
                             "type": "s3",
                             "bucket": BUCKET,
-                            "path": f"litestream/{task_id}/{generation}/{db_name}",
+                            "path": f"litestream/{task_id}/{db_name}",
                             "endpoint": ENDPOINT,
                             "force-path-style": True,
                         }
