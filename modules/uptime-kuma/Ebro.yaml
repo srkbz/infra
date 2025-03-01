@@ -55,4 +55,4 @@ tasks:
     extends: [":restic:operation"]
     script: |
       cd "${UPTIME_KUMA_HOME}/data"
-      restic-backup-here uptime-kuma
+      restic-backup-here uptime-kuma --exclude kuma.db

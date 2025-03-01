@@ -8,7 +8,11 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [configure]
+    requires:
+      [
+        configure,
+        query: 'tasks | filter(any(keys(.labels), # startsWith "litestream.")) | map(.id)',
+      ]
 
   configure:
     requires: [install]
