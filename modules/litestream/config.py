@@ -44,6 +44,7 @@ for task_id, labels in data:
                             "path": f"litestream/{task_id}/{db_name}",
                             "endpoint": ENDPOINT,
                             "force-path-style": True,
+                            "sync-interval": "60s",
                         }
                     ],
                 }

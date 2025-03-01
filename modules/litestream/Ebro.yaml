@@ -33,7 +33,9 @@ tasks:
     when:
       output_changes: |
         (cd "$EBRO_ROOT" && "$EBRO_BIN" -i --query 'tasks | filter(any(keys(.labels), # startsWith "litestream.")) | map([.id, .labels]) | toJSON()')
-      check_fails: test -f /etc/litestream.yml
+        cat config.py
+      check_fails: |
+        test -f /etc/litestream.yml
 
   install:
     requires: [deb]
