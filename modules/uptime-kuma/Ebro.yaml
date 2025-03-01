@@ -8,6 +8,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
+      litestream.db: "${UPTIME_KUMA_HOME}/data/kuma.db"
     requires: [":docker", home, extra-ca, port]
     script: |
       cp docker-compose.yml "${UPTIME_KUMA_HOME}/docker-compose.yml"
