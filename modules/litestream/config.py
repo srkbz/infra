@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import random
-from os import environ
-from os.path import join, isfile
+from os import environ, makedirs
+from os.path import join, isfile, dirname
 import string
 from subprocess import run, PIPE
 import json
@@ -39,6 +39,7 @@ def task_generation(task_id: str):
         generation = "".join(
             random.choices(string.ascii_lowercase + string.digits, k=16)
         )
+        makedirs(dirname(generation_file), exist_ok=True)
         with open(generation_file, "w") as f:
             return f.write(generation)
         return generation
