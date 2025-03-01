@@ -10,6 +10,21 @@ tasks:
       autorequire: "true"
     requires: [install]
 
+  configure:
+    requires: [install]
+    extends: [":secrets:op", ":secrets:when-secrets-change"]
+    labels:
+      secret.ACCESS_KEY_ID: "b2:KEY_ID"
+      secret.SECRET_ACCESS_KEY: "b2:APP_KEY"
+      secret.ENDPOINT: "b2:BASE_URL"
+      secret.BUCKET: "b2:BUCKET_NAME"
+    script: |
+      ./config.py > /etc/litestream.yml
+      chmod 700 /etc/litestream.yml
+    when:
+      output_changes: |
+        (cd "$EBRO_ROOT" && "$EBRO_BIN" -i --query 'tasks | filter(any(keys(.labels), # startsWith "litestream.")) | map([.id, .labels]) | toJSON()')
+
   install:
     requires: [deb]
     script: |
