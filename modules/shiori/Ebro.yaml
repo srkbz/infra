@@ -8,6 +8,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
+      litestream.db: "${SHIORI_HOME}/data/shiori.db"
     requires: [":docker", home, port]
     script: |
       cp docker-compose.yml "${SHIORI_HOME}/docker-compose.yml"
@@ -47,4 +48,4 @@ tasks:
     extends: [":restic:operation"]
     script: |
       cd "${SHIORI_HOME}/data"
-      restic-backup-here shiori
+      restic-backup-here shiori --exclude shiori.db
