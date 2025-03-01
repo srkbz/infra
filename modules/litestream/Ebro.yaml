@@ -19,6 +19,10 @@ tasks:
       secret.ENDPOINT: "b2:BASE_URL"
       secret.BUCKET: "b2:BUCKET_NAME"
     script: |
+      export ACCESS_KEY_ID
+      export SECRET_ACCESS_KEY
+      export ENDPOINT
+      export BUCKET
       ./config.py > /etc/litestream.yml
       chmod 700 /etc/litestream.yml
     when:
