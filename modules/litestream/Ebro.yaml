@@ -14,11 +14,14 @@ tasks:
     requires: [deb]
     script: |
       apt-get install -y --allow-downgrades "${LITESTREAM_DEB}"
+      systemctl enable litestream
+      systemctl start litestream
     when:
       check_fails: |
         command -v litestream
         actual_version="$(litestream version)"
         [[ "$actual_version" == "v${LITESTREAM_VERSION}" ]]
+        systemctl status litestream
 
   deb:
     script: |
