@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-import random
-from os import environ, makedirs
-from os.path import join, isfile, dirname
-import string
+from os import environ
 from subprocess import run, PIPE
 import json
 
