@@ -89,6 +89,9 @@ imports:
       DOMAIN: ebro.sirikon.me
       REPOSITORY: https://github.com/sirikon/ebro.git
       BRANCH: master
+  
+  pocketbase:
+    from: ../../modules/pocketbase
 
 tasks:
   default:
