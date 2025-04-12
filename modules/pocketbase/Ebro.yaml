@@ -17,3 +17,6 @@ tasks:
       unzip "pocketbase.zip"
     when:
       check_fails: test -f "$POCKETBASE_BIN"
+
+# pocketbase serve -http 127.0.0.1:<rngport>
+# https://pocketbase.io/docs/going-to-production/
