@@ -1,0 +1,18 @@
+environment:
+  POCKETBASE_HOME: "${STATE_DIR}/${EBRO_MODULE}"
+  POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
+  POCKETBASE_VERSION: "0.26.6"
+  POCKETBASE_BIN: "${POCKETBASE_CACHE}/bin/${POCKETBASE_VERSION}/pocketbase"
+
+tasks:
+  bin:
+    labels:
+      apt.packages: "unzip"
+    script: |
+      pocketbase_bin_dir="$(dirname "$POCKETBASE_BIN")"
+      mkdir -p "$pocketbase_bin_dir"
+      cd "$pocketbase_bin_dir"
+      curl --output "pocketbase.zip" "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip"
+      unzip "pocketbase.zip"
+    when:
+      check_fails: test -f "$POCKETBASE_BIN"
