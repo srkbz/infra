@@ -34,6 +34,8 @@ tasks:
       check_fails: test -f "$POCKETBASE_BIN"
 
   service:
+    labels:
+      litestream.db: "${POCKETBASE_HOME}/pb_data/data.db"
     requires: [bin, port, home, user]
     script: |
       POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
@@ -89,3 +91,12 @@ tasks:
     script: useradd --system --shell /bin/false "${POCKETBASE_USER}"
     when:
       check_fails: cat /etc/passwd | grep "${POCKETBASE_USER}"
+
+  backup:
+    if_tasks_exist: [":restic"]
+    labels:
+      cron: "0 3 * * 0"
+    extends: [":restic:operation"]
+    script: |
+      cd "${POCKETBASE_HOME}"
+      restic-backup-here pocketbase --exclude pb_data/data.db --exclude PORT
