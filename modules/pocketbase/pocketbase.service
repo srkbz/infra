@@ -3,8 +3,8 @@ Description = pocketbase
 
 [Service]
 Type             = simple
-User             = root
-Group            = root
+User             = ${POCKETBASE_USER}
+Group            = ${POCKETBASE_USER}
 LimitNOFILE      = 4096
 Restart          = always
 RestartSec       = 5s
