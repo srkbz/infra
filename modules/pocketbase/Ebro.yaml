@@ -82,6 +82,7 @@ tasks:
       cd "${POCKETBASE_HOME}"
       mkdir -p pb_data
       mkdir -p pb_migrations
+      chown $POCKETBASE_USER:$POCKETBASE_USER "${POCKETBASE_HOME}"
       chown -R $POCKETBASE_USER:$POCKETBASE_USER pb_data
       chown -R $POCKETBASE_USER:$POCKETBASE_USER pb_migrations
     when:
