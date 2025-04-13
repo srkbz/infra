@@ -2,6 +2,7 @@ environment:
   POCKETBASE_HOME: "${STATE_DIR}/${EBRO_MODULE}"
   POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
   POCKETBASE_VERSION: "0.26.6"
+  POCKETBASE_DOMAIN: "${POCKETBASE_DOMAIN:-}"
   POCKETBASE_HOST: ${POCKETBASE_HOST:-127.0.0.1}
   POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
   POCKETBASE_PORT_FILE: "${POCKETBASE_HOME}/PORT"
@@ -12,7 +13,7 @@ tasks:
   default:
     labels:
       autorequire: "true"
-    requires: [service]
+    requires: [service, caddy]
 
   bin:
     labels:
@@ -38,6 +39,27 @@ tasks:
     when:
       check_fails: test -f "$POCKETBASE_SERVICE_FILE"
       output_changes: cat pocketbase.service | envsubst
+
+  caddy:
+    labels:
+      caddy.conf: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+    requires: [port]
+    script: |
+      if [ "${POCKETBASE_DOMAIN:-}" -eq "" ]; then
+        echo "" > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+      else
+        POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
+        export POCKETBASE_PORT
+        mkdir -p "${POCKETBASE_CACHE}"
+        cat pocketbase.caddyfile | envsubst > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+      fi
+    when:
+      output_changes: |
+        echo "${POCKETBASE_DOMAIN:-}"
+        POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
+        export POCKETBASE_PORT
+        cat pocketbase.caddyfile | envsubst
+      check_fails: test -f "${POCKETBASE_CACHE}/pocketbase.caddyfile"
 
   port:
     extends: [":port-registry:reserve"]

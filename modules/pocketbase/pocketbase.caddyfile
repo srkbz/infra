@@ -1,0 +1,3 @@
+${POCKETBASE_DOMAIN} {
+    reverse_proxy ${POCKETBASE_HOST}:${POCKETBASE_PORT}
+}
