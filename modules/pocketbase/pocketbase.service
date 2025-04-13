@@ -10,6 +10,8 @@ Restart          = always
 RestartSec       = 5s
 WorkingDirectory = ${POCKETBASE_HOME}
 ExecStart        = ${POCKETBASE_BIN} serve --http ${POCKETBASE_HOST}:${POCKETBASE_PORT}
+ProtectSystem    = strict
+ReadWritePaths   = ${POCKETBASE_HOME}
 
 [Install]
 WantedBy = multi-user.target
