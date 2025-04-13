@@ -92,6 +92,8 @@ imports:
   
   pocketbase:
     from: ../../modules/pocketbase
+    environment:
+      POCKETBASE_DOMAIN: pb.srk.bz
 
 tasks:
   default:
