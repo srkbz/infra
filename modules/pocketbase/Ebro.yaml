@@ -52,7 +52,7 @@ tasks:
   caddy:
     labels:
       caddy.conf: "${POCKETBASE_CADDYFILE}"
-    requires: [port]
+    requires: [port, public]
     script: |
       if [ "${POCKETBASE_DOMAIN:-}" == "" ]; then
         echo "" > "${POCKETBASE_CADDYFILE}"
@@ -69,6 +69,13 @@ tasks:
         export POCKETBASE_PORT
         cat pocketbase.caddyfile | envsubst
       check_fails: test -f "${POCKETBASE_CADDYFILE}"
+
+  public:
+    requires: [home]
+    extends: [":utils:sync-directories"]
+    environment:
+      SYNC_FROM: "$EBRO_TASK_WORKING_DIRECTORY/public"
+      SYNC_TO: "$POCKETBASE_HOME/caddy_public"
 
   port:
     extends: [":port-registry:reserve"]
@@ -99,4 +106,4 @@ tasks:
     extends: [":restic:operation"]
     script: |
       cd "${POCKETBASE_HOME}"
-      restic-backup-here pocketbase --exclude pb_data/data.db --exclude PORT
+      restic-backup-here pocketbase --exclude pb_data/data.db --exclude PORT --exclude caddy_public
