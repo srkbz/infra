@@ -1,5 +1,6 @@
 environment:
   POCKETBASE_HOME: "${STATE_DIR}/${EBRO_MODULE}"
+  POCKETBASE_HOME_LINK: "/srv/pocketbase"
   POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
   POCKETBASE_VERSION: "0.26.6"
   POCKETBASE_DOMAIN: "${POCKETBASE_DOMAIN:-}"
@@ -74,9 +75,20 @@ tasks:
       PORT_FILE: "${POCKETBASE_PORT_FILE}"
 
   home:
-    script: mkdir -p "${POCKETBASE_HOME}"
+    requires: [user]
+    script: |
+      mkdir -p "${POCKETBASE_HOME}"
+      ln -s "${POCKETBASE_HOME}" "$POCKETBASE_HOME_LINK"
+      cd "${POCKETBASE_HOME}"
+      mkdir -p pb_data
+      mkdir -p pb_migrations
+      chown -R $POCKETBASE_USER:$POCKETBASE_USER pb_data
+      chown -R $POCKETBASE_USER:$POCKETBASE_USER pb_migrations
     when:
-      check_fails: test -d "${POCKETBASE_HOME}"
+      check_fails: |
+        test -d "${POCKETBASE_HOME}/pb_data"
+        test -d "${POCKETBASE_HOME}/pb_migrations"
+        test -d "$POCKETBASE_HOME_LINK"
 
   user:
     script: useradd --system --shell /bin/false "${POCKETBASE_USER}"
