@@ -45,12 +45,9 @@ tasks:
       caddy.conf: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
     requires: [port]
     script: |
-      echo "$POCKETBASE_DOMAIN"
       if [ "${POCKETBASE_DOMAIN:-}" == "" ]; then
-        echo "no domain"
         echo "" > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
       else
-        echo "domain found"
         POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
         export POCKETBASE_PORT
         mkdir -p "${POCKETBASE_CACHE}"
