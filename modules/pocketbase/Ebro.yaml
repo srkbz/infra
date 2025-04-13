@@ -79,6 +79,7 @@ tasks:
     requires: [user]
     script: |
       mkdir -p "${POCKETBASE_HOME}"
+      chmod 700 "${POCKETBASE_HOME}"
       chown -R $POCKETBASE_USER:$POCKETBASE_USER "${POCKETBASE_HOME}"
     when:
       check_fails: |
