@@ -75,7 +75,7 @@ tasks:
     extends: [":utils:sync-directories"]
     environment:
       SYNC_FROM: "$EBRO_TASK_WORKING_DIRECTORY/public"
-      SYNC_TO: "$POCKETBASE_HOME/caddy_public"
+      SYNC_TO: "$POCKETBASE_HOME/pb_public"
     script: |
       chown -R $POCKETBASE_USER:$POCKETBASE_USER "${SYNC_TO}"
 
@@ -108,4 +108,4 @@ tasks:
     extends: [":restic:operation"]
     script: |
       cd "${POCKETBASE_HOME}"
-      restic-backup-here pocketbase --exclude pb_data/data.db --exclude PORT --exclude caddy_public
+      restic-backup-here pocketbase --exclude pb_data/data.db --exclude PORT --exclude pb_public

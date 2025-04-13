@@ -1,6 +1,3 @@
 ${POCKETBASE_DOMAIN} {
-    root * ${POCKETBASE_HOME}/caddy_public
-    reverse_proxy /api/* ${POCKETBASE_HOST}:${POCKETBASE_PORT}
-    reverse_proxy /_/* ${POCKETBASE_HOST}:${POCKETBASE_PORT}
-    file_server
+    reverse_proxy ${POCKETBASE_HOST}:${POCKETBASE_PORT}
 }
