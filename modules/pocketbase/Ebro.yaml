@@ -42,7 +42,9 @@ tasks:
       systemctl enable pocketbase.service
       systemctl restart pocketbase
     when:
-      check_fails: test -f "$POCKETBASE_SERVICE_FILE"
+      check_fails: |
+        test -f "$POCKETBASE_SERVICE_FILE"
+        systemctl status pocketbase
       output_changes: cat pocketbase.service | envsubst
 
   caddy:
