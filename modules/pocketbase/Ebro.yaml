@@ -45,6 +45,7 @@ tasks:
       caddy.conf: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
     requires: [port]
     script: |
+      echo "$POCKETBASE_DOMAIN"
       if [ "${POCKETBASE_DOMAIN:-}" -eq "" ]; then
         echo "" > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
       else
