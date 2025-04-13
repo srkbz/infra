@@ -2,21 +2,51 @@ environment:
   POCKETBASE_HOME: "${STATE_DIR}/${EBRO_MODULE}"
   POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
   POCKETBASE_VERSION: "0.26.6"
+  POCKETBASE_HOST: ${POCKETBASE_HOST:-127.0.0.1}
+  POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
+  POCKETBASE_PORT_FILE: "${POCKETBASE_HOME}/PORT"
   POCKETBASE_BIN: "${POCKETBASE_CACHE}/bin/${POCKETBASE_VERSION}/pocketbase"
+  POCKETBASE_SERVICE_FILE: "/etc/systemd/system/pocketbase.service"
 
 tasks:
-  bin:
+  default:
     labels:
       autorequire: "true"
+    requires: [service]
+
+  bin:
+    labels:
       apt.packages: "unzip"
     script: |
       pocketbase_bin_dir="$(dirname "$POCKETBASE_BIN")"
       mkdir -p "$pocketbase_bin_dir"
       cd "$pocketbase_bin_dir"
-      curl -L --output "pocketbase.zip" "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip"
+      curl -L --output "pocketbase.zip" \
+        "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip"
       unzip "pocketbase.zip"
     when:
       check_fails: test -f "$POCKETBASE_BIN"
 
-# pocketbase serve -http 127.0.0.1:<rngport>
-# https://pocketbase.io/docs/going-to-production/
+  service:
+    requires: [bin, port, home]
+    script: |
+      POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
+      export POCKETBASE_PORT
+      cat pocketbase.service | envsubst > "$POCKETBASE_SERVICE_FILE"
+      systemctl enable pocketbase.service
+      systemctl restart pocketbase
+    when:
+      check_fails: test -f "$POCKETBASE_SERVICE_FILE"
+      output_changes: cat pocketbase.service | envsubst
+
+  port:
+    extends: [":port-registry:reserve"]
+    requires: [home]
+    environment:
+      PORT: "${POCKETBASE_PORT}"
+      PORT_FILE: "${POCKETBASE_PORT_FILE}"
+
+  home:
+    script: mkdir -p "${POCKETBASE_HOME}"
+    when:
+      check_fails: test -d "${POCKETBASE_HOME}"
