@@ -11,7 +11,7 @@ RestartSec       = 5s
 StandardOutput   = append:/root/pb/std.log
 StandardError    = append:/root/pb/std.log
 WorkingDirectory = ${POCKETBASE_HOME}
-ExecStart        = ${POCKETBASE_BIN} serve --http ${POCKETBASE_HOME}:${POCKETBASE_PORT}
+ExecStart        = ${POCKETBASE_BIN} serve --http ${POCKETBASE_HOST}:${POCKETBASE_PORT}
 
 [Install]
 WantedBy = multi-user.target
