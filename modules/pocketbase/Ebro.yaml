@@ -7,7 +7,8 @@ environment:
   POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
   POCKETBASE_PORT_FILE: "${POCKETBASE_HOME}/PORT"
   POCKETBASE_USER: "${POCKETBASE_USER:-pocketbase}"
-  POCKETBASE_BIN: "${POCKETBASE_CACHE}/bin/${POCKETBASE_VERSION}/pocketbase"
+  POCKETBASE_BIN: "${POCKETBASE_HOME}/pocketbase"
+  POCKETBASE_BIN_DOWNLOAD_DIR: "${POCKETBASE_CACHE}/download/${POCKETBASE_VERSION}"
   POCKETBASE_SERVICE_FILE: "/etc/systemd/system/pocketbase.service"
   POCKETBASE_CADDYFILE: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
 
@@ -20,13 +21,15 @@ tasks:
   bin:
     labels:
       apt.packages: "unzip"
+    requires: [home]
     script: |
-      pocketbase_bin_dir="$(dirname "$POCKETBASE_BIN")"
-      mkdir -p "$pocketbase_bin_dir"
-      cd "$pocketbase_bin_dir"
+      rm -rf "$POCKETBASE_BIN_DOWNLOAD_DIR"
+      mkdir -p "$POCKETBASE_BIN_DOWNLOAD_DIR"
+      cd "$POCKETBASE_BIN_DOWNLOAD_DIR"
       curl -L --output "pocketbase.zip" \
         "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip"
       unzip "pocketbase.zip"
+      cp pocketbase "$POCKETBASE_BIN"
     when:
       check_fails: test -f "$POCKETBASE_BIN"
 
