@@ -76,6 +76,8 @@ tasks:
     environment:
       SYNC_FROM: "$EBRO_TASK_WORKING_DIRECTORY/public"
       SYNC_TO: "$POCKETBASE_HOME/caddy_public"
+    script: |
+      chown -R $POCKETBASE_USER:$POCKETBASE_USER "${SYNC_TO}"
 
   port:
     extends: [":port-registry:reserve"]
