@@ -6,8 +6,10 @@ environment:
   POCKETBASE_HOST: ${POCKETBASE_HOST:-127.0.0.1}
   POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
   POCKETBASE_PORT_FILE: "${POCKETBASE_HOME}/PORT"
+  POCKETBASE_USER: "${POCKETBASE_USER:-pocketbase}"
   POCKETBASE_BIN: "${POCKETBASE_CACHE}/bin/${POCKETBASE_VERSION}/pocketbase"
   POCKETBASE_SERVICE_FILE: "/etc/systemd/system/pocketbase.service"
+  POCKETBASE_CADDYFILE: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
 
 tasks:
   default:
@@ -29,7 +31,7 @@ tasks:
       check_fails: test -f "$POCKETBASE_BIN"
 
   service:
-    requires: [bin, port, home]
+    requires: [bin, port, home, user]
     script: |
       POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
       export POCKETBASE_PORT
@@ -42,16 +44,16 @@ tasks:
 
   caddy:
     labels:
-      caddy.conf: "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+      caddy.conf: "${POCKETBASE_CADDYFILE}"
     requires: [port]
     script: |
       if [ "${POCKETBASE_DOMAIN:-}" == "" ]; then
-        echo "" > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+        echo "" > "${POCKETBASE_CADDYFILE}"
       else
         POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
         export POCKETBASE_PORT
         mkdir -p "${POCKETBASE_CACHE}"
-        cat pocketbase.caddyfile | envsubst > "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+        cat pocketbase.caddyfile | envsubst > "${POCKETBASE_CADDYFILE}"
       fi
     when:
       output_changes: |
@@ -59,7 +61,7 @@ tasks:
         POCKETBASE_PORT="$(cat "$POCKETBASE_PORT_FILE")"
         export POCKETBASE_PORT
         cat pocketbase.caddyfile | envsubst
-      check_fails: test -f "${POCKETBASE_CACHE}/pocketbase.caddyfile"
+      check_fails: test -f "${POCKETBASE_CADDYFILE}"
 
   port:
     extends: [":port-registry:reserve"]
@@ -72,3 +74,8 @@ tasks:
     script: mkdir -p "${POCKETBASE_HOME}"
     when:
       check_fails: test -d "${POCKETBASE_HOME}"
+
+  user:
+    script: useradd --system --shell /bin/false "${POCKETBASE_USER}"
+    when:
+      check_fails: cat /etc/passwd | grep "${POCKETBASE_USER}"
