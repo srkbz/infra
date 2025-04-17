@@ -1,7 +1,7 @@
 environment:
   POCKETBASE_HOME: "${POCKETBASE_HOME-/opt/pocketbase}"
   POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
-  POCKETBASE_VERSION: "0.26.6"
+  POCKETBASE_VERSION: "0.27.0"
   POCKETBASE_DOMAIN: "${POCKETBASE_DOMAIN:-}"
   POCKETBASE_HOST: ${POCKETBASE_HOST:-127.0.0.1}
   POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
@@ -32,6 +32,7 @@ tasks:
       cp pocketbase "$POCKETBASE_BIN"
     when:
       check_fails: test -f "$POCKETBASE_BIN"
+      output_changes: echo "$POCKETBASE_VERSION"
 
   service:
     labels:

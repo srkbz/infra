@@ -1,5 +1,5 @@
 [Unit]
-Description = pocketbase
+Description = pocketbase ${POCKETBASE_VERSION}
 
 [Service]
 Type             = simple
