@@ -29,6 +29,7 @@ tasks:
       curl -L --output "pocketbase.zip" \
         "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip"
       unzip "pocketbase.zip"
+      rm -f "$POCKETBASE_BIN"
       cp pocketbase "$POCKETBASE_BIN"
     when:
       check_fails: test -f "$POCKETBASE_BIN"
