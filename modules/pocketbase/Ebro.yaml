@@ -1,12 +1,13 @@
 environment:
-  POCKETBASE_HOME: "${POCKETBASE_HOME-/opt/pocketbase}"
-  POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
-  POCKETBASE_VERSION: "0.27.0"
-  POCKETBASE_DOMAIN: "${POCKETBASE_DOMAIN:-}"
+  POCKETBASE_VERSION: "${POCKETBASE_VERSION:-0.27.0}"
+  POCKETBASE_HOME: "${POCKETBASE_HOME:-/opt/pocketbase}"
+  POCKETBASE_USER: "${POCKETBASE_USER:-pocketbase}"
   POCKETBASE_HOST: ${POCKETBASE_HOST:-127.0.0.1}
   POCKETBASE_PORT: ${POCKETBASE_PORT:-random}
+  POCKETBASE_DOMAIN: "${POCKETBASE_DOMAIN:-}"
+
+  POCKETBASE_CACHE: "${CACHE_DIR}/${EBRO_MODULE}"
   POCKETBASE_PORT_FILE: "${POCKETBASE_HOME}/PORT"
-  POCKETBASE_USER: "${POCKETBASE_USER:-pocketbase}"
   POCKETBASE_BIN: "${POCKETBASE_HOME}/pocketbase"
   POCKETBASE_BIN_DOWNLOAD_DIR: "${POCKETBASE_CACHE}/download/${POCKETBASE_VERSION}"
   POCKETBASE_SERVICE_FILE: "/etc/systemd/system/pocketbase.service"
@@ -95,6 +96,7 @@ tasks:
     when:
       check_fails: |
         test -d "${POCKETBASE_HOME}"
+      output_changes: echo "$POCKETBASE_USER"
 
   user:
     script: useradd --system --shell /bin/false "${POCKETBASE_USER}"
