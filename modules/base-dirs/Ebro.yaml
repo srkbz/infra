@@ -4,7 +4,7 @@ environment:
 
 tasks:
   default:
-    required_by: [discover]
+    required_by: [":discover"]
     script: |
       mkdir -p "${STATE_DIR}"
       mkdir -p "${CACHE_DIR}"
