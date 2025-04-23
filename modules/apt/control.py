@@ -29,7 +29,7 @@ def packages() -> list[str]:
         stderr=subprocess.PIPE,
         check=True,
     )
-    output: str = cmd.stdout.encode("utf-8")
+    output: str = cmd.stdout.decode("utf-8")
     return output.splitlines()
 
 
