@@ -3,7 +3,7 @@ environment:
   CACHE_DIR: "${EBRO_ROOT}/.cache"
 
 imports:
-  discover: { from: "../../discover" }
+  discover: { from: "../../modules/discover" }
 
 tasks:
   dirs:
