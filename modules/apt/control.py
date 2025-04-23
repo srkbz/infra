@@ -31,3 +31,6 @@ def packages() -> list[str]:
     )
     output: str = cmd.stdout.encode("utf-8")
     return output.splitlines()
+
+
+main()
