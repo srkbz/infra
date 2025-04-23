@@ -1,0 +1,18 @@
+environment:
+  STATE_DIR: "${STATE_DIR}"
+  CACHE_DIR: "${CACHE_DIR}"
+
+tasks:
+  default:
+    required_by: [discover]
+    script: |
+      mkdir -p "${STATE_DIR}"
+      mkdir -p "${CACHE_DIR}"
+      chmod 700 "${STATE_DIR}"
+      chmod 700 "${CACHE_DIR}"
+    when:
+      check_fails: |
+        test -d "${STATE_DIR}"
+        test -d "${CACHE_DIR}"
+        [ "$(stat --format '%a' "${STATE_DIR}")" == "700" ]
+        [ "$(stat --format '%a' "${CACHE_DIR}")" == "700" ]
