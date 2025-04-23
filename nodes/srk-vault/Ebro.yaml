@@ -1,6 +1,6 @@
-environment: {}
-  # STATE_DIR: "${EBRO_ROOT}/.state"
-  # CACHE_DIR: "${EBRO_ROOT}/.cache"
+environment:
+  STATE_DIR: "${EBRO_ROOT}/.state"
+  CACHE_DIR: "${EBRO_ROOT}/.cache"
 
 imports:
   discover: { from: "../../modules/discover" }
