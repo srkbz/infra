@@ -1,4 +1,4 @@
 tasks:
   default:
     requires:
-      - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
+      - query: tasks | filter(.labels["discover"] == "true") | map(.id)

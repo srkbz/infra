@@ -12,5 +12,5 @@ tasks:
 
   example:
     labels:
-      autorequire: "true"
+      discover: "true"
     script: echo Hello world
