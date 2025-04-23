@@ -16,6 +16,7 @@ tasks:
       ./control.py > "${METAPKG_DIR}/DEBIAN/control"
 
       dpkg-deb --build "${METAPKG_DIR}" "${METAPKG_DIR}.deb"
+      apt-get update
       apt-get install -y "${METAPKG_DIR}.deb"
       apt-get autoremove -y
     when:
