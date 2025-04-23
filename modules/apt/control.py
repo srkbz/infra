@@ -28,7 +28,7 @@ def get_packages() -> list[str]:
             os.environ.get("EBRO_BIN"),
             "-i",
             "--query",
-            'tasks | filter("apt.packages" in .labels) | map(.labels["apt.packages"]) | join("\\n")',
+            'tasks | filter("apt.packages" in .labels) | map(.labels["apt.packages"]) | join(" ")',
         ],
         cwd=os.environ.get("EBRO_ROOT"),
         stdin=None,
@@ -39,7 +39,7 @@ def get_packages() -> list[str]:
     output: str = cmd.stdout.decode("utf-8")
     return [
         package.strip()
-        for package in list(dict.fromkeys(output.splitlines()))
+        for package in list(dict.fromkeys(output.split(" ")))
         if package.strip() != ""
     ]
 
