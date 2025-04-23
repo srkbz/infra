@@ -8,7 +8,7 @@ imports:
 
 tasks:
   default:
-    requires: [base-dirs, discover]
+    requires: [discover, base-dirs]
 
   example:
     labels:
