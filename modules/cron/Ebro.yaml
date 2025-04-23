@@ -1,7 +1,7 @@
 tasks:
   default:
     labels:
-      autorequire: "true"
+      discover: "true"
     script: |
       crontab_content="$(./build-crontab.sh)"
       echo "$crontab_content" | crontab -
