@@ -1,11 +1,21 @@
+environment:
+  METAPKG_NAME: "srkbz-infra-metapackage"
+  METAPKG_DIR: "${CACHE_DIR}/apt/metapkg/${METAPKG_NAME}"
+
 tasks:
-  # TODO: Rewrite to use apt metapackage
   default:
     labels:
-      autorequire: "true"
+      discover: "true"
     required_by: [query: 'tasks | filter("apt.packages" in .labels) | map(.id)']
     script: |
-      apt-get update
-      apt-get install -y $(./packages.sh)
+      rm -rf "${METAPKG_DIR}"
+      mkdir -p "${METAPKG_DIR}/DEBIAN"
+
+      mkdir -p DEBIAN
+      ./control.py > "${METAPKG_DIR}/DEBIAN/control"
+
+      dpkg-deb --build "${METAPKG_DIR}" "${METAPKG_DIR}.deb"
+      apt install -y "${METAPKG_DIR}.deb"
     when:
-      output_changes: ./packages.sh
+      output_changes: ./control.py
+      check_fails: dpkg-query -W -f='${binary:Package}\n' | grep "${METAPKG_NAME}"

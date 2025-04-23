@@ -3,6 +3,7 @@ environment:
   CACHE_DIR: "${EBRO_ROOT}/.cache"
 
 imports:
+  apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
 
@@ -13,4 +14,5 @@ tasks:
   example:
     labels:
       discover: "true"
+      apt.packages: "vim"
     script: echo Hello world
