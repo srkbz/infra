@@ -6,6 +6,10 @@ import os
 
 def main():
     packages = get_packages()
+    print("### Packages to install: " + len(packages), file=sys.stderr)
+    for package in packages:
+        print("### - " + package, file=sys.stderr)
+
     lines = [
         "Package: " + os.environ.get("METAPKG_NAME"),
         "Version: 0.0.0",
@@ -13,6 +17,7 @@ def main():
         "Description: Metapackage containing all the packages needed",
         *(["Depends: " + ", ".join(packages)] if len(packages) > 0 else []),
     ]
+
     print("\n".join(lines))
 
 
