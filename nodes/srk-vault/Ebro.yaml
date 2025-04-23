@@ -3,21 +3,27 @@ environment:
   CACHE_DIR: "${EBRO_ROOT}/.cache"
 
 tasks:
-  default:
-    requires:
-      - dirs
-      - everything
+  dirs:
+    required_by: [discover]
+    quiet: true
+    script: |
+      mkdir -p "${STATE_DIR}"
+      mkdir -p "${CACHE_DIR}"
+      chmod 700 "${STATE_DIR}"
+      chmod 700 "${CACHE_DIR}"
+    when:
+      check_fails: |
+        test -d "${STATE_DIR}"
+        test -d "${CACHE_DIR}"
+        [ "$(stat --format '%a' "${STATE_DIR}")" == "700" ]
+        [ "$(stat --format '%a' "${CACHE_DIR}")" == "700" ]
 
-  everything:
+  discover:
     requires:
       - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
 
-  dirs:
-    required_by: [everything]
-    quiet: true
-    script: |
-      chmod 700 "${STATE_DIR}"
-      chmod 700 "${CACHE_DIR}"
+  default:
+    requires: [dirs, discover]
 
   example:
     labels:
