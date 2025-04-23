@@ -4,12 +4,12 @@ environment:
 
 tasks:
   default:
-    required_by: [":discover"]
     requires:
       - state-dir
       - cache-dir
 
   dir:
+    required_by: [":discover"]
     abstract: true
     script: |
       set -x
