@@ -6,6 +6,7 @@ tasks:
   default:
     required_by: [":discover"]
     script: |
+      set -x
       mkdir -p "${STATE_DIR}"
       mkdir -p "${CACHE_DIR}"
       chmod 700 "${STATE_DIR}"
