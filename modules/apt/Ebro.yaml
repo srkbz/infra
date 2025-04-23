@@ -16,6 +16,7 @@ tasks:
 
       dpkg-deb --build "${METAPKG_DIR}" "${METAPKG_DIR}.deb"
       apt install -y "${METAPKG_DIR}.deb"
+      apt autoremove -y
     when:
       output_changes: ./control.py
       check_fails: dpkg-query -W -f='${binary:Package}\n' | grep "${METAPKG_NAME}"
