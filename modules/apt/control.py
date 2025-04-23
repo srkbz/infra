@@ -30,7 +30,7 @@ def packages() -> list[str]:
         check=True,
     )
     output: str = cmd.stdout.decode("utf-8")
-    return output.splitlines()
+    return list(dict.fromkeys(output.splitlines()))
 
 
 main()
