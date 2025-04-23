@@ -5,15 +5,29 @@ environment:
 tasks:
   default:
     required_by: [":discover"]
+    requires:
+      - state-dir
+      - cache-dir
+
+  dir:
+    abstract: true
     script: |
       set -x
-      mkdir -p "${STATE_DIR}"
-      mkdir -p "${CACHE_DIR}"
-      chmod 700 "${STATE_DIR}"
-      chmod 700 "${CACHE_DIR}"
+      mkdir -p "${TARGET_DIR}"
+      chmod "${TARGET_DIR_PERM}" "${TARGET_DIR}"
     when:
       check_fails: |
-        test -d "${STATE_DIR}"
-        test -d "${CACHE_DIR}"
-        [ "$(stat --format '%a' "${STATE_DIR}")" == "700" ]
-        [ "$(stat --format '%a' "${CACHE_DIR}")" == "700" ]
+        test -d "${TARGET_DIR}"
+        [ "$(stat --format '%a' "${TARGET_DIR}")" == "${TARGET_DIR_PERM}" ]
+
+  state-dir:
+    extends: [dir]
+    environment:
+      TARGET_DIR: "${STATE_DIR}"
+      TARGET_DIR_PERM: "700"
+
+  cache-dir:
+    extends: [dir]
+    environment:
+      TARGET_DIR: "${CACHE_DIR}"
+      TARGET_DIR_PERM: "700"
