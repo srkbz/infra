@@ -2,6 +2,9 @@ environment:
   STATE_DIR: "${EBRO_ROOT}/.state"
   CACHE_DIR: "${EBRO_ROOT}/.cache"
 
+imports:
+  discover: { from: "../../discover" }
+
 tasks:
   dirs:
     required_by: [discover]
@@ -17,10 +20,6 @@ tasks:
         test -d "${CACHE_DIR}"
         [ "$(stat --format '%a' "${STATE_DIR}")" == "700" ]
         [ "$(stat --format '%a' "${CACHE_DIR}")" == "700" ]
-
-  discover:
-    requires:
-      - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
 
   default:
     requires: [dirs, discover]

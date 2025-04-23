@@ -1,0 +1,4 @@
+tasks:
+  discover:
+    requires:
+      - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
