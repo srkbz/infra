@@ -21,7 +21,7 @@ def packages() -> list[str]:
             os.environ.get("EBRO_BIN"),
             "-i",
             "--query",
-            'tasks | filter("apt.packages" in .labels) | map(.labels["apt.packages"]) | join("\n")',
+            'tasks | filter("apt.packages" in .labels) | map(.labels["apt.packages"]) | join("\\n")',
         ],
         cwd=os.environ.get("EBRO_ROOT"),
         stdin=None,
