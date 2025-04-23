@@ -13,6 +13,7 @@ def main():
     lines = [
         "Package: " + os.environ.get("METAPKG_NAME"),
         "Version: 0.0.0",
+        "Maintainer: Carlos Fdez. Llamas <hello@sirikon.me>",
         "Architecture: all",
         "Description: Metapackage containing all the packages needed",
         *(["Depends: " + ", ".join(packages)] if len(packages) > 0 else []),
