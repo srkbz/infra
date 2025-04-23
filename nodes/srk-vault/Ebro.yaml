@@ -6,6 +6,7 @@ imports:
   apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
+  docker: { from: "../../modules/docker" }
 
 tasks:
   default:
