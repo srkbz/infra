@@ -1,0 +1,25 @@
+environment:
+  STATE_DIR: "${EBRO_ROOT}/.state"
+  CACHE_DIR: "${EBRO_ROOT}/.cache"
+
+tasks:
+  default:
+    requires:
+      - dirs
+      - everything
+
+  everything:
+    requires:
+      - query: tasks | filter(.labels["autorequire"] == "true") | map(.id)
+
+  dirs:
+    required_by: [everything]
+    quiet: true
+    script: |
+      chmod 700 "${STATE_DIR}"
+      chmod 700 "${CACHE_DIR}"
+
+  example:
+    labels:
+      autorequire: "true"
+    script: echo Hello world
