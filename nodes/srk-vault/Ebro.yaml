@@ -4,12 +4,12 @@ environment:
 
 imports:
   discover: { from: "../../modules/discover" }
-  base-dirs: { from: "../../modules/base-dirs" }
+  zase-dirs: { from: "../../modules/base-dirs" }
 
 tasks:
   dirs:
     required_by: [discover]
-    requires: [base-dirs]
+    requires: [zase-dirs]
 
   default:
     requires: [discover, dirs]
