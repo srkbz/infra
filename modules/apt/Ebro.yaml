@@ -9,14 +9,15 @@ tasks:
     required_by: [query: 'tasks | filter("apt.packages" in .labels) | map(.id)']
     script: |
       rm -rf "${METAPKG_DIR}"
+      rm -rf "${METAPKG_DIR}.deb"
       mkdir -p "${METAPKG_DIR}/DEBIAN"
 
       mkdir -p DEBIAN
       ./control.py > "${METAPKG_DIR}/DEBIAN/control"
 
       dpkg-deb --build "${METAPKG_DIR}" "${METAPKG_DIR}.deb"
-      apt install -y "${METAPKG_DIR}.deb"
-      apt autoremove -y
+      apt-get install -y "${METAPKG_DIR}.deb"
+      apt-get autoremove -y
     when:
       output_changes: ./control.py
       check_fails: dpkg-query -W -f='${binary:Package}\n' | grep "${METAPKG_NAME}"
