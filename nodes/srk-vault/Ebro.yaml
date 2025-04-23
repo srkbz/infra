@@ -7,8 +7,12 @@ imports:
   base-dirs: { from: "../../modules/base-dirs" }
 
 tasks:
+  dirs:
+    required_by: [discover]
+    requires: [base-dirs]
+
   default:
-    requires: [discover, base-dirs]
+    requires: [discover, dirs]
 
   example:
     labels:
