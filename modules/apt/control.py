@@ -6,7 +6,7 @@ import os
 
 def main():
     packages = get_packages()
-    print("### Packages to install: " + len(packages), file=sys.stderr)
+    print("### Packages to install: " + str(len(packages)), file=sys.stderr)
     for package in packages:
         print("### - " + package, file=sys.stderr)
 
