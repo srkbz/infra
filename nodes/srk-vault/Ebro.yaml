@@ -14,5 +14,5 @@ tasks:
   example:
     labels:
       discover: "true"
-      apt.packages: "vim"
+      apt.packages: "ncdu"
     script: echo Hello world
