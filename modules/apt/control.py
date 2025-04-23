@@ -5,17 +5,18 @@ import os
 
 
 def main():
+    packages = get_packages()
     lines = [
         "Package: " + os.environ.get("METAPKG_NAME"),
         "Version: 0.0.0",
         "Architecture: all",
         "Description: Metapackage containing all the packages needed",
-        "Depends: " + ", ".join(packages()),
+        *(["Depends: " + ", ".join(packages)] if len(packages) > 0 else []),
     ]
     print("\n".join(lines))
 
 
-def packages() -> list[str]:
+def get_packages() -> list[str]:
     cmd = subprocess.run(
         [
             os.environ.get("EBRO_BIN"),
