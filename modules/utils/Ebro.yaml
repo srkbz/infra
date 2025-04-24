@@ -1,4 +1,17 @@
 tasks:
+  dir:
+    abstract: true
+    script: |
+      set -x
+      mkdir -p "${DIR}"
+      chmod "${PERM}" "${DIR}"
+      chown "${OWNERS}" "${DIR}"
+    when:
+      check_fails: |
+        test -d "${DIR}"
+        [ "$(stat --format '%a' "${DIR}")" == "${PERM}" ]
+        [ "$(stat --format '%U:%G' "${DIR}")" == "${OWNERS}" ]
+
   sync-dir:
     abstract: true
     labels:
@@ -11,13 +24,19 @@ tasks:
         result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${FROM}/" "${TO}/")"
         [ ! -n "$result" ]
 
-  dir:
+  user:
     abstract: true
-    script: |
-      set -x
-      mkdir -p "${DIR}"
-      chmod "${PERM}" "${DIR}"
+    script: useradd --system --no-create-home --shell /bin/false "${NAME}"
     when:
-      check_fails: |
-        test -d "${DIR}"
-        [ "$(stat --format '%a' "${DIR}")" == "${PERM}" ]
+      check_fails: cat /etc/passwd | grep "${NAME}"
+
+  group:
+    abstract: true
+    script: groupadd --force "${NAME}"
+    when:
+      check_fails: cat /etc/group | grep "${NAME}"
+
+  user-in-group:
+    abstract: true
+    quiet: true
+    script: usermod --groups "${GROUP_NAME}" "${USER_NAME}"

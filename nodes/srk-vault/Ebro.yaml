@@ -14,15 +14,16 @@ imports:
 tasks:
   default:
     requires: [discover, base-dirs, data-dir]
-  
+
   data-dir:
     extends: [":utils:dir"]
+    requires: [data-user]
     environment:
       DIR: "${DATA_DIR}"
       PERM: "700"
+      OWNERS: "data:data"
 
-  example:
-    labels:
-      discover: "true"
-    requires: [base-dirs]
-    script: echo Hello world
+  data-user:
+    extends: [":utils:user"]
+    environment:
+      NAME: data

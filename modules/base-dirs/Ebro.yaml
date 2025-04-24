@@ -13,9 +13,11 @@ tasks:
     environment:
       DIR: "${STATE_DIR}"
       PERM: "700"
+      OWNERS: "root:root"
 
   cache-dir:
     extends: [":utils:dir"]
     environment:
       DIR: "${CACHE_DIR}"
       PERM: "700"
+      OWNERS: "root:root"
