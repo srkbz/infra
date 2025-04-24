@@ -8,25 +8,14 @@ tasks:
       - state-dir
       - cache-dir
 
-  dir:
-    abstract: true
-    script: |
-      set -x
-      mkdir -p "${TARGET_DIR}"
-      chmod "${TARGET_DIR_PERM}" "${TARGET_DIR}"
-    when:
-      check_fails: |
-        test -d "${TARGET_DIR}"
-        [ "$(stat --format '%a' "${TARGET_DIR}")" == "${TARGET_DIR_PERM}" ]
-
   state-dir:
-    extends: [dir]
+    extends: [":utils:dir"]
     environment:
-      TARGET_DIR: "${STATE_DIR}"
-      TARGET_DIR_PERM: "700"
+      DIR: "${STATE_DIR}"
+      PERM: "700"
 
   cache-dir:
-    extends: [dir]
+    extends: [":utils:dir"]
     environment:
-      TARGET_DIR: "${CACHE_DIR}"
-      TARGET_DIR_PERM: "700"
+      DIR: "${CACHE_DIR}"
+      PERM: "700"

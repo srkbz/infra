@@ -8,3 +8,14 @@ tasks:
       check_fails: |
         result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")"
         [ ! -n "$result" ]
+
+  dir:
+    abstract: true
+    script: |
+      set -x
+      mkdir -p "${DIR}"
+      chmod "${PERM}" "${DIR}"
+    when:
+      check_fails: |
+        test -d "${DIR}"
+        [ "$(stat --format '%a' "${DIR}")" == "${PERM}" ]

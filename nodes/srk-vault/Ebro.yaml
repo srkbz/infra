@@ -1,6 +1,7 @@
 environment:
   STATE_DIR: "${EBRO_ROOT}/.state"
   CACHE_DIR: "${EBRO_ROOT}/.cache"
+  DATA_DIR: "/data"
 
 imports:
   apt: { from: "../../modules/apt" }
@@ -11,7 +12,13 @@ imports:
 
 tasks:
   default:
-    requires: [discover, base-dirs]
+    requires: [discover, base-dirs, data-dir]
+  
+  data-dir:
+    extends: [":utils:dir"]
+    environment:
+      DIR: "${DATA_DIR}"
+      PERM: "700"
 
   example:
     labels:
