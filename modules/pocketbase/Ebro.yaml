@@ -75,10 +75,10 @@ tasks:
 
   public:
     requires: [home]
-    extends: [":utils:sync-directories"]
+    extends: [":utils:sync-dir"]
     environment:
-      SYNC_FROM: "$EBRO_TASK_WORKING_DIRECTORY/public"
-      SYNC_TO: "$POCKETBASE_HOME/pb_public"
+      FROM: "$EBRO_TASK_WORKING_DIRECTORY/public"
+      TO: "$POCKETBASE_HOME/pb_public"
 
   port:
     extends: [":port-registry:reserve"]

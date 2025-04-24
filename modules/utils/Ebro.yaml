@@ -1,12 +1,14 @@
 tasks:
-  sync-directories:
+  sync-dir:
     abstract: true
+    labels:
+      apt.packages: "rsync"
     script: |
-      mkdir -p "${SYNC_TO}/"
-      rsync --checksum --archive --delete --itemize-changes "${SYNC_FROM}/" "${SYNC_TO}/"
+      mkdir -p "${TO}/"
+      rsync --checksum --archive --delete --itemize-changes "${FROM}/" "${TO}/"
     when:
       check_fails: |
-        result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${SYNC_FROM}/" "${SYNC_TO}/")"
+        result="$(rsync --checksum --archive --delete --itemize-changes --dry-run "${FROM}/" "${TO}/")"
         [ ! -n "$result" ]
 
   dir:
