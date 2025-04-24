@@ -28,13 +28,13 @@ tasks:
     abstract: true
     script: useradd --system --no-create-home --shell /bin/false "${NAME}"
     when:
-      check_fails: cat /etc/passwd | grep "${NAME}"
+      check_fails: cat /etc/passwd | grep -E "^${NAME}:"
 
   group:
     abstract: true
     script: groupadd --force "${NAME}"
     when:
-      check_fails: cat /etc/group | grep "${NAME}"
+      check_fails: cat /etc/group | grep -E "^${NAME}:"
 
   user-in-group:
     abstract: true
