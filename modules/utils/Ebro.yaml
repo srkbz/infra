@@ -17,6 +17,7 @@ tasks:
     labels:
       apt.packages: "rsync"
     script: |
+      set -x
       mkdir -p "${TO}/"
       rsync --checksum --archive --delete --itemize-changes "${FROM}/" "${TO}/"
     when:
@@ -26,17 +27,23 @@ tasks:
 
   user:
     abstract: true
-    script: useradd --system --no-create-home --shell /bin/false "${NAME}"
+    script: |
+      set -x
+      useradd --system --no-create-home --shell /bin/false "${NAME}"
     when:
       check_fails: cat /etc/passwd | grep -E "^${NAME}:"
 
   group:
     abstract: true
-    script: groupadd --force "${NAME}"
+    script: |
+      set -x
+      groupadd --force "${NAME}"
     when:
       check_fails: cat /etc/group | grep -E "^${NAME}:"
 
   user-in-group:
     abstract: true
     quiet: true
-    script: usermod --groups "${GROUP_NAME}" "${USER_NAME}"
+    script: |
+      set -x
+      usermod --groups "${GROUP_NAME}" "${USER_NAME}"
