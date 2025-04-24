@@ -20,7 +20,7 @@ tasks:
     requires: [data-user]
     environment:
       DIR: "${DATA_DIR}"
-      PERM: "700"
+      PERM: "770"
       OWNERS: "data:data"
 
   data-user:
