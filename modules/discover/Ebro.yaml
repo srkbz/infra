@@ -2,7 +2,3 @@ tasks:
   default:
     requires:
       - query: tasks | filter(.labels["discover"] == "true") | map(.id)
-
-  before:
-    required_by:
-      - query: tasks | filter(.labels["discover"] == "true") | map(.id)

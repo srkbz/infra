@@ -16,4 +16,5 @@ tasks:
   example:
     labels:
       discover: "true"
+    requires: [base-dirs]
     script: echo Hello world

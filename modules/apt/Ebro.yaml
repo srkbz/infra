@@ -7,6 +7,7 @@ tasks:
     labels:
       discover: "true"
     required_by: [query: 'tasks | filter("apt.packages" in .labels) | map(.id)']
+    requires: [":base-dirs"]
     script: |
       rm -rf "${METAPKG_DIR}"
       rm -rf "${METAPKG_DIR}.deb"

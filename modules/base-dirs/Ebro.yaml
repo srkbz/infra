@@ -4,7 +4,6 @@ environment:
 
 tasks:
   default:
-    extends: [":discover:before"]
     requires:
       - state-dir
       - cache-dir
