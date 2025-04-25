@@ -1,0 +1,15 @@
+environment:
+  DROPBOX_CACHE: "${CACHE_DIR}/dropbox"
+  DROPBOX_PACKAGE_URL_TTL_SECONDS: "86400"
+
+tasks:
+  default:
+    requires: [package-url]
+  
+  package-url:
+    script: |
+      curl -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/PACKAGE_URL"
+    when:
+      check_fails: |
+        test -f "$DROPBOX_CACHE/PACKAGE_URL"
+        [ $(("$(date -r "$DROPBOX_CACHE/PACKAGE_URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]

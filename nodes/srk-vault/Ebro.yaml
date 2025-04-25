@@ -18,6 +18,7 @@ tasks:
   data-dir:
     extends: [":utils:dir"]
     requires: [data-user]
+    required_by: [base-dirs]
     environment:
       DIR: "${DATA_DIR}"
       PERM: "770"
