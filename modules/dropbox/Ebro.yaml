@@ -6,13 +6,31 @@ tasks:
   default:
     labels:
       discover: "true"
+    requires: [package]
+
+  package:
     requires: [package-url]
+    script: |
+      url="$(cat "$DROPBOX_CACHE/package/URL")"
+      url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
+
+      rm -rf "$DROPBOX_CACHE/package/${url_id}"
+      mkdir -p "$DROPBOX_CACHE/package/${url_id}"
+      cd "$DROPBOX_CACHE/package/${url_id}"
+
+      curl --output package.tar.gz '${url}'
+      tar -xvzf package.tar.gz
+    when:
+      check_fails: |
+        url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
+        test -d "$DROPBOX_CACHE/package/${url_id}"
   
   package-url:
     script: |
-      mkdir -p "$DROPBOX_CACHE"
-      curl --fail -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/PACKAGE_URL"
+      mkdir -p "$DROPBOX_CACHE/package"
+      curl --fail -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/package/URL"
+      cat "$DROPBOX_CACHE/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_CACHE/package/URL_ID"
     when:
       check_fails: |
-        test -f "$DROPBOX_CACHE/PACKAGE_URL"
-        [ $(("$(date -r "$DROPBOX_CACHE/PACKAGE_URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
+        test -f "$DROPBOX_CACHE/package/URL"
+        [ $(("$(date -r "$DROPBOX_CACHE/package/URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
