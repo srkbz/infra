@@ -23,14 +23,15 @@ tasks:
     when:
       check_fails: |
         url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
-        test -d "$DROPBOX_CACHE/package/${url_id}"
+        test -d "$DROPBOX_CACHE/package/${url_id}/.dropbox-dist"
   
   package-url:
     script: |
       mkdir -p "$DROPBOX_CACHE/package"
-      curl --fail -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/package/URL"
+      curl --fail -s -D - 'https://www.dropbox.com/download?plat=lnx.x86_64' | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/package/URL"
       cat "$DROPBOX_CACHE/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_CACHE/package/URL_ID"
     when:
       check_fails: |
         test -f "$DROPBOX_CACHE/package/URL"
         [ $(("$(date -r "$DROPBOX_CACHE/package/URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
+z
