@@ -9,7 +9,7 @@ tasks:
     requires: [package]
 
   package:
-    requires: [package-url]
+    requires: [package-url, base-dirs]
     script: |
       set -x
       url="$(cat "$DROPBOX_CACHE/package/URL")"
@@ -28,6 +28,7 @@ tasks:
         test -d "$DROPBOX_CACHE/package/${url_id}/.dropbox-dist"
   
   package-url:
+    requires: [base-dirs]
     script: |
       set -x
       mkdir -p "$DROPBOX_CACHE/package"
