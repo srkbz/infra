@@ -11,6 +11,7 @@ tasks:
   package:
     requires: [package-url]
     script: |
+      set -x
       url="$(cat "$DROPBOX_CACHE/package/URL")"
       url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
 
@@ -27,6 +28,7 @@ tasks:
   
   package-url:
     script: |
+      set -x
       mkdir -p "$DROPBOX_CACHE/package"
       curl --fail -s -D - 'https://www.dropbox.com/download?plat=lnx.x86_64' | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/package/URL"
       cat "$DROPBOX_CACHE/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_CACHE/package/URL_ID"
