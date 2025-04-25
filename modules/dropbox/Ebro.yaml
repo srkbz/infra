@@ -7,7 +7,12 @@ tasks:
   default:
     labels:
       discover: "true"
-    requires: [dropbox-py, package]
+    requires: [package, dropbox-py, user]
+
+  user:
+    extends: [":utils:user"]
+    environment:
+      NAME: dropbox
 
   dropbox-py:
     requires: [":base-dirs"]

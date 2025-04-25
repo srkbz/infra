@@ -1,3 +1,6 @@
+# TODO:
+# configure ssh (only allow login with ssh key, not password)
+
 environment:
   STATE_DIR: "${EBRO_ROOT}/.state"
   CACHE_DIR: "${EBRO_ROOT}/.cache"
