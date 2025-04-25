@@ -18,14 +18,14 @@ tasks:
 
   data-dir:
     extends: [":utils:dir"]
-    requires: [data-user]
+    requires: [data-group]
     required_by: [base-dirs]
     environment:
       DIR: "${DATA_DIR}"
       PERM: "770"
-      OWNERS: "data:data"
+      OWNERS: "${USER}:data"
 
-  data-user:
-    extends: [":utils:user"]
+  data-group:
+    extends: [":utils:group"]
     environment:
       NAME: data
