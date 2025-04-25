@@ -10,6 +10,7 @@ imports:
   base-dirs: { from: "../../modules/base-dirs" }
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
+  dropbox: { from: "../../modules/dropbox" }
 
 tasks:
   default:

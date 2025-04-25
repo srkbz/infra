@@ -4,6 +4,8 @@ environment:
 
 tasks:
   default:
+    labels:
+      discover: "true"
     requires: [package-url]
   
   package-url:
