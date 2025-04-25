@@ -31,7 +31,8 @@ tasks:
     script: |
       set -x
       mkdir -p "$DROPBOX_CACHE/package"
-      curl --fail -s -o /dev/null -w '%header{location}' 'https://www.dropbox.com/download?plat=lnx.x86_64' > "$DROPBOX_CACHE/package/URL"
+      arch="$(uname -m)"
+      curl --fail -s -o /dev/null -w '%header{location}' "https://www.dropbox.com/download?plat=lnx.${arch}" > "$DROPBOX_CACHE/package/URL"
       cat "$DROPBOX_CACHE/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_CACHE/package/URL_ID"
     when:
       check_fails: |
