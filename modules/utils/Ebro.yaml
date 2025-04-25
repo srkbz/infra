@@ -29,7 +29,7 @@ tasks:
     abstract: true
     script: |
       set -x
-      useradd --system --no-create-home --shell /bin/false "${NAME}"
+      useradd --system --shell /bin/false "${NAME}"
     when:
       check_fails: cat /etc/passwd | grep -E "^${NAME}:"
 
