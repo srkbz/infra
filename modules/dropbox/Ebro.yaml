@@ -11,7 +11,7 @@ tasks:
   package-url:
     script: |
       mkdir -p "$DROPBOX_CACHE"
-      curl -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/PACKAGE_URL"
+      curl --fail -s -D - "https://www.dropbox.com/download?plat=lnx.x86_64" | grep -E '^location:' | sed 's/location: //' > "$DROPBOX_CACHE/PACKAGE_URL"
     when:
       check_fails: |
         test -f "$DROPBOX_CACHE/PACKAGE_URL"
