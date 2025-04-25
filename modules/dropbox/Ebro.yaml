@@ -13,7 +13,7 @@ tasks:
     requires: [":base-dirs"]
     script: |
       mkdir -p "${DROPBOX_CACHE}"
-      curl --fail --output "${DROPBOX_CACHE}/dropbox.py" "$DROPBOX_PY_URL"
+      curl -L --fail --output "${DROPBOX_CACHE}/dropbox.py" "$DROPBOX_PY_URL"
     when:
       check_fails: test -f "${DROPBOX_CACHE}/dropbox.py"
       output_changes: echo "$DROPBOX_PY_URL"
