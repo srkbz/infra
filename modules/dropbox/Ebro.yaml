@@ -21,6 +21,7 @@ tasks:
 
       curl --fail --output package.tar.gz "${url}"
       tar -xvzf package.tar.gz
+      chown -R "$USER:$USER" .dropbox-dist
     when:
       check_fails: |
         url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
