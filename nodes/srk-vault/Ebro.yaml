@@ -21,7 +21,7 @@ tasks:
 
   data-dir:
     labels:
-      discover: true
+      discover: "true"
     extends: [":utils:dir"]
     requires: [data-group]
     required_by: [base-dirs]
@@ -32,14 +32,14 @@ tasks:
 
   data-group:
     labels:
-      discover: true
+      discover: "true"
     extends: [":utils:group"]
     environment:
       NAME: data
 
   dropbox-user-in-data-group:
     labels:
-      discover: true
+      discover: "true"
     requires: [data-group, ":dropbox:user"]
     extends: [":utils:user-in-group"]
     environment:
