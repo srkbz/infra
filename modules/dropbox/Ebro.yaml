@@ -1,12 +1,22 @@
 environment:
   DROPBOX_CACHE: "${CACHE_DIR}/dropbox"
   DROPBOX_PACKAGE_URL_TTL_SECONDS: "86400"
+  DROPBOX_PY_URL: "https://www.dropbox.com/download?dl=packages/dropbox.py"
 
 tasks:
   default:
     labels:
       discover: "true"
-    requires: [package]
+    requires: [dropbox-py, package]
+
+  dropbox-py:
+    requires: [":base-dirs"]
+    script: |
+      mkdir -p "${DROPBOX_CACHE}"
+      curl --fail --output "${DROPBOX_CACHE}/dropbox.py" "$DROPBOX_PY_URL"
+    when:
+      check_fails: test -f "${DROPBOX_CACHE}/dropbox.py"
+      output_changes: echo "$DROPBOX_PY_URL"
 
   package:
     requires: [package-url, ":base-dirs"]
@@ -26,7 +36,7 @@ tasks:
       check_fails: |
         url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
         test -d "$DROPBOX_CACHE/package/${url_id}/.dropbox-dist"
-  
+
   package-url:
     requires: [":base-dirs"]
     script: |
