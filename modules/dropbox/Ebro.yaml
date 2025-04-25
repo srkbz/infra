@@ -19,7 +19,7 @@ tasks:
       mkdir -p "$DROPBOX_CACHE/package/${url_id}"
       cd "$DROPBOX_CACHE/package/${url_id}"
 
-      curl -v --fail --output package.tar.gz "${url}"
+      curl --fail --output package.tar.gz "${url}"
       tar -xvzf package.tar.gz
     when:
       check_fails: |
