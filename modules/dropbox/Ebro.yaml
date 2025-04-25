@@ -34,4 +34,3 @@ tasks:
       check_fails: |
         test -f "$DROPBOX_CACHE/package/URL"
         [ $(("$(date -r "$DROPBOX_CACHE/package/URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
-z
