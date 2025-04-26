@@ -1,3 +1,6 @@
+# TODO: Install package under dropbox's home directory
+# to make it accessible.
+
 environment:
   DROPBOX_CACHE: "${CACHE_DIR}/dropbox"
   DROPBOX_PACKAGE_URL_TTL_SECONDS: "86400"
