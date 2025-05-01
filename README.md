@@ -13,6 +13,5 @@ cd infra
 ```bash
 echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/srkbz.conf
 echo "AllowUsers $USER" >> /etc/ssh/sshd_config.d/srkbz.conf
-echo "DenyUsers *" >> /etc/ssh/sshd_config.d/srkbz.conf
 systemctl restart sshd
 ```
