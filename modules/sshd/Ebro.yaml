@@ -1,0 +1,5 @@
+tasks:
+  default:
+    labels:
+      discover: "true"
+    script: echo Hello
