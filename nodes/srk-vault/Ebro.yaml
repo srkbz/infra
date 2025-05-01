@@ -18,7 +18,7 @@ imports:
 tasks:
   default:
     labels:
-      apt.packages: "vim"
+      apt.packages: "vim htop btop iftop iotop"
     requires: [discover]
 
   data-dir:
