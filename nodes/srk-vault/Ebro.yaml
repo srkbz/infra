@@ -17,6 +17,8 @@ imports:
 
 tasks:
   default:
+    labels:
+      apt.packages: "fwupd"
     requires: [discover]
 
   data-dir:
