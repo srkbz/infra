@@ -19,6 +19,5 @@ systemctl restart sshd
 
 ```bash
 passwd --delete $the_user
-userdel $the_user
-rm -rf /home/$the_user
+userdel --remove $the_user
 ```
