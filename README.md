@@ -11,7 +11,9 @@ cd infra
 ## Configure ssh
 
 ```bash
-echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/srkbz.conf
-echo "AllowUsers $USER" >> /etc/ssh/sshd_config.d/srkbz.conf
-systemctl restart sshd
+mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && vim ~/.ssh/authorized_keys
+```
+
+```bash
+printf "%s\n" "PasswordAuthentication no" "AllowUsers $USER" > /etc/ssh/sshd_config.d/srkbz.conf && systemctl restart sshd
 ```
