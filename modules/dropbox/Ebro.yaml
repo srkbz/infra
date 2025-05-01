@@ -2,7 +2,7 @@
 # to make it accessible.
 
 environment:
-  DROPBOX_CACHE: "${CACHE_DIR}/dropbox"
+  DROPBOX_ROOT: "/home/dropbox"
   DROPBOX_PACKAGE_URL_TTL_SECONDS: "86400"
   DROPBOX_PY_URL: "https://www.dropbox.com/download?dl=packages/dropbox.py"
 
@@ -12,48 +12,48 @@ tasks:
       discover: "true"
     requires: [package, dropbox-py, user]
 
-  user:
-    extends: [":utils:user"]
-    environment:
-      NAME: dropbox
-
   dropbox-py:
-    requires: [":base-dirs"]
+    requires: [":base-dirs", user]
     script: |
-      curl -L --fail --create-dirs --output "${DROPBOX_CACHE}/dropbox.py" "$DROPBOX_PY_URL"
-      chmod +x "${DROPBOX_CACHE}/dropbox.py"
+      curl -L --fail --create-dirs --output "${DROPBOX_ROOT}/dropbox.py" "$DROPBOX_PY_URL"
+      chmod +x "${DROPBOX_ROOT}/dropbox.py"
     when:
-      check_fails: test -f "${DROPBOX_CACHE}/dropbox.py"
+      check_fails: test -f "${DROPBOX_ROOT}/dropbox.py"
       output_changes: echo "$DROPBOX_PY_URL"
 
   package:
-    requires: [package-url, ":base-dirs"]
+    requires: [package-url, ":base-dirs", user]
     script: |
       set -x
-      url="$(cat "$DROPBOX_CACHE/package/URL")"
-      url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
+      url="$(cat "$DROPBOX_ROOT/package/URL")"
+      url_id="$(cat "$DROPBOX_ROOT/package/URL_ID")"
 
-      rm -rf "$DROPBOX_CACHE/package/${url_id}"
-      mkdir -p "$DROPBOX_CACHE/package/${url_id}"
-      cd "$DROPBOX_CACHE/package/${url_id}"
+      rm -rf "$DROPBOX_ROOT/package/${url_id}"
+      mkdir -p "$DROPBOX_ROOT/package/${url_id}"
+      cd "$DROPBOX_ROOT/package/${url_id}"
 
       curl --fail --output package.tar.gz "${url}"
       tar -xvzf package.tar.gz
       chown -R "$USER:$USER" .dropbox-dist
     when:
       check_fails: |
-        url_id="$(cat "$DROPBOX_CACHE/package/URL_ID")"
-        test -d "$DROPBOX_CACHE/package/${url_id}/.dropbox-dist"
+        url_id="$(cat "$DROPBOX_ROOT/package/URL_ID")"
+        test -d "$DROPBOX_ROOT/package/${url_id}/.dropbox-dist"
 
   package-url:
-    requires: [":base-dirs"]
+    requires: [":base-dirs", user]
     script: |
       set -x
-      mkdir -p "$DROPBOX_CACHE/package"
+      mkdir -p "$DROPBOX_ROOT/package"
       arch="$(uname -m)"
-      curl --fail -s -o /dev/null -w '%header{location}' "https://www.dropbox.com/download?plat=lnx.${arch}" > "$DROPBOX_CACHE/package/URL"
-      cat "$DROPBOX_CACHE/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_CACHE/package/URL_ID"
+      curl --fail -s -o /dev/null -w '%header{location}' "https://www.dropbox.com/download?plat=lnx.${arch}" > "$DROPBOX_ROOT/package/URL"
+      cat "$DROPBOX_ROOT/package/URL" | sha256sum | sed 's/ *-//' > "$DROPBOX_ROOT/package/URL_ID"
     when:
       check_fails: |
-        test -f "$DROPBOX_CACHE/package/URL"
-        [ $(("$(date -r "$DROPBOX_CACHE/package/URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
+        test -f "$DROPBOX_ROOT/package/URL"
+        [ $(("$(date -r "$DROPBOX_ROOT/package/URL" "+%s")" + "$DROPBOX_PACKAGE_URL_TTL_SECONDS")) -gt "$(date "+%s")" ]
+
+  user:
+    extends: [":utils:user"]
+    environment:
+      NAME: dropbox
