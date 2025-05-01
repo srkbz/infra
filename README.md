@@ -8,16 +8,11 @@ cd infra
 ./ebrow
 ```
 
-## Disable password login in ssh
+## Configure ssh
 
 ```bash
 echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/srkbz.conf
+echo "AllowUsers $USER" >> /etc/ssh/sshd_config.d/srkbz.conf
+echo "DenyUsers *" >> /etc/ssh/sshd_config.d/srkbz.conf
 systemctl restart sshd
-```
-
-## Nuke user
-
-```bash
-passwd --delete $the_user
-userdel --remove $the_user
 ```
