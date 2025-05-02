@@ -11,7 +11,7 @@ VPN_NETWORK = ip_network("10.10.0.0/24")
 VAULT_IP = ip_address("10.10.0.1")
 
 GATEWAY_IP = ip_address("10.10.0.2")
-GATEWAY_PUBLIC_ADDRESS = "gateway.srk.bz"
+GATEWAY_PUBLIC_ADDRESS = "187.33.146.244"
 
 assert VAULT_IP in VPN_NETWORK
 assert GATEWAY_IP in VPN_NETWORK
