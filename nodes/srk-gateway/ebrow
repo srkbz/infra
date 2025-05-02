@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+EBRO_VERSION="0.18.0"
+declare -A EBRO_SUMS=(
+  ["Linux__aarch64"]="99d81648282cbb065b590bf5d1880d16b258c712795dbbabade1db8f07dc7e52"
+  ["Linux__x86_64"]="cd7ee92bb944601713989421fe1c8af4ed3e027c7165f25f1b3a5143ba7a7362"
+  ["Darwin__arm64"]="8547bdfb649e4c76007437a449b6845f40c00f1da0f022ebad15e9242ced984e"
+)
+
+EBRO_BIN=".ebro/bin/${EBRO_VERSION}/ebro"
+if [ ! -f "$EBRO_BIN" ] || [ ! -x "$EBRO_BIN" ]; then
+  variant="$(uname -s)__$(uname -m)"
+  if [ ! "${EBRO_SUMS[$variant]+ok}" ]; then
+    echo "The variant $variant is not registered in EBRO_SUMS."
+    echo "Add the sha256 checksum to EBRO_SUMS for this variant."
+    exit 1
+  fi
+  curl --fail --location --create-dirs --output "$EBRO_BIN" \
+    "https://github.com/sirikon/ebro/releases/download/${EBRO_VERSION}/ebro-${variant}"
+  echo "${EBRO_SUMS[$variant]}  ${EBRO_BIN}" | shasum --algorithm 256 --check 2>/dev/null
+  chmod +x "$EBRO_BIN"
+fi
+exec "$EBRO_BIN" "$@"

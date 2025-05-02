@@ -1,0 +1,18 @@
+environment:
+  STATE_DIR: "${EBRO_ROOT}/.state"
+  CACHE_DIR: "${EBRO_ROOT}/.cache"
+  DATA_DIR: "/data"
+
+imports:
+  utils: { from: "../../modules/utils" }
+  apt: { from: "../../modules/apt" }
+  discover: { from: "../../modules/discover" }
+  base-dirs: { from: "../../modules/base-dirs" }
+  wireguard: { from: "../../modules/wireguard" }
+  cron: { from: "../../modules/cron" }
+
+tasks:
+  default:
+    labels:
+      apt.packages: "vim htop btop iftop iotop"
+    requires: [discover]
