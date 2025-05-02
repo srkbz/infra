@@ -18,7 +18,7 @@ imports:
   freshrss:
     from: ../../modules/freshrss
     environment:
-      FRESHRSS_HOST: "10.10.0.1"
+      FRESHRSS_HOST: "192.168.1.7"
       FRESHRSS_DATA: "${DATA_DIR}/apps/freshrss"
 
 tasks:
