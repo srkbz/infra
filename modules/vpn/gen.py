@@ -36,7 +36,7 @@ def main():
         yield "[Peer]"
         yield f"PublicKey = {gateway_public_key}"
         yield f"AllowedIPs = {GATEWAY_IP}/32"
-        yield f"Endpoint = {GATEWAY_PUBLIC_ADDRESS}:{WG_PORT}"
+        # yield f"Endpoint = {GATEWAY_PUBLIC_ADDRESS}:{WG_PORT}"
         yield "PersistentKeepalive = 5"
 
     write_config(join(vault_dir, "wg0.conf"), vault_config)
