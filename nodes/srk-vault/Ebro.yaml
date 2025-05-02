@@ -8,6 +8,7 @@ imports:
   apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
+  port-registry: { from: ../../modules/port-registry }
   wireguard: { from: "../../modules/wireguard" }
   vpn: { from: "../../modules/vpn" }
   cron: { from: "../../modules/cron" }
