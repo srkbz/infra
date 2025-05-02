@@ -11,9 +11,14 @@ imports:
   wireguard: { from: "../../modules/wireguard" }
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
+  caddy: { from: "../../modules/caddy" }
 
 tasks:
   default:
     labels:
       apt.packages: "vim htop btop iftop iotop"
     requires: [discover]
+
+  caddyfile:
+    labels:
+      caddy.conf: "${EBRO_ROOT}/Caddyfile"
