@@ -8,7 +8,7 @@ imports:
   apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
-  # wireguard: { from: "../../modules/wireguard" }
+  wireguard: { from: "../../modules/wireguard" }
   vpn: { from: "../../modules/vpn" }
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
@@ -46,3 +46,17 @@ tasks:
     environment:
       USER_NAME: dropbox
       GROUP_NAME: data
+
+  vpn-wireguard:
+    required_by: [wireguard]
+    requires: [vpn]
+    labels:
+      discover: "true"
+    script: |
+      set -x
+      cp "${STATE_DIR}/vpn/config/vault/wg0.conf" /etc/wireguard/wg0.conf
+      chown root:root /etc/wireguard/wg0.conf
+      chmod 600 /etc/wireguard/wg0.conf
+    when:
+      check_fails: test -f /etc/wireguard/wg0.conf
+      output_changes: cat "${STATE_DIR}/vpn/config/vault/wg0.conf"
