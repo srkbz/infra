@@ -3,6 +3,7 @@ from ipaddress import ip_address, ip_network
 from os import makedirs, environ
 from os.path import join, exists
 from subprocess import run
+from sys import stderr
 
 WG_PORT = 51820
 VPN_NETWORK = ip_network("10.10.0.0/24")
@@ -57,11 +58,14 @@ def main():
 
 def ensure_keypair(dir: str):
     if not exists(join(dir, "private.key")):
+        log("Creating keypair for " + dir)
         makedirs(dir, exist_ok=True)
         run(
             ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
             cwd=dir,
         )
+    else:
+        log("Reusing keypair for " + dir)
     private_key = read_file(join(dir, "private.key")).strip()
     public_key = read_file(join(dir, "public.key")).strip()
     return (private_key, public_key)
@@ -73,9 +77,14 @@ def read_file(path):
 
 
 def write_config(path, gen):
+    log("Writting config to " + path)
     with open(path, "w") as f:
         for line in gen():
             f.writelines(line + "\n")
+
+
+def log(msg):
+    print(f"### {msg}", file=stderr)
 
 
 if __name__ == "__main__":
