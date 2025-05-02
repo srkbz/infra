@@ -1,0 +1,27 @@
+environment:
+  WG_CONF_NAME: "wg0"
+  WG_CONF_FILE: "/etc/wireguard/${WG_CONF_NAME}.conf"
+
+tasks:
+  default:
+    labels:
+      discover: "true"
+      apt.packages: "wireguard"
+    script: |
+      test -f "$WG_CONF_FILE"
+      [ "$(stat --format '%a' "${WG_CONF_FILE}")" == "600" ]
+      [ "$(stat --format '%U:%G' "${WG_CONF_FILE}")" == "root:root" ]
+
+      systemctl enable "wg-quick@${WG_CONF_NAME}"
+      systemctl start "wg-quick@${WG_CONF_NAME}"
+      wg syncconf "${WG_CONF_NAME}" <(wg-quick strip "${WG_CONF_NAME}")
+    when:
+      check_fails: |
+        systemctl status "wg-quick@${WG_CONF_NAME}"
+      output_changes: |
+        cat "$WG_CONF_FILE"
+
+  down:
+    script: |
+      wg-quick down "$WG_CONF_NAME" || true
+      systemctl stop "wg-quick@${WG_CONF_NAME}"

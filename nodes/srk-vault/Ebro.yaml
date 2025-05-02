@@ -8,6 +8,7 @@ imports:
   apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
+  wireguard: { from: "../../modules/wireguard" }
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
   dropbox: { from: "../../modules/dropbox" }
