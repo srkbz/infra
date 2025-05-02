@@ -19,6 +19,7 @@ tasks:
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
+        echo "${FRESHRSS_HOST}"
         cat docker-compose.yml
         cat "${FRESHRSS_PORT_FILE}"
       check_fails: |
