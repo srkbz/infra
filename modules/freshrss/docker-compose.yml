@@ -2,12 +2,13 @@ services:
   freshrss:
     image: freshrss/freshrss
     restart: always
+    user: freshrss
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     environment:
       TZ: Europe/Madrid
       CRON_MIN: "15,45"
     volumes:
-      - ./data:/var/www/FreshRSS/data
+      - ${FRESHRSS_DATA}:/var/www/FreshRSS/data
     ports:
       - ${HOST}:${PORT}:80

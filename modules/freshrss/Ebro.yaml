@@ -1,5 +1,6 @@
 environment:
   FRESHRSS_HOME: ${STATE_DIR}/freshrss
+  FRESHRSS_DATA: '${FRESHRSS_DATA:-"${FRESHRSS_HOME}/data"}'
   FRESHRSS_HOST: "${FRESHRSS_HOST:-127.0.0.1}"
   FRESHRSS_PORT: "${FRESHRSS_PORT:-random}"
   FRESHRSS_PORT_FILE: "${FRESHRSS_HOME}/PORT"
@@ -7,8 +8,8 @@ environment:
 tasks:
   default:
     labels:
-      autorequire: "true"
-    requires: [":docker", home, port]
+      discover: "true"
+    requires: [":docker", home, data, user, port]
     script: |
       cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
       cd "${FRESHRSS_HOME}"
@@ -39,11 +40,12 @@ tasks:
     when:
       check_fails: test -d "$FRESHRSS_HOME"
 
-  backup:
-    if_tasks_exist: [":restic"]
-    labels:
-      cron: "0 3 * * 0"
-    extends: [":restic:operation"]
-    script: |
-      cd "${FRESHRSS_HOME}/data"
-      restic-backup-here freshrss
+  data:
+    script: mkdir -p "$FRESHRSS_HOME"
+    when:
+      check_fails: test -d "$FRESHRSS_HOME"
+
+  user:
+    extends: [":utils:user"]
+    environment:
+      NAME: freshrss

@@ -14,6 +14,12 @@ imports:
   docker: { from: "../../modules/docker" }
   dropbox: { from: "../../modules/dropbox" }
 
+  freshrss:
+    from: ../../modules/freshrss
+    environment:
+      FRESHRSS_HOST: "10.10.0.1"
+      FRESHRSS_DATA: "${DATA_DIR}/apps/freshrss"
+
 tasks:
   default:
     labels:
@@ -45,6 +51,16 @@ tasks:
     extends: [":utils:user-in-group"]
     environment:
       USER_NAME: dropbox
+      GROUP_NAME: data
+
+  freshrss-user-in-data-group:
+    labels:
+      discover: "true"
+    requires: [data-group, ":freshrss:user"]
+    required_by: [":freshrss"]
+    extends: [":utils:user-in-group"]
+    environment:
+      USER_NAME: freshrss
       GROUP_NAME: data
 
   vpn-wireguard:
