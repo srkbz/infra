@@ -9,6 +9,7 @@ imports:
   discover: { from: "../../modules/discover" }
   base-dirs: { from: "../../modules/base-dirs" }
   wireguard: { from: "../../modules/wireguard" }
+  vpn: { from: "../../modules/vpn" }
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
   dropbox: { from: "../../modules/dropbox" }

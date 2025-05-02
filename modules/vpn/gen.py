@@ -1,166 +1,80 @@
 #!/usr/bin/env python3
 from ipaddress import ip_address, ip_network
-from os import makedirs, umask, environ
+from os import makedirs, environ
 from os.path import join, exists
 from subprocess import run
 
 WG_PORT = 51820
 VPN_NETWORK = ip_network("10.10.0.0/24")
-HOME_NETWORK = ip_network("192.168.1.0/24")
 
-SERVER_IP = ip_address("10.10.0.1")
-SERVER_PUBLIC_ADDRESS = "vpn.srk.bz"
+VAULT_IP = ip_address("10.10.0.1")
 
-HOME_GATEWAY_IP = ip_address("10.10.0.2")
-HOME_GATEWAY_DEFAULT_INTERFACE = "eth0"
+GATEWAY_IP = ip_address("10.10.0.2")
+GATEWAY_PUBLIC_ADDRESS = "gateway.srk.bz"
 
-CLIENTS = [("phone", ip_address("10.10.0.3")), ("macbook", ip_address("10.10.0.4"))]
+assert VAULT_IP in VPN_NETWORK
+assert GATEWAY_IP in VPN_NETWORK
 
-assert SERVER_IP in VPN_NETWORK
-assert HOME_GATEWAY_IP in VPN_NETWORK
-for _, ip in CLIENTS:
-    assert ip in VPN_NETWORK
-
-VPN_HOME = environ.get("VPN_HOME")
+VPN_CONFIG = environ.get("VPN_CONFIG")
 
 
 def main():
-    umask(0o077)
+    vault_dir = join(VPN_CONFIG, "vault")
+    gateway_dir = join(VPN_CONFIG, "gateway")
 
-    makedirs(VPN_HOME, exist_ok=True)
+    vault_private_key, vault_public_key = ensure_keypair(vault_dir)
+    gateway_private_key, gateway_public_key = ensure_keypair(gateway_dir)
 
-    if not exists(VPN_HOME + "/server/private.key"):
-        makedirs(VPN_HOME + "/server", exist_ok=True)
-        run(
-            ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
-            cwd=VPN_HOME + "/server",
-        )
-
-    if not exists(VPN_HOME + "/home-gateway/private.key"):
-        makedirs(VPN_HOME + "/home-gateway", exist_ok=True)
-        run(
-            ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
-            cwd=VPN_HOME + "/home-gateway",
-        )
-
-    for client_name, client_ip in CLIENTS:
-        if not exists(join(VPN_HOME + "/clients", client_name, "private.key")):
-            makedirs(join(VPN_HOME + "/clients", client_name), exist_ok=True)
-            run(
-                ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
-                cwd=join(VPN_HOME + "/clients", client_name),
-            )
-
-        with open(join(VPN_HOME + "/clients", client_name, "home_lan.conf"), "w") as f:
-            for line in client_home_lan_wireguard_config(client_name, client_ip):
-                f.write(line + "\n")
-        run(
-            ["bash", "-c", "cat home_lan.conf | qrencode -t UTF8>home_lan.qr"],
-            cwd=join(VPN_HOME + "/clients", client_name),
-        )
-
-        with open(
-            join(VPN_HOME + "/clients", client_name, "home_gateway.conf"), "w"
-        ) as f:
-            for line in client_home_gateway_wireguard_config(client_name, client_ip):
-                f.write(line + "\n")
-        run(
-            ["bash", "-c", "cat home_gateway.conf | qrencode -t UTF8>home_gateway.qr"],
-            cwd=join(VPN_HOME + "/clients", client_name),
-        )
-
-    with open(VPN_HOME + "/server/wg0.conf", "w") as f:
-        for line in server_wireguard_config():
-            f.write(line + "\n")
-
-    with open(VPN_HOME + "/home-gateway/wg0.conf", "w") as f:
-        for line in home_gateway_wireguard_config():
-            f.write(line + "\n")
-
-
-def client_home_lan_wireguard_config(client_name, client_ip):
-    yield "[Interface]"
-    yield "PrivateKey = " + read_file(
-        join(VPN_HOME + "/clients", client_name, "private.key")
-    ).strip()
-    yield f"Address = {client_ip}/32"
-    yield ""
-    yield "[Peer]"
-    yield "PublicKey = " + read_file(VPN_HOME + "/server/public.key").strip()
-    yield f"AllowedIPs = {VPN_NETWORK}, {HOME_NETWORK}"
-    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
-
-
-def client_home_gateway_wireguard_config(client_name, client_ip):
-    yield "[Interface]"
-    yield "PrivateKey = " + read_file(
-        join(VPN_HOME + "/clients", client_name, "private.key")
-    ).strip()
-    yield f"Address = {client_ip}/32"
-    yield ""
-    yield "[Peer]"
-    yield "PublicKey = " + read_file(VPN_HOME + "/server/public.key").strip()
-    yield f"AllowedIPs = 0.0.0.0/0"
-    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
-
-
-def server_wireguard_config():
-    yield "[Interface]"
-    yield f"Address = {SERVER_IP}/{VPN_NETWORK.prefixlen}"
-    yield f"ListenPort = {WG_PORT}"
-    yield "PrivateKey = " + read_file(VPN_HOME + "/server/private.key").strip()
-    yield ""
-    yield "PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT"
-    yield "PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT"
-    yield ""
-    yield "# Home Gateway"
-    yield "[Peer]"
-    yield "PublicKey = " + read_file(VPN_HOME + "/home-gateway/public.key").strip()
-    yield f"AllowedIPs = {HOME_GATEWAY_IP}/32,{HOME_NETWORK}"
-    for client_name, client_ip in CLIENTS:
+    def vault_config():
+        yield "[Interface]"
+        yield f"Address = {VAULT_IP}/32"
+        yield f"ListenPort = {WG_PORT}"
+        yield f"PrivateKey = {vault_private_key}"
         yield ""
-        yield f"# Client: {client_name}"
+        yield "# Gateway"
         yield "[Peer]"
-        yield "PublicKey = " + read_file(
-            VPN_HOME + f"/clients/{client_name}/public.key"
-        ).strip()
-        yield f"AllowedIPs = {client_ip}/32"
+        yield f"PublicKey = {gateway_public_key}"
+        yield f"AllowedIPs = {GATEWAY_IP}/32"
+        yield f"Endpoint = {GATEWAY_PUBLIC_ADDRESS}:{WG_PORT}"
+        yield "PersistentKeepalive = 5"
+
+    write_config(join(vault_dir, "wg0.conf"), vault_config)
+
+    def gateway_config():
+        yield "[Interface]"
+        yield f"Address = {GATEWAY_IP}/32"
+        yield f"ListenPort = {WG_PORT}"
+        yield f"PrivateKey = {gateway_private_key}"
+        yield ""
+        yield "# Vault"
+        yield "[Peer]"
+        yield f"PublicKey = {vault_public_key}"
+        yield f"AllowedIPs = {VAULT_IP}/32"
+        yield "PersistentKeepalive = 5"
+
+    write_config(join(gateway_dir, "wg0.conf"), gateway_config)
 
 
-def home_gateway_wireguard_config():
-    yield "[Interface]"
-    yield f"Address = {HOME_GATEWAY_IP}/{VPN_NETWORK.prefixlen}"
-    yield f"ListenPort = {WG_PORT}"
-    yield "PrivateKey = " + read_file(VPN_HOME + "/home-gateway/private.key").strip()
-    yield ""
-    yield "PostUp = " + "; ".join(
-        [
-            f"iptables -t nat -A POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
-            f"iptables -A FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
-            f"iptables -A FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
-        ]
-    )
-
-    yield "PostDown = " + "; ".join(
-        [
-            f"iptables -t nat -D POSTROUTING -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j MASQUERADE",
-            f"iptables -D FORWARD -i wg0 -o {HOME_GATEWAY_DEFAULT_INTERFACE} -j ACCEPT",
-            f"iptables -D FORWARD -i {HOME_GATEWAY_DEFAULT_INTERFACE} -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT",
-        ]
-    )
-
-    yield ""
-    yield "# Server"
-    yield "[Peer]"
-    yield "PublicKey = " + read_file(VPN_HOME + "/server/public.key").strip()
-    yield f"AllowedIPs = {VPN_NETWORK}"
-    yield f"Endpoint = {SERVER_PUBLIC_ADDRESS}:{WG_PORT}"
-    yield "PersistentKeepalive = 15"
+def ensure_keypair(dir: str):
+    if not exists(join(dir, "private.key")):
+        makedirs(dir, exist_ok=True)
+        run(
+            ["bash", "-c", "wg genkey | tee private.key | wg pubkey>public.key"],
+            cwd=dir,
+        )
+    private_key = read_file(join(dir, "private.key")).strip()
+    public_key = read_file(join(dir, "public.key")).strip()
+    return (private_key, public_key)
 
 
 def read_file(path):
     with open(path, "r") as f:
         return f.read()
+
+
+def write_config(path, gen):
+    with open(path, "w") as f:
+        f.writelines(gen())
 
 
 if __name__ == "__main__":
