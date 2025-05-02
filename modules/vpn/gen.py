@@ -10,21 +10,21 @@ VPN_NETWORK = ip_network("10.10.0.0/24")
 
 VAULT_IP = ip_address("10.10.0.1")
 
-GATEWAY_IP = ip_address("10.10.0.2")
-GATEWAY_PUBLIC_ADDRESS = "187.33.146.244"
+FACADE_IP = ip_address("10.10.0.2")
+FACADE_PUBLIC_ADDRESS = "facade.srk.bz"
 
 assert VAULT_IP in VPN_NETWORK
-assert GATEWAY_IP in VPN_NETWORK
+assert FACADE_IP in VPN_NETWORK
 
 VPN_CONFIG = environ.get("VPN_CONFIG")
 
 
 def main():
     vault_dir = join(VPN_CONFIG, "vault")
-    gateway_dir = join(VPN_CONFIG, "gateway")
+    facade_dir = join(VPN_CONFIG, "facade")
 
     vault_private_key, vault_public_key = ensure_keypair(vault_dir)
-    gateway_private_key, gateway_public_key = ensure_keypair(gateway_dir)
+    facade_private_key, facade_public_key = ensure_keypair(facade_dir)
 
     def vault_config():
         yield "[Interface]"
@@ -32,20 +32,20 @@ def main():
         yield f"ListenPort = {WG_PORT}"
         yield f"PrivateKey = {vault_private_key}"
         yield ""
-        yield "# Gateway"
+        yield "# Facade"
         yield "[Peer]"
-        yield f"PublicKey = {gateway_public_key}"
-        yield f"AllowedIPs = {GATEWAY_IP}/32"
-        # yield f"Endpoint = {GATEWAY_PUBLIC_ADDRESS}:{WG_PORT}"
+        yield f"PublicKey = {facade_public_key}"
+        yield f"AllowedIPs = {FACADE_IP}/32"
+        # yield f"Endpoint = {FACADE_PUBLIC_ADDRESS}:{WG_PORT}"
         yield "PersistentKeepalive = 5"
 
     write_config(join(vault_dir, "wg0.conf"), vault_config)
 
-    def gateway_config():
+    def facade_config():
         yield "[Interface]"
-        yield f"Address = {GATEWAY_IP}/32"
+        yield f"Address = {FACADE_IP}/32"
         yield f"ListenPort = {WG_PORT}"
-        yield f"PrivateKey = {gateway_private_key}"
+        yield f"PrivateKey = {facade_private_key}"
         yield ""
         yield "# Vault"
         yield "[Peer]"
@@ -53,7 +53,7 @@ def main():
         yield f"AllowedIPs = {VAULT_IP}/32"
         yield "PersistentKeepalive = 5"
 
-    write_config(join(gateway_dir, "wg0.conf"), gateway_config)
+    write_config(join(facade_dir, "wg0.conf"), facade_config)
 
 
 def ensure_keypair(dir: str):
