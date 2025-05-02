@@ -11,3 +11,4 @@ services:
       - ${FRESHRSS_DATA}:/var/www/FreshRSS/data
     ports:
       - ${HOST}:${PORT}:80
+      - 10.10.0.1:${PORT}:80
