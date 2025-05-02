@@ -74,7 +74,8 @@ def read_file(path):
 
 def write_config(path, gen):
     with open(path, "w") as f:
-        f.writelines(gen())
+        for line in gen():
+            f.writelines(line + "\n")
 
 
 if __name__ == "__main__":
