@@ -9,7 +9,7 @@ environment:
 tasks:
   default:
     labels:
-      autorequire: "true"
+      discover: "true"
     requires: [conf, install]
     script: |
       cp Caddyfile "$CADDY_CONF"
