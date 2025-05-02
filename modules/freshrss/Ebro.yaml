@@ -14,13 +14,16 @@ tasks:
       cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
       cd "${FRESHRSS_HOME}"
       port="$(cat "$FRESHRSS_PORT_FILE")"
+      user_id="$(id -u freshrss)"
       echo "PORT=${port}" > .env
       echo "HOST=${FRESHRSS_HOST}" >> .env
+      echo "USER_ID=${user_id}" >> .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
         cat docker-compose.yml
         cat "${FRESHRSS_PORT_FILE}"
+        id -u freshrss
       check_fails: |
         test -d "${FRESHRSS_HOME}"
         cd "${FRESHRSS_HOME}"
