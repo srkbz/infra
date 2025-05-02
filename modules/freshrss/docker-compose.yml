@@ -2,7 +2,6 @@ services:
   freshrss:
     image: freshrss/freshrss
     restart: always
-    user: ${USER_ID}:${USER_ID}
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     environment:
