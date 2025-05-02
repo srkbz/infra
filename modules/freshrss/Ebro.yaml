@@ -1,6 +1,5 @@
 environment:
   FRESHRSS_HOME: ${STATE_DIR}/freshrss
-  FRESHRSS_DATA: '${FRESHRSS_DATA:-"${FRESHRSS_HOME}/data"}'
   FRESHRSS_HOST: "${FRESHRSS_HOST:-127.0.0.1}"
   FRESHRSS_PORT: "${FRESHRSS_PORT:-random}"
   FRESHRSS_PORT_FILE: "${FRESHRSS_HOME}/PORT"
@@ -11,17 +10,12 @@ tasks:
       discover: "true"
     requires: [":docker", home, data, port]
     script: |
-      cp docker-compose.yml "${FRESHRSS_HOME}/docker-compose.yml"
+      ./docker-compose.py > "${FRESHRSS_HOME}/docker-compose.yml"
       cd "${FRESHRSS_HOME}"
-      port="$(cat "$FRESHRSS_PORT_FILE")"
-      echo "PORT=${port}" > .env
-      echo "HOST=${FRESHRSS_HOST}" >> .env
       docker compose up --detach --wait --remove-orphans
     when:
       output_changes: |
-        echo "${FRESHRSS_HOST}"
-        cat docker-compose.yml
-        cat "${FRESHRSS_PORT_FILE}"
+        ./docker-compose.py
       check_fails: |
         test -d "${FRESHRSS_HOME}"
         cd "${FRESHRSS_HOME}"
