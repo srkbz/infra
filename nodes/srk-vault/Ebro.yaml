@@ -54,16 +54,6 @@ tasks:
       USER_NAME: dropbox
       GROUP_NAME: data
 
-  freshrss-user-in-data-group:
-    labels:
-      discover: "true"
-    requires: [data-group, ":freshrss:user"]
-    required_by: [":freshrss"]
-    extends: [":utils:user-in-group"]
-    environment:
-      USER_NAME: freshrss
-      GROUP_NAME: data
-
   vpn-wireguard:
     required_by: [wireguard]
     requires: [vpn]
