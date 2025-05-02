@@ -37,11 +37,10 @@ def get_packages() -> list[str]:
         check=True,
     )
     output: str = cmd.stdout.decode("utf-8")
-    return [
-        package.strip()
-        for package in list(dict.fromkeys(output.split(" ")))
-        if package.strip() != ""
+    packages = [
+        package.strip() for package in output.split(" ") if package.strip() != ""
     ]
+    return list(dict.fromkeys(packages))
 
 
 main()
