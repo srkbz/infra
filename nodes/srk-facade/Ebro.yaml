@@ -10,6 +10,7 @@ imports:
   base-dirs: { from: "../../modules/base-dirs" }
   wireguard: { from: "../../modules/wireguard" }
   cron: { from: "../../modules/cron" }
+  docker: { from: "../../modules/docker" }
 
 tasks:
   default:
