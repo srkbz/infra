@@ -14,12 +14,14 @@ imports:
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
   dropbox: { from: "../../modules/dropbox" }
+  caddy: { from: "../../modules/caddy" }
 
   freshrss:
     from: ../../modules/freshrss
     environment:
       FRESHRSS_HOSTS: "192.168.1.7,10.10.0.1"
       FRESHRSS_HOME: "${DATA_DIR}/apps/freshrss"
+      FRESHRSS_DOMAIN: "http://rss.app.srk.bz"
 
 tasks:
   default:

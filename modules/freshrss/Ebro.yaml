@@ -1,14 +1,17 @@
 environment:
+  FRESHRSS_CACHE: "${CACHE_DIR}/freshrss"
   FRESHRSS_HOME: '${FRESHRSS_HOME:-"${STATE_DIR}/freshrss"}'
-  FRESHRSS_HOSTS: "${FRESHRSS_HOSTS:-127.0.0.1}"
+  FRESHRSS_HOSTS: "${FRESHRSS_HOSTS:-}"
   FRESHRSS_PORT: "${FRESHRSS_PORT:-random}"
   FRESHRSS_PORT_FILE: "${FRESHRSS_HOME}/PORT"
+  FRESHRSS_DOMAIN: "${FRESHRSS_DOMAIN:-}"
+  FRESHRSS_CADDYFILE: "${FRESHRSS_CACHE}/freshrss.caddyfile"
 
 tasks:
   default:
     labels:
       discover: "true"
-    requires: [":docker", home, data, port]
+    requires: [":docker", home, data, port, caddy]
     script: |
       ./docker-compose.py > "${FRESHRSS_HOME}/docker-compose.yml"
       cd "${FRESHRSS_HOME}"
@@ -22,6 +25,27 @@ tasks:
         test -f "docker-compose.yml"
         active_containers="$(docker compose ps -q)"
         [ "$active_containers" != "" ]
+
+  caddy:
+    labels:
+      caddy.conf: "${FRESHRSS_CADDYFILE}"
+    requires: [port]
+    script: |
+      if [ "${FRESHRSS_DOMAIN:-}" == "" ]; then
+        echo "" > "${FRESHRSS_CADDYFILE}"
+      else
+        FRESHRSS_PORT="$(cat "$FRESHRSS_PORT_FILE")"
+        export FRESHRSS_PORT
+        mkdir -p "${FRESHRSS_CACHE}"
+        cat freshrss.caddyfile | envsubst > "${FRESHRSS_CADDYFILE}"
+      fi
+    when:
+      output_changes: |
+        echo "${FRESHRSS_DOMAIN:-}"
+        FRESHRSS_PORT="$(cat "$FRESHRSS_PORT_FILE")"
+        export FRESHRSS_PORT
+        cat freshrss.caddyfile | envsubst
+      check_fails: test -f "${FRESHRSS_CADDYFILE}"
 
   port:
     extends: [":port-registry:reserve"]

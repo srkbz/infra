@@ -5,7 +5,7 @@ import os
 FRESHRSS_HOME = os.environ.get("FRESHRSS_HOME")
 FRESHRSS_HOSTS = os.environ.get("FRESHRSS_HOSTS")
 
-hosts = FRESHRSS_HOSTS.split(",")
+hosts = [h for h in [*FRESHRSS_HOSTS.split(","), "127.0.0.1"] if h != ""]
 with open(os.environ.get("FRESHRSS_PORT_FILE"), "r") as f:
     port = f.read().strip()
 

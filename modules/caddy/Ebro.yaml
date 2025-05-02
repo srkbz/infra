@@ -1,5 +1,5 @@
 environment:
-  CADDY_VERSION: "2.9.1"
+  CADDY_VERSION: '${CADDY_VERSION:-"2.10.0"}'
   CADDY_CONF: /etc/caddy/Caddyfile
   CADDY_CONF_DIR: /etc/caddy/conf.d
   CADDY_CACHE_DIR: "${CACHE_DIR}/caddy"
