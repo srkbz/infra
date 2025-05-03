@@ -12,15 +12,19 @@ class ShellResult:
 
 
 def shell(
-    script, *, check: bool = True, capture: bool = False, captureErr: bool = False
+    script,
+    *,
+    check: bool = True,
+    captureStdout: bool = False,
+    captureStderr: bool = False
 ):
     args = [*SHELL, script]
-    stdout = subprocess.PIPE if capture else None
-    stderr = subprocess.PIPE if captureErr else None
+    stdout = subprocess.PIPE if captureStdout else None
+    stderr = subprocess.PIPE if captureStderr else None
     result = subprocess.run(args, check=check, stdin=None, stdout=stdout, stderr=stderr)
 
     return ShellResult(
         exit_code=result.returncode,
-        stdout=result.stdout.decode("utf-8") if capture else None,
-        stderr=result.stderr.decode("utf-8") if captureErr else None,
+        stdout=result.stdout.decode("utf-8") if captureStdout else None,
+        stderr=result.stderr.decode("utf-8") if captureStderr else None,
     )

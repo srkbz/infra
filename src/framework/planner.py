@@ -29,6 +29,9 @@ def planner(tasks: list[Task]):
                     if task in dependencies[t]:
                         dependencies[t].remove(task)
 
+        if not tasks_to_pop:
+            raise Exception("Cyclic dependency")
+
         for task in tasks_to_pop:
             dependencies.pop(task)
 
