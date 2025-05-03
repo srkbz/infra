@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from os import makedirs
-from os.path import join
+from os.path import join, isfile
 
-from framework import get_runner, task, shell
+from framework import get_runner, task
+from framework.utils.shell import shell
+from framework.utils.fs import read_file, remove_all, write_file
 from modules.base_dirs import get_base_dirs
 
 
@@ -10,6 +12,7 @@ def setup_apt():
 
     cache_dir = join(get_base_dirs().cache_dir, "apt")
     metapackage_dir = join(cache_dir, "metapackage")
+    metapackage_deb = metapackage_dir + ".deb"
     debian_dir = join(metapackage_dir, "DEBIAN")
     control_file = join(debian_dir, "control")
 
@@ -27,21 +30,14 @@ def setup_apt():
         ]
         control = "\n".join(control_lines) + "\n"
 
-        try:
-            with open(control_file, "r") as f:
-                if control == f.read():
-                    return
-        except FileNotFoundError:
-            pass
-
+        if read_file(control_file) == control and isfile(metapackage_deb):
+            return
         yield
 
-        shell(f"rm -rf '{metapackage_dir}'")
-        makedirs(debian_dir)
-        with open(control_file, "w") as f:
-            f.write(control)
+        remove_all(metapackage_dir)
+        write_file(control_file, control)
 
-        shell(f"dpkg-deb --build '{metapackage_dir}' '{metapackage_dir}.deb'")
+        shell(f"dpkg-deb --build '{metapackage_dir}' '{metapackage_deb}'")
 
 
 @dataclass(frozen=True)
