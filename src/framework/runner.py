@@ -1,4 +1,5 @@
 import sys
+import inspect
 from framework.planner import planner
 from framework.task import Task
 
@@ -20,7 +21,7 @@ class Logger:
             line.append("[" + task + "] ")
         line.append(message)
         line.append("\x1b[0m\n")
-        sys.stdout.write("".join(line))
+        sys.stderr.write("".join(line))
 
 
 log = Logger()
@@ -39,5 +40,17 @@ class Runner:
 
     def run(self):
         for task in planner(self.__tasks):
-            log.info(task=task_name(task), message="running")
-            task.func()
+
+            if inspect.isgeneratorfunction(task.func):
+                gen = task.func()
+                try:
+                    next(gen)
+                except StopIteration:
+                    log.info(task=task_name(task), message="skipping")
+                else:
+                    log.warn(task=task_name(task), message="running")
+                    for _ in gen:
+                        pass
+            else:
+                log.warn(task=task_name(task), message="running")
+                task.func()
