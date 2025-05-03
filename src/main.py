@@ -1,4 +1,4 @@
-from framework import task, runner
+from framework import runner, task
 
 
 with runner():

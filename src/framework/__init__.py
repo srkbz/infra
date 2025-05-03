@@ -1,26 +1,8 @@
 from contextvars import ContextVar
 from contextlib import contextmanager
-from dataclasses import dataclass
-from typing import Self
 
-
-@dataclass
-class Task:
-    func: callable
-    requires: list[Self]
-    required_by: list[Self]
-
-
-class Runner:
-    def __init__(self):
-        self.__tasks: list[Task] = []
-
-    def add_task(self, task: Task):
-        self.__tasks.append(task)
-
-    def run(self):
-        for task in self.__tasks:
-            task.func()
+from framework.runner import Runner
+from framework.task import Task
 
 
 __runner = ContextVar[Runner]("runner", default=None)
