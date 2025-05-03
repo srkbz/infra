@@ -1,8 +1,8 @@
 from os import getcwd
 from os.path import join
 
-from framework import runner, task
-from modules.apt import AptPackages, install_apt_packages, setup_apt
+from framework import runner
+from modules.apt import install_apt_packages, setup_apt
 from modules.base_dirs import base_dirs
 
 CACHE_DIR = join(getcwd(), ".cache")
