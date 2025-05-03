@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import shlex
 import subprocess
 
 SHELL = ["/bin/bash", "-c"]
