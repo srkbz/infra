@@ -2,9 +2,10 @@ from dataclasses import dataclass
 from os.path import join, isfile
 
 from framework import get_runner, task
+from framework.utils.context import get_context_value
 from framework.utils.shell import shell
 from framework.utils.fs import read_file, remove_all, write_file
-from modules.base_dirs import get_base_dirs
+from modules.base_dirs import BaseDirs
 
 
 def install_apt_packages(packages: list[str]):
@@ -16,7 +17,7 @@ def install_apt_packages(packages: list[str]):
 
 def setup_apt():
 
-    cache_dir = join(get_base_dirs().cache_dir, "apt")
+    cache_dir = join(get_context_value(BaseDirs).cache_dir, "apt")
     metapackage_dir = join(cache_dir, "metapackage")
     metapackage_deb = metapackage_dir + ".deb"
     debian_dir = join(metapackage_dir, "DEBIAN")
