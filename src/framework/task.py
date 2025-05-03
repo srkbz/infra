@@ -5,8 +5,8 @@ from typing import Self
 @dataclass(kw_only=True, frozen=True)
 class Task:
     func: callable
-    requires: set[Self]
-    required_by: set[Self]
+    requires: list[Self]
+    required_by: list[Self]
 
     def __key(self):
         return (self.func,)

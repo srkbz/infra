@@ -3,16 +3,16 @@ from framework.task import Task
 
 def planner(tasks: list[Task]):
     result: list[Task] = []
-    dependencies: dict[Task, list[Task]] = {}
+    dependencies: dict[Task, set[Task]] = {}
 
     for task in tasks:
-        dependencies[task] = []
+        dependencies[task] = set()
 
     for task in tasks:
         for subtask in task.requires:
-            dependencies[task].append(subtask)
+            dependencies[task].add(subtask)
         for subtask in task.required_by:
-            dependencies[subtask].append(task)
+            dependencies[subtask].add(task)
 
     while True:
         if not dependencies:
