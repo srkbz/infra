@@ -58,13 +58,13 @@ def task_name(task: Task):
 
 class Runner:
     def __init__(self):
-        self.__tasks: list[Task] = []
+        self.tasks: list[Task] = []
 
     def add_task(self, task: Task):
-        self.__tasks.append(task)
+        self.tasks.append(task)
 
     def run(self):
-        for task in planner(self.__tasks):
+        for task in planner(self.tasks):
 
             if inspect.isgeneratorfunction(task.func):
                 gen = task.func()

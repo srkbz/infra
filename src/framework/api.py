@@ -18,6 +18,10 @@ def runner():
     __runner.reset(token)
 
 
+def get_runner():
+    return __runner.get()
+
+
 def task(
     requires: list[callable] = [],
     required_by: list[callable] = [],
@@ -25,7 +29,7 @@ def task(
 ):
     def decorator(func):
         task = Task(func=func, requires=requires, required_by=required_by, title=title)
-        __runner.get().add_task(task)
+        get_runner().add_task(task)
 
         if inspect.ismethod(func):
             setattr(func.__self__, func.__name__, task)
