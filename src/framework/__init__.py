@@ -17,7 +17,7 @@ def runner():
     __runner.reset(token)
 
 
-def task(requires: list[callable] = [], required_by: list[callable] = []):
+def task(requires: set[callable] = set(), required_by: set[callable] = set()):
     def decorator(func):
         task = Task(func=func, requires=requires, required_by=required_by)
         __runner.get().add_task(task)
