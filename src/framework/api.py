@@ -21,10 +21,10 @@ def runner():
 def task(
     requires: list[callable] = [],
     required_by: list[callable] = [],
-    tags: dict[str, str] | None = None,
+    title: str | None = None,
 ):
     def decorator(func):
-        task = Task(func=func, requires=requires, required_by=required_by, tags=tags)
+        task = Task(func=func, requires=requires, required_by=required_by, title=title)
         __runner.get().add_task(task)
 
         if inspect.ismethod(func):

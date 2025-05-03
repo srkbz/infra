@@ -7,7 +7,7 @@ class Task:
     func: callable
     requires: list[Self]
     required_by: list[Self]
-    tags: dict[str, str]
+    title: str | None
 
     def __key(self):
         return (self.func,)

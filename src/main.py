@@ -1,20 +1,21 @@
 from framework import runner, task, shell
 
 
+class Something:
+
+    def __init__(self, message: str):
+        self.message = message
+
+        task(title=message)(self.hehe)
+
+    def do_something(self):
+        print(self.message)
+
+    def hehe(self):
+        self.do_something()
+
+
 with runner():
-
-    class Something:
-
-        def __init__(self, message: str):
-            self.message = message
-
-            task(tags={"message": message})(self.hehe)
-
-        def do_something(self):
-            print(self.message)
-
-        def hehe(self):
-            self.do_something()
 
     something = Something("something!")
     something_else = Something("something else!")
