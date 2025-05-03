@@ -1,19 +1,26 @@
 from contextvars import ContextVar
 from contextlib import contextmanager
+from dataclasses import dataclass
+from typing import Self
 
-from framework.tags import task_tag, TaskTagData
+
+@dataclass
+class Task:
+    func: callable
+    requires: list[Self]
+    required_by: list[Self]
 
 
 class Runner:
     def __init__(self):
-        self.__tasks = []
+        self.__tasks: list[Task] = []
 
-    def add_task(self, func):
-        self.__tasks.append(func)
+    def add_task(self, task: Task):
+        self.__tasks.append(task)
 
     def run(self):
         for task in self.__tasks:
-            task()
+            task.func()
 
 
 __runner = ContextVar[Runner]("runner", default=None)
@@ -30,8 +37,8 @@ def runner():
 
 def task(requires: list[callable] = [], required_by: list[callable] = []):
     def decorator(func):
-        task_tag.tag(func, TaskTagData(requires=requires, required_by=required_by))
-        __runner.get().add_task(func)
-        return func
+        task = Task(func=func, requires=requires, required_by=required_by)
+        __runner.get().add_task(task)
+        return task
 
     return decorator

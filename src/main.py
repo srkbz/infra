@@ -7,6 +7,6 @@ with runner():
     def hello_world():
         print("Hello world")
 
-    @task(required_by=hello_world)
+    @task(required_by=[hello_world])
     def first():
         print("This goes first")
