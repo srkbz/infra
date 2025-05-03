@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from os import makedirs
 from os.path import join, isfile
 
 from framework import get_runner, task
