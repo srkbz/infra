@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from framework import runner, task, shell, tag, get_runner
+from framework import runner, task, get_runner, shell
 
 
 class Something:
@@ -7,9 +7,7 @@ class Something:
     def __init__(self, message: str):
         self.message = message
 
-        task(title=message)(self.hehe)
-
-        tag(AptData(["ssh"]))(self.hehe)
+        task(title=message, tags=[AptData(["ssh"])])(self.hehe)
 
     def do_something(self):
         print(self.message)
@@ -36,8 +34,7 @@ with runner():
     def first():
         print("This goes first")
 
-    @tag(AptData(["vim"]))
-    @task(requires=[hello_world])
+    @task(requires=[hello_world], tags=[AptData(["vim"])])
     def last():
         print("Bye!")
 

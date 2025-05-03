@@ -24,13 +24,19 @@ def get_runner():
 
 
 def task(
+    *,
     requires: list[callable] = [],
     required_by: list[callable] = [],
+    tags: list[Any] = [],
     title: str | None = None,
 ):
     def decorator(func):
         task = Task(
-            func=func, requires=requires, required_by=required_by, title=title, tags={}
+            func=func,
+            requires=requires,
+            required_by=required_by,
+            title=title,
+            tags=tags,
         )
         get_runner().add_task(task)
 
@@ -38,16 +44,6 @@ def task(
             setattr(func.__self__, func.__name__, task)
             return None
 
-        return task
-
-    return decorator
-
-
-def tag(data: Any):
-    def decorator(task: Task):
-        if data.__class__ not in task.tags:
-            task.tags[data.__class__] = []
-        task.tags[data.__class__].append(data)
         return task
 
     return decorator

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self, TypeVar
+from typing import Any, Self, TypeVar
 
 T = TypeVar("T")
 
@@ -9,7 +9,7 @@ class Task:
     func: callable
     requires: list[Self]
     required_by: list[Self]
-    tags: dict[type, list[str]]
+    tags: list[Any]
     title: str | None
 
     def __key(self):
@@ -24,6 +24,4 @@ class Task:
         return NotImplemented
 
     def get_tags(self, klazz: type[T]) -> list[T]:
-        if klazz not in self.tags:
-            return []
-        return self.tags[klazz]
+        return [tag for tag in self.tags if isinstance(tag, klazz)]
