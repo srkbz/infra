@@ -1,7 +1,7 @@
 from os import getcwd
 from os.path import join
 
-from framework import runner, task, get_runner, shell
+from framework import runner, task
 from modules.apt import AptPackages, setup_apt
 from modules.base_dirs import base_dirs
 
