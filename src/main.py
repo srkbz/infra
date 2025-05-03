@@ -1,11 +1,11 @@
-from framework import runner, task
+from framework import runner, shell, task
 
 
 with runner():
 
     @task()
     def hello_world():
-        print("Hello world")
+        shell("echo 'Hello world!'")
 
     @task(required_by=[hello_world])
     def first():
