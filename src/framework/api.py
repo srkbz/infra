@@ -30,7 +30,7 @@ def task(
     tags: list[Any] = [],
     title: str | None = None,
 ):
-    def decorator(func):
+    def decorator(func) -> Task:
         task = Task(
             func=func,
             requires=requires,
@@ -42,7 +42,6 @@ def task(
 
         if inspect.ismethod(func):
             setattr(func.__self__, func.__name__, task)
-            return None
 
         return task
 
