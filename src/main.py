@@ -7,7 +7,8 @@ with runner():
 
         def __init__(self, message: str):
             self.message = message
-            self.hehe = task(tags={"message": message})(self.hehe)
+
+            task(tags={"message": message})(self.hehe)
 
         def do_something(self):
             print(self.message)

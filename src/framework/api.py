@@ -1,3 +1,4 @@
+import inspect
 from contextvars import ContextVar
 from contextlib import contextmanager
 
@@ -23,10 +24,13 @@ def task(
     tags: dict[str, str] | None = None,
 ):
     def decorator(func):
-        task = Task(
-            func=func, requires=requires, required_by=required_by, tags=tags
-        )
+        task = Task(func=func, requires=requires, required_by=required_by, tags=tags)
         __runner.get().add_task(task)
+
+        if inspect.ismethod(func):
+            setattr(func.__self__, func.__name__, task)
+            return None
+
         return task
 
     return decorator
