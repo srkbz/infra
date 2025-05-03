@@ -6,19 +6,51 @@ from framework.task import Task
 
 class Logger:
 
-    def info(self, *, task: str | None = None, message: str):
-        self.line("32", task, message)
+    def info(
+        self,
+        *,
+        task: str | None = None,
+        tags: dict[str, str] | None = None,
+        message: str,
+    ):
+        self.line("32", task, tags, message)
 
-    def warn(self, *, task: str | None = None, message: str):
-        self.line("33", task, message)
+    def warn(
+        self,
+        *,
+        task: str | None = None,
+        tags: dict[str, str] | None = None,
+        message: str,
+    ):
+        self.line("33", task, tags, message)
 
-    def error(self, *, task: str | None = None, message: str):
-        self.line("31", task, message)
+    def error(
+        self,
+        *,
+        task: str | None = None,
+        tags: dict[str, str] | None = None,
+        message: str,
+    ):
+        self.line("31", task, tags, message)
 
-    def line(self, color: str, task: str | None, message: str):
+    def line(
+        self,
+        color: str,
+        task: str | None,
+        tags: dict[str, str] | None,
+        message: str,
+    ):
         line = ["\x1b[1;" + color + "m███ "]
         if task is not None:
             line.append("[" + task + "] ")
+        if tags is not None:
+            line.append("[")
+            for i, key in enumerate(tags):
+                val = tags[key]
+                line.append(f"{key}={val}")
+                if i < (len(tags) - 1):
+                    line.append(" ")
+            line.append("] ")
         line.append(message)
         line.append("\x1b[0m\n")
         sys.stderr.write("".join(line))
@@ -46,11 +78,21 @@ class Runner:
                 try:
                     next(gen)
                 except StopIteration:
-                    log.info(task=task_name(task), message="skipping")
+                    log.info(
+                        task=task_name(task),
+                        tags=task.tags,
+                        message="skipping",
+                    )
                 else:
-                    log.warn(task=task_name(task), message="running")
+                    log.warn(
+                        task=task_name(task),
+                        tags=task.tags,
+                        message="running",
+                    )
                     for _ in gen:
                         pass
             else:
-                log.warn(task=task_name(task), message="running")
+                log.warn(
+                    task=task_name(task), tags=task.tags, message="running"
+                )
                 task.func()

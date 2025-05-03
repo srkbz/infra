@@ -17,9 +17,15 @@ def runner():
     __runner.reset(token)
 
 
-def task(requires: list[callable] = [], required_by: list[callable] = []):
+def task(
+    requires: list[callable] = [],
+    required_by: list[callable] = [],
+    tags: dict[str, str] | None = None,
+):
     def decorator(func):
-        task = Task(func=func, requires=requires, required_by=required_by)
+        task = Task(
+            func=func, requires=requires, required_by=required_by, tags=tags
+        )
         __runner.get().add_task(task)
         return task
 
