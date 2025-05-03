@@ -1,6 +1,7 @@
 import inspect
 from contextvars import ContextVar
 from contextlib import contextmanager
+from typing import Any
 
 from framework.runner import Runner
 from framework.task import Task
@@ -28,13 +29,25 @@ def task(
     title: str | None = None,
 ):
     def decorator(func):
-        task = Task(func=func, requires=requires, required_by=required_by, title=title)
+        task = Task(
+            func=func, requires=requires, required_by=required_by, title=title, tags={}
+        )
         get_runner().add_task(task)
 
         if inspect.ismethod(func):
             setattr(func.__self__, func.__name__, task)
             return None
 
+        return task
+
+    return decorator
+
+
+def tag(data: Any):
+    def decorator(task: Task):
+        if data.__class__ not in task.tags:
+            task.tags[data.__class__] = []
+        task.tags[data.__class__].append(data)
         return task
 
     return decorator

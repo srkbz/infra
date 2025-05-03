@@ -1,4 +1,5 @@
-from framework import runner, task, shell
+from dataclasses import dataclass
+from framework import runner, task, shell, tag, get_runner
 
 
 class Something:
@@ -8,11 +9,18 @@ class Something:
 
         task(title=message)(self.hehe)
 
+        tag(AptData(["ssh"]))(self.hehe)
+
     def do_something(self):
         print(self.message)
 
     def hehe(self):
         self.do_something()
+
+
+@dataclass(frozen=True)
+class AptData:
+    packages: list[str]
 
 
 with runner():
@@ -28,6 +36,25 @@ with runner():
     def first():
         print("This goes first")
 
+    @tag(AptData(["vim"]))
     @task(requires=[hello_world])
     def last():
         print("Bye!")
+
+    tasks_with_apt = [task for task in get_runner().tasks if task.get_tags(AptData)]
+    packages_to_install = list(
+        dict.fromkeys(
+            [
+                package
+                for task in tasks_with_apt
+                for tag in task.get_tags(AptData)
+                for package in tag.packages
+            ]
+        )
+    )
+
+    @task(required_by=tasks_with_apt)
+    def apt():
+        print("Installing shiet with APT")
+        for package in packages_to_install:
+            print(package)
