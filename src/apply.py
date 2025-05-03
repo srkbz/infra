@@ -2,19 +2,17 @@ from os import getcwd
 from os.path import join
 
 from framework import runner, task
-from modules.apt import AptPackages, setup_apt
+from modules.apt import AptPackages, install_apt_packages, setup_apt
 from modules.base_dirs import base_dirs
+
+CACHE_DIR = join(getcwd(), ".cache")
+STATE_DIR = join(getcwd(), ".state")
 
 APT_PACKAGES = ["vim"]
 
 with runner():
-    with base_dirs(
-        cache_dir=join(getcwd(), ".cache"), state_dir=join(getcwd(), ".state")
-    ):
+    with base_dirs(cache_dir=CACHE_DIR, state_dir=STATE_DIR):
 
-        @task(tags=[AptPackages(APT_PACKAGES)])
-        def default():
-            return
-            yield
+        install_apt_packages(APT_PACKAGES)
 
         setup_apt()

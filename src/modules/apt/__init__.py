@@ -7,6 +7,13 @@ from framework.utils.fs import read_file, remove_all, write_file
 from modules.base_dirs import get_base_dirs
 
 
+def install_apt_packages(packages: list[str]):
+    @task(tags=[AptPackages(packages)], title=" ".join(packages))
+    def default():
+        return
+        yield
+
+
 def setup_apt():
 
     cache_dir = join(get_base_dirs().cache_dir, "apt")
