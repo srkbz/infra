@@ -13,3 +13,9 @@ backups in vault
     vault/restic/freshrss.json
 caddy config in facade
     facade/caddy/freshrss.caddyfile
+
+
+
+Features required:
+- `for_each` in modules for repeating the module based on scripts
+- Scripts in `requires` for deciding requirements based on script output
