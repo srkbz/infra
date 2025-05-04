@@ -15,6 +15,7 @@ imports:
   docker: { from: "../../modules/docker" }
   dropbox: { from: "../../modules/dropbox" }
   caddy: { from: "../../modules/caddy" }
+  restic: { from: "../../modules/restic" }
 
   freshrss:
     from: ../../modules/freshrss

@@ -1,16 +1,16 @@
 environment:
-  RESTIC_VERSION: "0.17.3"
-  RESTIC_ROOT: ${EBRO_ROOT}/.cache/restic
+  RESTIC_VERSION: "${RESTIC_VERSION:-0.18.0}"
+  RESTIC_ROOT: ${CACHE_DIR}/restic
 
 tasks:
   default:
     labels:
-      autorequire: "true"
-    requires: [":secrets", install]
+      discover: "true"
+    requires: [install]
 
   install:
     script: |
-      rm -rf "$RESTIC_ROOT"/bin/*
+      rm -rf "{$RESTIC_ROOT}/bin"
       RESTIC_VARIANT="$(./restic-variant.sh)"
 
       curl --fail --location --create-dirs --output "$RESTIC_ROOT/bin/restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2" \
@@ -18,14 +18,14 @@ tasks:
 
       (
         cd "$RESTIC_ROOT/bin"
-        cat "${EBRO_TASK_WORKING_DIRECTORY}/SHA256SUMS" | grep "${RESTIC_VARIANT}" | sha256sum --check
+        cat "${EBRO_TASK_WORKING_DIRECTORY}/SHA256SUMS_${RESTIC_VERSION}" | grep "${RESTIC_VARIANT}" | sha256sum --check
         bzip2 -d "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}.bz2"
         mv "restic_${RESTIC_VERSION}_${RESTIC_VARIANT}" restic
         chmod +x restic
       )
     when:
       output_changes: |
-        echo "${RESTIC_VERSION}" && cat SHA256SUMS
+        echo "${RESTIC_VERSION}" && cat "SHA256SUMS_${RESTIC_VERSION}"
       check_fails: |
         test -f "$RESTIC_ROOT/bin/restic"
         restic_version_info="$("$RESTIC_ROOT/bin/restic" version)"
