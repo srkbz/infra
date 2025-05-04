@@ -1,0 +1,15 @@
+freshrss port assignment
+    vault/port-registry/freshrss.json
+        -> :port-registry:freshrss
+docker compose project in vault (depends on port assignment)
+    vault/docker/compose-projects/freshrss/docker-compose.yml
+    vault/docker/compose-projects/freshrss/config.json
+        {"ports-to-env": {"freshrss": "PORT"}}
+caddy config in vault (depends on port assignment)
+    vault/caddy/freshrss/Caddyfile
+    vault/caddy/freshrss/config.json
+        {"ports-to-env": {"freshrss": "PORT"}}
+backups in vault
+    vault/restic/freshrss.json
+caddy config in facade
+    facade/caddy/freshrss.caddyfile
