@@ -31,24 +31,24 @@ tasks:
         restic_version_info="$("$RESTIC_ROOT/bin/restic" version)"
         [[ "$restic_version_info" == "restic ${RESTIC_VERSION} "* ]]
 
-  operation:
-    abstract: true
-    extends: [":secrets:op"]
-    requires: [install]
-    labels:
-      secret.APP_KEY: "b2:APP_KEY"
-      secret.BASE_URL: "b2:BASE_URL"
-      secret.BUCKET_NAME: "b2:BUCKET_NAME"
-      secret.KEY_ID: "b2:KEY_ID"
-      secret.TELEGRAM_BOT_TOKEN: "telegram:BOT_TOKEN"
-      secret.TELEGRAM_CHAT_ID: "telegram:CHAT_ID"
-    environment:
-      RESTIC_BIN: "${RESTIC_ROOT}/bin/restic"
-      PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
-    script: |
-      export APP_KEY
-      export BASE_URL
-      export BUCKET_NAME
-      export KEY_ID
-      export TELEGRAM_BOT_TOKEN
-      export TELEGRAM_CHAT_ID
+  # operation:
+  #   abstract: true
+  #   extends: [":secrets:op"]
+  #   requires: [install]
+  #   labels:
+  #     secret.APP_KEY: "b2:APP_KEY"
+  #     secret.BASE_URL: "b2:BASE_URL"
+  #     secret.BUCKET_NAME: "b2:BUCKET_NAME"
+  #     secret.KEY_ID: "b2:KEY_ID"
+  #     secret.TELEGRAM_BOT_TOKEN: "telegram:BOT_TOKEN"
+  #     secret.TELEGRAM_CHAT_ID: "telegram:CHAT_ID"
+  #   environment:
+  #     RESTIC_BIN: "${RESTIC_ROOT}/bin/restic"
+  #     PATH: "${EBRO_TASK_WORKING_DIRECTORY}/bin:${PATH}"
+  #   script: |
+  #     export APP_KEY
+  #     export BASE_URL
+  #     export BUCKET_NAME
+  #     export KEY_ID
+  #     export TELEGRAM_BOT_TOKEN
+  #     export TELEGRAM_CHAT_ID
