@@ -46,6 +46,10 @@ def setup_apt():
 
         shell(f"dpkg-deb --build '{metapackage_dir}' '{metapackage_deb}'")
 
+    @install_apt_packages.when_check_fails
+    def _():
+        assert 1 == 1
+
 
 @dataclass(frozen=True)
 class AptPackages:
