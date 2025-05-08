@@ -30,7 +30,7 @@ modules:
 
       target-commit:
         requires: [home]
-        script: ./scripts/get-target-commit.sh
+        script: ./scripts/update-target-commit.sh
         when:
           check_fails: |
             test -f "${SITE_TARGET_COMMIT}"
