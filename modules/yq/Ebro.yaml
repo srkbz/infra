@@ -1,0 +1,13 @@
+environment:
+  YQ_VERSION: "4.45.2"
+  YQ_URL: "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64"
+
+tasks:
+  default:
+    labels:
+      discover: "true"
+    script: |
+      curl -Lo yq /usr/local/bin/yq
+    when:
+      check_fails: test -f /usr/local/bin/yq
+      output_changes: echo "$YQ_URL"

@@ -4,6 +4,7 @@ environment:
   DATA_DIR: "/data"
 
 imports:
+  yq: { from: "../../modules/yq" }
   utils: { from: "../../modules/utils" }
   apt: { from: "../../modules/apt" }
   discover: { from: "../../modules/discover" }
