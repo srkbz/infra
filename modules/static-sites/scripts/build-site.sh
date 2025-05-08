@@ -6,9 +6,9 @@ build_workspace="${SITE_STATE}/builds/${build_id}"
 
 target_commit="$(cat "${SITE_TARGET_COMMIT}")"
 
-repository="$(yq -r '.repository' "${SITE_CONFIG}")"
-build_script="$(yq -r '.build.script // ""' "${SITE_CONFIG}")"
-build_output="$(yq -r '.build.output // ""' "${SITE_CONFIG}")"
+repository="$(yq -re '.repository' "${SITE_CONFIG}")"
+build_script="$(yq -re '.build.script // ""' "${SITE_CONFIG}")"
+build_output="$(yq -re '.build.output // ""' "${SITE_CONFIG}")"
 
 mkdir -p "${build_workspace}"
 
