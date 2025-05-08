@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -xeuo pipefail
 
-eval "$("${EBRO_TASK_WORKING_DIRECTORY}/scripts/config.py")"
-
 build_id="$(openssl rand -hex 16)"
 build_workspace="${SITE_STATE}/builds/${build_id}"
+
+repository="$(yq -r '.repository' "${SITE_CONFIG}")"
 
 mkdir -p "${build_workspace}"
 
