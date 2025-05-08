@@ -1,12 +1,21 @@
 environment:
+  BIN_DIR: "${BIN_DIR}"
   STATE_DIR: "${STATE_DIR}"
   CACHE_DIR: "${CACHE_DIR}"
 
 tasks:
   default:
     requires:
+      - bin-dir
       - state-dir
       - cache-dir
+
+  bin-dir:
+    extends: [":utils:dir"]
+    environment:
+      DIR: "${BIN_DIR}"
+      PERM: "700"
+      OWNERS: "root:root"
 
   state-dir:
     extends: [":utils:dir"]

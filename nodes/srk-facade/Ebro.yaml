@@ -1,7 +1,9 @@
 environment:
+  BIN_DIR: "${EBRO_ROOT}/.bin"
   STATE_DIR: "${EBRO_ROOT}/.state"
   CACHE_DIR: "${EBRO_ROOT}/.cache"
   DATA_DIR: "/data"
+  PATH: "${BIN_DIR}:${PATH}"
 
 imports:
   yq: { from: "../../modules/yq" }

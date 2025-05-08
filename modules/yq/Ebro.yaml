@@ -7,10 +7,9 @@ tasks:
     labels:
       discover: "true"
     script: |
-      curl -Lo /usr/local/bin/yq "$YQ_URL"
-      chmod +x /usr/local/bin/yq
+      curl -Lo "${BIN_DIR}/yq" "$YQ_URL"
+      chmod +x "${BIN_DIR}/yq"
     when:
       check_fails: |
-        test -f /usr/local/bin/yq
-        [ "$(yq --version)" == "yq (https://github.com/mikefarah/yq/) version v${YQ_VERSION}" ]
-      output_changes: echo "$YQ_URL"
+        test -f "${BIN_DIR}/yq"
+        [ "$("${BIN_DIR}/yq" --version)" == "yq (https://github.com/mikefarah/yq/) version v${YQ_VERSION}" ]
