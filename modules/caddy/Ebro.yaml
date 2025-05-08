@@ -71,7 +71,7 @@ tasks:
 modules:
   config:
     for_each: |
-      ls "${EBRO_ROOT}/config/caddy"
+      test -d "${EBRO_ROOT}/config/caddy" && ls "${EBRO_ROOT}/config/caddy"
 
     tasks:
       caddyfile:
