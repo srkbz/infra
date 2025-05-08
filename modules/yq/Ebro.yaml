@@ -7,7 +7,8 @@ tasks:
     labels:
       discover: "true"
     script: |
-      curl -Lo yq /usr/local/bin/yq
+      curl -Lo /usr/local/bin/yq "$YQ_URL"
+      chmod +x /usr/local/bin/yq
     when:
       check_fails: test -f /usr/local/bin/yq
       output_changes: echo "$YQ_URL"
