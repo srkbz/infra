@@ -8,12 +8,15 @@ modules:
       ls "${EBRO_ROOT}/config/static-sites"
 
     environment:
-      SITE_HOME: "${EBRO_ROOT}/config/static-sites/${EBRO_EACH}"
-      SITE_STATE: "${SITES_STATE}/${EBRO_EACH}"
+      SITE_DOMAIN: "${EBRO_EACH}"
+      SITE_HOME: "${EBRO_ROOT}/config/static-sites/${SITE_DOMAIN}"
+      SITE_STATE: "${SITES_STATE}/${SITE_DOMAIN}"
+      SITE_CACHE: "${SITES_CACHE}/${SITE_DOMAIN}"
       SITE_LIVE: "${SITE_STATE}/live"
       SITE_BUILDS: "${SITE_STATE}/builds"
       SITE_LIVE_COMMIT: "${SITE_STATE}/LIVE_COMMIT"
       SITE_TARGET_COMMIT: "${SITE_STATE}/TARGET_COMMIT"
+      SITE_CADDYFILE: "${SITE_CACHE}/Caddyfile"
 
     tasks:
       default:
@@ -47,32 +50,16 @@ modules:
             live_commit="$(cat "${SITE_LIVE_COMMIT}")"
             [ "$target_commit" == "$live_commit" ]
 
-# tasks:
-#   default:
-#     labels:
-#       discover: "true"
-#     requires: [site, webhook]
-
-#   target-commit:
-#     requires: [home]
-#     script: ./update-target-commit.sh
-#     when:
-#       check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
-
-#   caddy:
-#     labels:
-#       caddy.conf: "${SITE_CACHE}/site.caddyfile"
-#     script: |
-#       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
-#       export FILE_SERVER_FLAGS
-#       mkdir -p "${SITE_CACHE}"
-#       cat Caddyfile | envsubst > "${SITE_CACHE}/site.caddyfile"
-#     when:
-#       check_fails: test -f "${SITE_CACHE}/site.caddyfile"
-#       output_changes: |
-#         FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
-#         export FILE_SERVER_FLAGS
-#         cat Caddyfile
+      caddy:
+        labels:
+          caddy.conf: "${SITE_CADDYFILE}"
+        script: |
+          mkdir -p "$(dirname "${SITE_CADDYFILE}")"
+          cat Caddyfile | envsubst > "${SITE_CADDYFILE}"
+        when:
+          check_fails: test -f "${SITE_CADDYFILE}"
+          output_changes: |
+            cat Caddyfile | envsubst
 
 #   webhook:
 #     extends: [":secrets:op", ":secrets:when-secrets-change"]
