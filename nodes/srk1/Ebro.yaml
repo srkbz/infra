@@ -48,48 +48,6 @@ imports:
       SHIORI_HOST: "10.10.0.1"
       SHIORI_PORT: "3002"
 
-  static-site-sirikon.me:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: sirikon.me
-      REPOSITORY: https://github.com/sirikon/sirikon.me.git
-      BRANCH: master
-
-  static-site-osoondo.com:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: osoondo.com
-      REPOSITORY: https://github.com/sirikon/osoondo.com.git
-      BRANCH: master
-
-  static-site-egin.sirikon.me:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: egin.sirikon.me
-      REPOSITORY: https://github.com/sirikon/egin.git
-      BRANCH: master
-
-  static-site-astenagusia.eus:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: astenagusia.eus
-      REPOSITORY: https://github.com/sirikon/astenagusia.git
-      BRANCH: master
-
-  static-site-2048.sirikon.me:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: 2048.sirikon.me
-      REPOSITORY: https://github.com/sirikon/2048.git
-      BRANCH: master
-
-  static-site-ebro.sirikon.me:
-    from: ../../modules/static-site
-    environment:
-      DOMAIN: ebro.sirikon.me
-      REPOSITORY: https://github.com/sirikon/ebro.git
-      BRANCH: master
-  
   pocketbase:
     from: ../../modules/pocketbase
     environment:
