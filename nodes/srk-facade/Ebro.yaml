@@ -12,6 +12,7 @@ imports:
   cron: { from: "../../modules/cron" }
   docker: { from: "../../modules/docker" }
   caddy: { from: "../../modules/caddy" }
+  static-sites: { from: "../../modules/static-sites" }
 
 tasks:
   default:
