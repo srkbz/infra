@@ -4,7 +4,8 @@ set -xeuo pipefail
 build_id="$(openssl rand -hex 16)"
 build_workspace="${SITE_STATE}/builds/${build_id}"
 
-repository="$(yq -r '.repository' "${SITE_CONFIG}")"
+repository="$(yq -re '.repository' "${SITE_CONFIG}")"
+branch="$(yq -re '.branch // "master"' "${SITE_CONFIG}")"
 
 mkdir -p "${build_workspace}"
 
