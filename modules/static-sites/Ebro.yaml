@@ -41,7 +41,7 @@ modules:
           check_fails: |
             test -f "${SITE_TARGET_COMMIT}"
           output_changes: |
-            cat "$SITE_CONFIG"
+            ./scripts/config.py
 
       build:
         requires: [home, target-commit, ":docker"]
@@ -53,7 +53,7 @@ modules:
             live_commit="$(cat "${SITE_LIVE_COMMIT}")"
             [ "$target_commit" == "$live_commit" ]
           output_changes: |
-            cat "$SITE_CONFIG"
+            ./scripts/config.py
 
       caddy:
         labels:
