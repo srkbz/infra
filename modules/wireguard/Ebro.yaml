@@ -1,3 +1,5 @@
+# TODO: https://gist.github.com/Codebreaker101/02874edc371fbc64c173d64f81d8f27d
+
 environment:
   WG_CONF_NAME: "wg0"
   WG_CONF_FILE: "/etc/wireguard/${WG_CONF_NAME}.conf"
