@@ -1,36 +1,35 @@
 #!/usr/bin/env bash
 set -xeuo pipefail
 
-BUILD_ID="$(openssl rand -hex 16)"
-BUILD_WORKSPACE="${SITE_HOME}/builds/${BUILD_ID}"
-SITE_LIVE="${SITE_HOME}/live"
-TARGET_COMMIT="$(cat "${SITE_HOME}/TARGET_COMMIT")"
+eval "$("${EBRO_TASK_WORKING_DIRECTORY}/scripts/config.py")"
 
-mkdir -p "${BUILD_WORKSPACE}"
+build_id="$(openssl rand -hex 16)"
+build_workspace="${SITE_STATE}/builds/${build_id}"
+
+target_commit="$(cat "${SITE_TARGET_COMMIT}")"
+
+mkdir -p "${build_workspace}"
 
 (
-    cd "${BUILD_WORKSPACE}"
+    cd "${build_workspace}"
     git init
-    git remote add origin "${REPOSITORY}"
-    git fetch --tags origin "${TARGET_COMMIT}"
-    git reset --hard "${TARGET_COMMIT}"
+    git remote add origin "${repository}"
+    git fetch --tags origin "${target_commit}"
+    git reset --hard "${target_commit}"
 
-    if [ "$DOMAIN" == "ebro.sirikon.me" ]; then
-        ./meta/docker/build.sh website
-        rm -rf "${SITE_LIVE}"
-        cp -r "out/website" "${SITE_LIVE}"
-    elif [ -f "Dockerfile" ]; then
-        docker build -t "site_${BUILD_ID}" .
-        container_id=$(docker create "site_${BUILD_ID}")
+    if [ -f "Dockerfile" ]; then
+        docker build -t "static_site_${build_id}" .
+        container_id=$(docker create "static_site_${build_id}")
         rm -rf "${SITE_LIVE}"
         docker cp "${container_id}:/dist" "${SITE_LIVE}"
         docker rm -f "${container_id}"
-        docker rmi "site_${BUILD_ID}"
+        docker rmi "static_site_${build_id}"
     else
         rm -rf "${SITE_LIVE}"
         cp -r "dist" "${SITE_LIVE}"
     fi
-    printf "%s" "${TARGET_COMMIT}" >"${SITE_HOME}/LIVE_COMMIT"
+
+    printf "%s" "${target_commit}" >"${SITE_LIVE_COMMIT}"
 )
 
-rm -rf "${BUILD_WORKSPACE}"
+rm -rf "${build_workspace}"

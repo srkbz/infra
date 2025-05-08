@@ -10,6 +10,8 @@ modules:
     environment:
       SITE_HOME: "${EBRO_ROOT}/config/static-sites/${EBRO_EACH}"
       SITE_STATE: "${SITES_STATE}/${EBRO_EACH}"
+      SITE_LIVE: "${SITE_STATE}/live"
+      SITE_BUILDS: "${SITE_STATE}/builds"
       SITE_LIVE_COMMIT: "${SITE_STATE}/LIVE_COMMIT"
       SITE_TARGET_COMMIT: "${SITE_STATE}/TARGET_COMMIT"
 
@@ -17,16 +19,16 @@ modules:
       default:
         labels:
           discover: "true"
-        requires: [target-commit]
+        requires: [build]
 
       home:
         script: |
-          mkdir -p "${SITE_STATE}/live"
-          mkdir -p "${SITE_STATE}/builds"
+          mkdir -p "${SITE_LIVE}"
+          mkdir -p "${SITE_BUILDS}"
         when:
           check_fails: |
-            test -d "${SITE_STATE}/live"
-            test -d "${SITE_STATE}/builds"
+            test -d "${SITE_LIVE}"
+            test -d "${SITE_BUILDS}"
 
       target-commit:
         requires: [home]
@@ -35,21 +37,21 @@ modules:
           check_fails: |
             test -f "${SITE_TARGET_COMMIT}"
 
+      build:
+        requires: [home, target-commit, ":docker"]
+        script: ./scripts/build-site.sh
+        when:
+          check_fails: |
+            test -f "${SITE_LIVE_COMMIT}"
+            target_commit="$(cat "${SITE_TARGET_COMMIT}")"
+            live_commit="$(cat "${SITE_LIVE_COMMIT}")"
+            [ "$target_commit" == "$live_commit" ]
+
 # tasks:
 #   default:
 #     labels:
 #       discover: "true"
 #     requires: [site, webhook]
-
-#   site:
-#     requires: [home, target-commit, ":docker"]
-#     script: ./build-site.sh
-#     when:
-#       check_fails: |
-#         test -f "${SITE_HOME}/LIVE_COMMIT"
-#         target_commit="$(cat "${SITE_HOME}/TARGET_COMMIT")"
-#         live_commit="$(cat "${SITE_HOME}/LIVE_COMMIT")"
-#         [ "$target_commit" == "$live_commit" ]
 
 #   target-commit:
 #     requires: [home]
