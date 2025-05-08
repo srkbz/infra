@@ -1,7 +1,8 @@
 environment:
   CADDY_VERSION: '${CADDY_VERSION:-"2.10.0"}'
-  CADDY_CONF: /etc/caddy/Caddyfile
-  CADDY_CONF_DIR: /etc/caddy/conf.d
+  CADDY_CONF_ROOT: /etc/caddy
+  CADDY_CONF_FILE: "${CADDY_CONF_ROOT}/Caddyfile"
+  CADDY_CONF_DIR: "${CADDY_CONF_ROOT}/conf.d"
   CADDY_CACHE_DIR: "${CACHE_DIR}/caddy"
   CADDY_DEB: "${CADDY_CACHE_DIR}/deb/${CADDY_VERSION}/caddy.deb"
   CADDY_DEB_URL: "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.deb"
@@ -10,16 +11,12 @@ tasks:
   default:
     labels:
       discover: "true"
-    requires: [conf, install]
-    script: |
-      cp Caddyfile "$CADDY_CONF"
-      systemctl reload caddy
+    requires: [apply]
+
+  deb:
+    script: curl -L --create-dirs -o "${CADDY_DEB}" "${CADDY_DEB_URL}"
     when:
-      output_changes: |
-        cat Caddyfile
-        cat "$CADDY_CONF_DIR"/* || true
-      check_fails: |
-        test -f "$CADDY_CONF"
+      check_fails: test -f "${CADDY_DEB}"
 
   install:
     requires: [deb]
@@ -31,15 +28,16 @@ tasks:
         actual_caddy_version="$(caddy --version)"
         [[ "$actual_caddy_version" == "v${CADDY_VERSION} "* ]]
 
-  deb:
+  conf-file:
     script: |
-      caddy_deb_dir="$(dirname "$CADDY_DEB")"
-      mkdir -p "${caddy_deb_dir}"
-      curl -L -o "${CADDY_DEB}" "${CADDY_DEB_URL}"
+      cp Caddyfile "$CADDY_CONF_FILE"
     when:
-      check_fails: test -f "${CADDY_DEB}"
+      output_changes: |
+        cat Caddyfile
+      check_fails: |
+        test -f "$CADDY_CONF_FILE"
 
-  conf:
+  conf-dir:
     requires: [query: 'tasks | filter("caddy.conf" in .labels) | map(.id)']
     script: |
       mkdir -p "$CADDY_CONF_DIR"
@@ -57,3 +55,15 @@ tasks:
           conf_file="$(cd "${EBRO_ROOT}" && "${EBRO_BIN}" -i --query "filter(tasks, .id == '${task_id}')[0].labels['caddy.conf']")"
           cat "$conf_file"
         done
+
+  apply:
+    requires: [install, conf-dir, conf-file]
+    script: |
+      systemctl start caddy
+      systemctl reload caddy
+    when:
+      output_changes: |
+        cat "$CADDY_CONF_FILE"
+        cat "$CADDY_CONF_DIR"/* || true
+      check_fails: |
+        systemctl status caddy

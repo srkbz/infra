@@ -18,7 +18,3 @@ tasks:
     labels:
       apt.packages: "vim htop btop iftop iotop"
     requires: [discover]
-
-  caddyfile:
-    labels:
-      caddy.conf: "${EBRO_ROOT}/Caddyfile"
