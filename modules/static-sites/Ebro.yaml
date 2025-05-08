@@ -35,7 +35,7 @@ modules:
             test -d "${SITE_BUILDS}"
 
       target-commit:
-        requires: [home]
+        requires: [":yq", home]
         script: ./scripts/update-target-commit.sh
         when:
           check_fails: |
@@ -44,7 +44,7 @@ modules:
             cat "${SITE_CONFIG}"
 
       build:
-        requires: [home, target-commit, ":docker"]
+        requires: [":yq", home, target-commit, ":docker"]
         script: ./scripts/build-site.sh
         when:
           check_fails: |
