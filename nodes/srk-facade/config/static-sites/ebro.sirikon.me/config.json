@@ -1,0 +1,7 @@
+{
+    "repository": "https://github.com/sirikon/ebro.git",
+    "build": {
+        "script": "./meta/docker/build.sh website",
+        "output": "./out/website"
+    }
+}

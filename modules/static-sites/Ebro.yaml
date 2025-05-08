@@ -10,6 +10,7 @@ modules:
     environment:
       SITE_DOMAIN: "${EBRO_EACH}"
       SITE_HOME: "${EBRO_ROOT}/config/static-sites/${SITE_DOMAIN}"
+      SITE_CONFIG: "${SITE_HOME}/config.json"
       SITE_STATE: "${SITES_STATE}/${SITE_DOMAIN}"
       SITE_CACHE: "${SITES_CACHE}/${SITE_DOMAIN}"
       SITE_LIVE: "${SITE_STATE}/live"
@@ -39,6 +40,8 @@ modules:
         when:
           check_fails: |
             test -f "${SITE_TARGET_COMMIT}"
+          output_changes: |
+            cat "$SITE_CONFIG"
 
       build:
         requires: [home, target-commit, ":docker"]
@@ -49,6 +52,8 @@ modules:
             target_commit="$(cat "${SITE_TARGET_COMMIT}")"
             live_commit="$(cat "${SITE_LIVE_COMMIT}")"
             [ "$target_commit" == "$live_commit" ]
+          output_changes: |
+            cat "$SITE_CONFIG"
 
       caddy:
         labels:

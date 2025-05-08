@@ -17,7 +17,11 @@ mkdir -p "${build_workspace}"
     git fetch --tags origin "${target_commit}"
     git reset --hard "${target_commit}"
 
-    if [ -f "Dockerfile" ]; then
+    if [ "${build_script}" != "" ]; then
+        bash -c "$build_script"
+        rm -rf "${SITE_LIVE}"
+        cp -r "$build_output" "${SITE_LIVE}"
+    elif [ -f "Dockerfile" ]; then
         docker build -t "static_site_${build_id}" .
         container_id=$(docker create "static_site_${build_id}")
         rm -rf "${SITE_LIVE}"
