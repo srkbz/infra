@@ -67,3 +67,9 @@ tasks:
         cat "$CADDY_CONF_DIR"/* || true
       check_fails: |
         systemctl status caddy
+
+  config:
+    for_each: |
+      ls "${EBRO_ROOT}/config/caddy"
+    labels:
+      caddy.conf: "${EBRO_ROOT}/config/caddy/${EBRO_EACH}/Caddyfile"
