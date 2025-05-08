@@ -1,6 +1,6 @@
 environment:
   SITES_STATE: "${STATIC_SITES_HOME:-/opt/static-sites}"
-  SITES_CACHE: "${CACHE_DIR}/static-sites/${DOMAIN}"
+  SITES_CACHE: "${CACHE_DIR}/static-sites"
 
 modules:
   sites:
@@ -27,7 +27,7 @@ modules:
           check_fails: |
             test -d "${SITE_STATE}/live"
             test -d "${SITE_STATE}/builds"
-      
+
       target-commit:
         requires: [home]
         script: ./scripts/get-target-commit.sh
