@@ -10,5 +10,7 @@ tasks:
       curl -Lo /usr/local/bin/yq "$YQ_URL"
       chmod +x /usr/local/bin/yq
     when:
-      check_fails: test -f /usr/local/bin/yq
+      check_fails: |
+        test -f /usr/local/bin/yq
+        [ "$(yq --version)" == "yq (https://github.com/mikefarah/yq/) version v${YQ_VERSION}" ]
       output_changes: echo "$YQ_URL"
