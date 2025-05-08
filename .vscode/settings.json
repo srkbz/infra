@@ -1,5 +1,5 @@
 {
   "yaml.schemas": {
-    "https://ebro.sirikon.me/schema.json": ["**/Ebro.yaml", "**/Ebro.*.yaml"]
+    "https://raw.githubusercontent.com/sirikon/ebro/refs/heads/master/docs/schema.json": ["**/Ebro.yaml", "**/Ebro.*.yaml"]
   }
 }

@@ -1,0 +1,87 @@
+environment:
+  SITES_STATE: "${STATIC_SITES_HOME:-/opt/static-sites}"
+  SITES_CACHE: "${CACHE_DIR}/static-sites/${DOMAIN}"
+
+modules:
+  sites:
+    for_each: |
+      ls "${EBRO_ROOT}/config/static-sites"
+
+    environment:
+      SITE_HOME: "${EBRO_ROOT}/config/static-sites/${EBRO_EACH}"
+      SITE_STATE: "${SITES_STATE}/${EBRO_EACH}"
+      SITE_LIVE_COMMIT: "${SITE_STATE}/LIVE_COMMIT"
+      SITE_TARGET_COMMIT: "${SITE_STATE}/TARGET_COMMIT"
+
+    tasks:
+      default:
+        labels:
+          discover: "true"
+        requires: [target-commit]
+
+      home:
+        script: |
+          mkdir -p "${SITE_STATE}/live"
+          mkdir -p "${SITE_STATE}/builds"
+        when:
+          check_fails: |
+            test -d "${SITE_STATE}/live"
+            test -d "${SITE_STATE}/builds"
+      
+      target-commit:
+        requires: [home]
+        script: ./scripts/get-target-commit.sh
+        when:
+          check_fails: |
+            test -f "${SITE_TARGET_COMMIT}"
+
+# tasks:
+#   default:
+#     labels:
+#       discover: "true"
+#     requires: [site, webhook]
+
+#   site:
+#     requires: [home, target-commit, ":docker"]
+#     script: ./build-site.sh
+#     when:
+#       check_fails: |
+#         test -f "${SITE_HOME}/LIVE_COMMIT"
+#         target_commit="$(cat "${SITE_HOME}/TARGET_COMMIT")"
+#         live_commit="$(cat "${SITE_HOME}/LIVE_COMMIT")"
+#         [ "$target_commit" == "$live_commit" ]
+
+#   target-commit:
+#     requires: [home]
+#     script: ./update-target-commit.sh
+#     when:
+#       check_fails: test -f "${SITE_HOME}/TARGET_COMMIT"
+
+#   caddy:
+#     labels:
+#       caddy.conf: "${SITE_CACHE}/site.caddyfile"
+#     script: |
+#       FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
+#       export FILE_SERVER_FLAGS
+#       mkdir -p "${SITE_CACHE}"
+#       cat Caddyfile | envsubst > "${SITE_CACHE}/site.caddyfile"
+#     when:
+#       check_fails: test -f "${SITE_CACHE}/site.caddyfile"
+#       output_changes: |
+#         FILE_SERVER_FLAGS="${FILE_SERVER_FLAGS:-}"
+#         export FILE_SERVER_FLAGS
+#         cat Caddyfile
+
+#   webhook:
+#     extends: [":secrets:op", ":secrets:when-secrets-change"]
+#     labels:
+#       secret.WEBHOOK_SECRET: "static-sites/${DOMAIN}:WEBHOOK_SECRET"
+#       webhook.conf: "${SITE_CACHE}/hook.json"
+#     script: |
+#       export WEBHOOK_SECRET
+#       ./webhook-build.py > "${SITE_CACHE}/hook.json"
+#     when:
+#       check_fails: |
+#         test -f "${SITE_CACHE}/hook.json"
+#       output_changes: |
+#         cat ./webhook-build.py
