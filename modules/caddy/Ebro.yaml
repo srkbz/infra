@@ -68,8 +68,12 @@ tasks:
       check_fails: |
         systemctl status caddy
 
+modules:
   config:
     for_each: |
       ls "${EBRO_ROOT}/config/caddy"
-    labels:
-      caddy.conf: "${EBRO_ROOT}/config/caddy/${EBRO_EACH}/Caddyfile"
+
+    tasks:
+      caddyfile:
+        labels:
+          caddy.conf: "${EBRO_ROOT}/config/caddy/${EBRO_EACH}/Caddyfile"
