@@ -1,32 +1,14 @@
 import inspect
-from contextvars import ContextVar
-from contextlib import contextmanager
-from typing import Any
+from typing import Any, Callable
 
-from framework.runner import Runner
-from framework.task import Task
-
-
-__runner = ContextVar[Runner]("runner", default=None)
-
-
-@contextmanager
-def runner():
-    r = Runner()
-    token = __runner.set(r)
-    yield r
-    r.run()
-    __runner.reset(token)
-
-
-def get_runner():
-    return __runner.get()
+from framework.models import Task
+from framework.runner import runner
 
 
 def task(
     *,
-    requires: list[callable] = [],
-    required_by: list[callable] = [],
+    requires: list[Task | Callable[[], list[Task]]] = [],
+    required_by: list[Task | Callable[[], list[Task]]] = [],
     tags: list[Any] = [],
     title: str | None = None,
 ):
@@ -37,8 +19,9 @@ def task(
             required_by=required_by,
             title=title,
             tags=tags,
+            when_check_fails_funcs=[],
         )
-        get_runner().add_task(task)
+        runner.add_task(task)
 
         if inspect.ismethod(func):
             setattr(func.__self__, func.__name__, task)

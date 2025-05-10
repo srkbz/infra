@@ -1,7 +1,6 @@
 import sys
-import inspect
+from framework.models import Task
 from framework.planner import planner
-from framework.task import Task
 
 
 class Logger:
@@ -64,24 +63,45 @@ class Runner:
         self.tasks.append(task)
 
     def run(self):
+        for task in self.tasks:
+            requires = []
+            for item in task.requires:
+                if callable(item):
+                    requires.extend(item())
+                else:
+                    requires.append(item)
+            task.requires.clear()
+            task.requires.extend(list(dict.fromkeys(requires)))
+
+            required_by = []
+            for item in task.required_by:
+                if callable(item):
+                    required_by.extend(item())
+                else:
+                    required_by.append(item)
+            task.required_by.clear()
+            task.required_by.extend(list(dict.fromkeys(required_by)))
+
         for task in planner(self.tasks):
 
-            if inspect.isgeneratorfunction(task.func):
-                gen = task.func()
+            skip = False
+
+            if len(task.when_check_fails_funcs) > 0:
+                skip = True
                 try:
-                    next(gen)
-                except StopIteration:
-                    log.info(
-                        task=task_name(task),
-                        message="skipping",
-                    )
-                else:
-                    log.warn(
-                        task=task_name(task),
-                        message="running",
-                    )
-                    for _ in gen:
-                        pass
+                    for func in task.when_check_fails_funcs:
+                        func()
+                except Exception:
+                    skip = False
+
+            if skip:
+                log.info(
+                    task=task_name(task),
+                    message="skipping",
+                )
             else:
                 log.warn(task=task_name(task), message="running")
                 task.func()
+
+
+runner = Runner()

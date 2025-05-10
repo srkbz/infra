@@ -1,4 +1,4 @@
-from framework.task import Task
+from framework.models import Task
 
 
 def planner(tasks: list[Task]):
