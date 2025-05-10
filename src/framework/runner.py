@@ -47,13 +47,12 @@ log = Logger()
 
 
 def task_name(task: Task):
-    text: str = (
+    return (
         task.func.__module__
         + "."
         + task.func.__qualname__
         + (" " + task.title if task.title is not None else "")
     )
-    return text.removeprefix("modules.")
 
 
 class Runner:
