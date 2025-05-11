@@ -103,7 +103,7 @@ class Runner:
             if skip:
                 log.info(
                     task=task_name(task),
-                    message="skipping",
+                    message="up to date",
                 )
             else:
                 log.warn(task=task_name(task), message="running")
