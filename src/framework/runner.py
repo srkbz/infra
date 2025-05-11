@@ -57,13 +57,19 @@ def task_name(task: Task):
 
 class Runner:
     def __init__(self):
-        self.tasks: list[Task] = []
+        self._tasks: list[Task] = []
 
     def add_task(self, task: Task):
-        self.tasks.append(task)
+        self._tasks.append(task)
+
+    def get_tasks(self):
+        return [task for task in self._tasks if task.enabled]
 
     def run(self):
-        for task in self.tasks:
+        for task in self._tasks:
+            if not task.enabled:
+                continue
+
             requires = []
             for item in task.requires:
                 if callable(item):
@@ -82,7 +88,7 @@ class Runner:
             task.required_by.clear()
             task.required_by.extend(list(dict.fromkeys(required_by)))
 
-        for task in planner(self.tasks):
+        for task in planner(self._tasks):
 
             skip = False
 

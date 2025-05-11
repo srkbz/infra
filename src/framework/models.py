@@ -7,6 +7,7 @@ T = TypeVar("T")
 @dataclass(kw_only=True, frozen=True)
 class Task:
     func: callable
+    enabled: bool
     requires: list[Self | Callable[[], list[Self]]]
     required_by: list[Self | Callable[[], list[Self]]]
     tags: list[Any]

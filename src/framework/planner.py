@@ -6,13 +6,15 @@ def planner(tasks: list[Task]):
     dependencies: dict[Task, set[Task]] = {}
 
     for task in tasks:
-        dependencies[task] = set()
+        if task.enabled:
+            dependencies[task] = set()
 
     for task in tasks:
-        for subtask in task.requires:
-            dependencies[task].add(subtask)
-        for subtask in task.required_by:
-            dependencies[subtask].add(task)
+        if task.enabled:
+            for subtask in task.requires:
+                dependencies[task].add(subtask)
+            for subtask in task.required_by:
+                dependencies[subtask].add(task)
 
     while True:
         if not dependencies:

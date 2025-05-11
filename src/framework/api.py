@@ -7,6 +7,7 @@ from framework.runner import runner
 
 def task(
     *,
+    enabled: bool = True,
     requires: list[Task | Callable[[], list[Task]]] = [],
     required_by: list[Task | Callable[[], list[Task]]] = [],
     tags: list[Any] = [],
@@ -15,6 +16,7 @@ def task(
     def decorator(func) -> Task:
         task = Task(
             func=func,
+            enabled=enabled,
             requires=requires,
             required_by=required_by,
             title=title,

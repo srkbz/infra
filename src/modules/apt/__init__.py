@@ -23,7 +23,7 @@ _control_file = join(_debian_dir, "control")
 
 
 def get_tasks_with_apt_packages() -> list[Task]:
-    return [task for task in runner.tasks if task.get_tags(AptPackages)]
+    return [task for task in runner.get_tasks() if task.get_tags(AptPackages)]
 
 
 def get_packages() -> list[str]:
@@ -31,7 +31,7 @@ def get_packages() -> list[str]:
         dict.fromkeys(
             [
                 package
-                for task in runner.tasks
+                for task in runner.get_tasks()
                 for tag in task.get_tags(AptPackages)
                 for package in tag.packages
             ]
@@ -55,14 +55,14 @@ def build_control_file() -> str:
 
 
 @task(required_by=[get_tasks_with_apt_packages])
-def install_apt_packages():
+def install_packages():
     remove_all(_metapackage_dir)
     write_file(_control_file, build_control_file())
 
     shell(f"dpkg-deb --build '{_metapackage_dir}' '{_metapackage_deb}'")
 
 
-@install_apt_packages.when_check_fails
+@install_packages.when_check_fails
 def _():
     assert read_file(_control_file) == build_control_file()
     assert isfile(_metapackage_deb)
