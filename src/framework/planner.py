@@ -12,9 +12,11 @@ def planner(tasks: list[Task]):
     for task in tasks:
         if task.enabled:
             for subtask in task.requires:
-                dependencies[task].add(subtask)
+                if subtask.enabled:
+                    dependencies[task].add(subtask)
             for subtask in task.required_by:
-                dependencies[subtask].add(task)
+                if subtask.enabled:
+                    dependencies[subtask].add(task)
 
     while True:
         if not dependencies:
