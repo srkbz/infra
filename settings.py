@@ -9,6 +9,8 @@ STATE_DIR = join(getcwd(), ".state")
 APT_PACKAGES = ["vim", "htop", "btop", "iftop", "iotop"]
 
 
-node_settings = importlib.import_module("nodes." + node() + ".settings")
+node_settings = importlib.import_module(
+    "nodes." + node().replace("-", "_") + ".settings"
+)
 for key in dir(node_settings):
     setattr(sys.modules[__name__], key, getattr(node_settings, key))
