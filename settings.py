@@ -10,5 +10,5 @@ APT_PACKAGES = ["vim", "htop", "btop", "iftop", "iotop"]
 
 
 node_settings = importlib.import_module("nodes." + node() + ".settings")
-for key in node_settings:
-    setattr(sys.modules[__name__], key, node_settings[key])
+for key in dir(node_settings):
+    setattr(sys.modules[__name__], key, getattr(node_settings, key))
