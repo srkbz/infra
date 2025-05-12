@@ -7,4 +7,4 @@ STATE_DIR = join(getcwd(), ".state")
 
 match node():
     case "pi":
-        from nodes.pi import *
+        from nodes.pi.settings import *
