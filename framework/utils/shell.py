@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import subprocess
 
-SHELL = ["/bin/bash", "-xeuo", "pipefail", "-c"]
+SHELL = ["/usr/bin/env", "bash", "-xeuo", "pipefail", "-c"]
 
 
 @dataclass(kw_only=True, frozen=True)
