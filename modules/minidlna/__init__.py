@@ -4,14 +4,18 @@ from framework.utils.shell import shell
 
 from modules.apt import AptPackages
 
+from modules.directories import Directory
 import settings
 
 ENABLED = getattr(settings, "MINIDLNA_ENABLED", False)
 PORT = getattr(settings, "MINIDLNA_PORT", 8200)
-DIRECTORY = getattr(settings, "MINIDLNA_DIRECTORY", None)
+DIRECTORY_ID = getattr(settings, "MINIDLNA_DIRECTORY_ID", None)
 
-if ENABLED and DIRECTORY is None:
-    raise Exception("MINIDLNA_DIRECTORY needs to be defined")
+if ENABLED:
+    if DIRECTORY_ID is None:
+        raise Exception("MINIDLNA_DIRECTORY_ID needs to be defined")
+
+    DIRECTORY = settings.DIRECTORIES[DIRECTORY_ID]["path"]
 
 
 def build_config():
@@ -30,7 +34,7 @@ def build_config():
     )
 
 
-@task(enabled=ENABLED, tags=[AptPackages(["minidlna"])])
+@task(enabled=ENABLED, tags=[AptPackages(["minidlna"]), Directory(DIRECTORY_ID)])
 def setup():
     write_file("/etc/minidlna.conf", build_config())
     shell("systemctl restart minidlna.service")

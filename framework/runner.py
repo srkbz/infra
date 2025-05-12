@@ -37,7 +37,7 @@ class Logger:
     ):
         line = ["\x1b[1;" + color + "m███ "]
         if task is not None:
-            line.append("[" + task + "] ")
+            line.append(task + " ")
         line.append(message)
         line.append("\x1b[0m\n")
         sys.stderr.write("".join(line))
@@ -50,7 +50,7 @@ def task_name(task: Task):
     return (
         task.func.__module__
         + "."
-        + task.func.__qualname__
+        + task.func.__name__
         + (" " + task.title if task.title is not None else "")
     )
 

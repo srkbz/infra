@@ -23,6 +23,7 @@ _metapackage_dir = join(_cache_dir, "metapackage")
 _metapackage_deb = _metapackage_dir + ".deb"
 _debian_dir = join(_metapackage_dir, "DEBIAN")
 _control_file = join(_debian_dir, "control")
+_installed_control_file = join(_cache_dir, "INSTALLED_CONTROL")
 
 
 def get_tasks_with_apt_packages() -> list[Task]:
@@ -60,12 +61,18 @@ def build_control_file() -> str:
 @task(required_by=[get_tasks_with_apt_packages])
 def install_packages():
     remove_all(_metapackage_dir)
-    write_file(_control_file, build_control_file())
+    control_file_content = build_control_file()
+    write_file(_control_file, control_file_content)
 
     shell(f"dpkg-deb --build '{_metapackage_dir}' '{_metapackage_deb}'")
+    shell("apt-get update")
+    shell(f"apt-get install -y '{_metapackage_deb}'")
+    shell("apt-get autoremove -y")
+    write_file(_installed_control_file, control_file_content)
 
 
 @install_packages.when_check_fails
 def _():
     assert read_file(_control_file) == build_control_file()
+    assert read_file(_installed_control_file) == build_control_file()
     assert isfile(_metapackage_deb)

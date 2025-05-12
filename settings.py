@@ -6,5 +6,5 @@ CACHE_DIR = join(getcwd(), ".cache")
 STATE_DIR = join(getcwd(), ".state")
 
 match node():
-    case "pi":
-        from nodes.pi.settings import *
+    case "srk-laptop":
+        from nodes.srk_laptop.settings import *
