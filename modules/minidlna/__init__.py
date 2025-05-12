@@ -43,4 +43,4 @@ def setup():
 @setup.when_check_fails
 def _():
     assert read_file("/etc/minidlna.conf") == build_config()
-    shell("systemctl status minidlna.service")
+    shell("systemctl status minidlna.service >/dev/null")
