@@ -26,6 +26,7 @@ def build_config():
             "media_dir=" + DIRECTORY,
             "port=" + str(PORT),
             "inotify=yes",
+            "root_container=B",
             "album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg",
             "album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg",
             "album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg",
