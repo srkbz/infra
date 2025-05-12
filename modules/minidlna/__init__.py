@@ -8,7 +8,10 @@ import settings
 
 ENABLED = getattr(settings, "MINIDLNA_ENABLED", False)
 PORT = getattr(settings, "MINIDLNA_PORT", 8200)
-DIRECTORY = getattr(settings, "MINIDLNA_DIRECTORY")
+DIRECTORY = getattr(settings, "MINIDLNA_DIRECTORY", None)
+
+if ENABLED and DIRECTORY is None:
+    raise Exception("MINIDLNA_DIRECTORY needs to be defined")
 
 
 def build_config():
