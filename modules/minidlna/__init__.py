@@ -10,6 +10,7 @@ import settings
 ENABLED = getattr(settings, "MINIDLNA_ENABLED", False)
 PORT = getattr(settings, "MINIDLNA_PORT", 8200)
 DIRECTORY_ID = getattr(settings, "MINIDLNA_DIRECTORY_ID", None)
+FRIENDLY_NAME = getattr(settings, "MINIDLNA_FRIENDLY_NAME", None)
 
 if ENABLED:
     if DIRECTORY_ID is None:
@@ -27,6 +28,7 @@ def build_config():
             "port=" + str(PORT),
             "inotify=yes",
             "root_container=B",
+            *(["friendly_name=" + FRIENDLY_NAME] if FRIENDLY_NAME is not None else []),
             "album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg",
             "album_art_names=AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg",
             "album_art_names=Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg",
