@@ -7,7 +7,10 @@ from framework.models import Task
 from framework.utils.shell import shell
 from framework.utils.fs import read_file, remove_all, write_file
 
-from settings import CACHE_DIR, APT_PACKAGES
+import settings
+
+PACKAGES = getattr(settings, "APT_PACKAGES", [])
+CACHE_DIR = settings.CACHE_DIR
 
 
 @dataclass(frozen=True)
@@ -35,7 +38,7 @@ def get_packages() -> list[str]:
                 for tag in task.get_tags(AptPackages)
                 for package in tag.packages
             ]
-            + APT_PACKAGES
+            + PACKAGES
         )
     )
 
