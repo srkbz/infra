@@ -84,7 +84,7 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
-def setup_sources(dry_run=False):
+def setup_sources(*, dry_run=False):
     sources = get_sources()
 
     list_path = "/etc/apt/sources.list.d/srkbz-infra.list"
@@ -124,7 +124,12 @@ def setup_sources(dry_run=False):
 
 @task(required_by=[get_tasks_with_apt_sources])
 def install_sources():
-    setup_sources()
+    setup_sources(dry_run=False)
+
+
+@install_sources.when_check_fails
+def _():
+    setup_sources(dry_run=True)
 
 
 @task(requires=[install_sources], required_by=[get_tasks_with_apt_packages])
