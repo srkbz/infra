@@ -22,3 +22,8 @@ from modules.apt import AptSource
 )
 def setup():
     pass
+
+
+@setup.when_check_fails
+def _():
+    pass
