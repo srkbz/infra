@@ -84,9 +84,10 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
-def setup_sources():
+def setup_sources(dry_run=False):
     sources = get_sources()
 
+    list_path = "/etc/apt/sources.list.d/srkbz-infra.list"
     list_content = []
 
     for source in sources:
@@ -96,6 +97,7 @@ def setup_sources():
         key_path = join("/etc/apt/keyrings/", "srkbz_infra_source_" + url_hash_digest)
 
         if not isfile(key_path):
+            assert not dry_run
             shell(
                 f"curl -fsSL '{source.url}' -o '{key_path}'",
             )
@@ -113,9 +115,11 @@ def setup_sources():
         line.append(" " + source.release)
         list_content.append("".join(line))
 
-    write_file(
-        "/etc/apt/sources.list.d/srkbz-infra.list", "\n".join(list_content) + "\n"
-    )
+    list_content_text = "\n".join(list_content) + "\n"
+
+    if not isfile(list_path) or read_file(list_path) != list_content_text:
+        assert not dry_run
+        write_file(list_path, list_content_text)
 
 
 @task(required_by=[get_tasks_with_apt_sources])
