@@ -1,9 +1,14 @@
 from framework.api import task
 from framework.utils.shell import shell
-from modules.apt import AptSource
+from modules.apt import AptPackages, AptSource
+
+import settings
+
+ENABLED = getattr(settings, "DOCKER_ENABLED", False)
 
 
 @task(
+    enabled=ENABLED,
     tags=[
         AptSource(
             arch=shell(
@@ -17,8 +22,17 @@ from modules.apt import AptSource
                 echo=False,
             ).stdout.strip(),
             release="stable",
-        )
-    ]
+        ),
+        AptPackages(
+            [
+                "docker-ce",
+                "docker-ce-cli",
+                "containerd.io",
+                "docker-buildx-plugin",
+                "docker-compose-plugin",
+            ]
+        ),
+    ],
 )
 def setup():
     pass

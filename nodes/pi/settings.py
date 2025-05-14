@@ -1,5 +1,3 @@
-APT_PACKAGES = ["docker-ce"]
-
 DIRECTORIES = {
     "public": {"path": "/srv/public", "owner": ["root", "root"], "perm": "755"},
 }
