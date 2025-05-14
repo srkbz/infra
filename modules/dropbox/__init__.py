@@ -6,11 +6,15 @@ from modules.apt import AptSource
 @task(
     tags=[
         AptSource(
-            arch=shell("dpkg --print-architecture", captureStdout=True).stdout.strip(),
+            arch=shell(
+                "dpkg --print-architecture", captureStdout=True, echo=False
+            ).stdout.strip(),
             key="https://download.docker.com/linux/debian/gpg",
             url="https://download.docker.com/linux/debian",
             version=shell(
-                '. /etc/os-release && echo "$VERSION_CODENAME"', captureStdout=True
+                '. /etc/os-release && echo "$VERSION_CODENAME"',
+                captureStdout=True,
+                echo=False,
             ).stdout.strip(),
             release="stable",
         )
