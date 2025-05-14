@@ -6,7 +6,6 @@ from platform import node
 
 CACHE_DIR = join(getcwd(), ".cache")
 STATE_DIR = join(getcwd(), ".state")
-APT_PACKAGES = ["vim", "htop", "btop", "iftop", "iotop"]
 
 
 node_settings = importlib.import_module(
@@ -14,3 +13,11 @@ node_settings = importlib.import_module(
 )
 for key in dir(node_settings):
     setattr(sys.modules[__name__], key, getattr(node_settings, key))
+
+APT_PACKAGES = getattr(sys.modules[__name__], "APT_PACKAGES", []) + [
+    "vim",
+    "htop",
+    "btop",
+    "iftop",
+    "iotop",
+]
