@@ -98,6 +98,7 @@ def setup_sources(*, dry_run=False):
 
         if not isfile(key_path):
             assert not dry_run
+            shell("install -m 0755 -d /etc/apt/keyrings")
             shell(
                 f"curl -fsSL '{source.url}' -o '{key_path}'",
             )
