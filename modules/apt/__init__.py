@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from os.path import join, isfile
+from hashlib import sha256
 
 from framework.api import task
 from framework.runner import runner
@@ -83,10 +84,44 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
+def setup_sources():
+    sources = get_sources()
+
+    list_content = []
+
+    for source in sources:
+        url_hash = sha256()
+        url_hash.update(source.url.encode("utf-8"))
+        url_hash_digest = url_hash.hexdigest()
+        key_path = join("/etc/apt/keyrings/", "srkbz_infra_source_" + url_hash_digest)
+
+        if not isfile(key_path):
+            shell(
+                f"curl -fsSL '{source.url}' -o '{key_path}'",
+                echo=False,
+            )
+
+        line = ["deb"]
+        if source.arch is not None or source.key is not None:
+            line.append(" [")
+            if source.arch is not None:
+                line.append("arch=" + source.arch + " ")
+            if source.key is not None:
+                line.append("signed-by=" + key_path)
+            line.append("] ")
+        line.append(source.url)
+        line.append(" " + source.version)
+        line.append(" " + source.release)
+        list_content.append("".join(line))
+
+    write_file(
+        "/etc/apt/sources.list.d/srkbz-infra.list", "\n".join(list_content) + "\n"
+    )
+
+
 @task(required_by=[get_tasks_with_apt_sources])
 def install_sources():
-    sources = get_sources()
-    print(sources)
+    setup_sources()
 
 
 @task(requires=[install_sources], required_by=[get_tasks_with_apt_packages])
