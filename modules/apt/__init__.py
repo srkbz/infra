@@ -98,7 +98,6 @@ def setup_sources():
         if not isfile(key_path):
             shell(
                 f"curl -fsSL '{source.url}' -o '{key_path}'",
-                echo=False,
             )
 
         line = ["deb"]
