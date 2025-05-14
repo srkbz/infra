@@ -101,6 +101,7 @@ def setup_sources(*, dry_run=False):
             shell(
                 f"curl -fsSL '{source.url}' -o '{key_path}'",
             )
+            shell(f"chmod a+r '{key_path}'")
 
         line = ["deb"]
         if source.arch is not None or source.key is not None:
