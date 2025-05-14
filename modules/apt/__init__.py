@@ -65,7 +65,6 @@ def get_sources() -> list[AptSource]:
                 for task in runner.get_tasks()
                 for source in task.get_tags(AptSource)
             ]
-            + PACKAGES
         )
     )
 
