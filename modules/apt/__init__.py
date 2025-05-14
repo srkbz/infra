@@ -18,6 +18,15 @@ class AptPackages:
     packages: list[str]
 
 
+@dataclass(frozen=True, kw_only=True)
+class AptSource:
+    arch: str | None
+    key: str | None
+    url: str
+    version: str
+    release: str
+
+
 _cache_dir = join(CACHE_DIR, "apt")
 _metapackage_dir = join(_cache_dir, "metapackage")
 _metapackage_deb = _metapackage_dir + ".deb"
@@ -30,6 +39,10 @@ def get_tasks_with_apt_packages() -> list[Task]:
     return [task for task in runner.get_tasks() if task.get_tags(AptPackages)]
 
 
+def get_tasks_with_apt_sources() -> list[Task]:
+    return [task for task in runner.get_tasks() if task.get_tags(AptSource)]
+
+
 def get_packages() -> list[str]:
     return list(
         dict.fromkeys(
@@ -38,6 +51,19 @@ def get_packages() -> list[str]:
                 for task in runner.get_tasks()
                 for tag in task.get_tags(AptPackages)
                 for package in tag.packages
+            ]
+            + PACKAGES
+        )
+    )
+
+
+def get_sources() -> list[AptSource]:
+    return list(
+        dict.fromkeys(
+            [
+                source
+                for task in runner.get_tasks()
+                for source in task.get_tags(AptSource)
             ]
             + PACKAGES
         )
@@ -58,7 +84,13 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
-@task(required_by=[get_tasks_with_apt_packages])
+@task(required_by=[get_tasks_with_apt_sources])
+def install_sources():
+    sources = get_sources()
+    print(sources)
+
+
+@task(requires=[install_sources], required_by=[get_tasks_with_apt_packages])
 def install_packages():
     remove_all(_metapackage_dir)
     control_file_content = build_control_file()
