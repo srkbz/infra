@@ -99,7 +99,7 @@ def setup_sources(*, dry_run=False):
         if not isfile(key_path):
             assert not dry_run
             shell(
-                f"curl -fsSL '{source.url}' | gpg --dearmor -o '{key_path}'",
+                f"curl -fsSL '{source.url}' -o '{key_path}'",
             )
             shell("chmod 755 /etc/apt/keyrings")
             shell(f"chmod a+r '{key_path}'")
