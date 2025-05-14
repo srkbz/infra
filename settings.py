@@ -1,7 +1,7 @@
 import importlib
 import sys
-from os import getcwd, listdir
-from os.path import join, dirname
+from os import getcwd
+from os.path import join
 from platform import node
 
 node_settings = importlib.import_module(
