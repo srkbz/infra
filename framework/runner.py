@@ -62,7 +62,7 @@ class Runner:
         self._tasks.append(task)
 
     def get_tasks(self):
-        return [task for task in self._tasks if task.enabled]
+        return [task for task in self._tasks if task._enabled]
 
     def run(self):
         for task in self._tasks:
@@ -76,7 +76,7 @@ class Runner:
             )
 
         for task in self._tasks:
-            if not task.enabled:
+            if not task._enabled:
                 continue
 
             requires = []
