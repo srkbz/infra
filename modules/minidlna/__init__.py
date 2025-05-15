@@ -37,10 +37,20 @@ def build_config():
     )
 
 
-@task(enabled=ENABLED, tags=[AptPackages(["minidlna"]), Directory(DIRECTORY_ID)])
+@task()
 def setup():
     write_file("/etc/minidlna.conf", build_config())
     shell("systemctl restart minidlna.service")
+
+
+@setup.enabled
+def _():
+    return ENABLED
+
+
+@setup.tags
+def _():
+    return [AptPackages(["minidlna"]), Directory(DIRECTORY_ID)]
 
 
 @setup.when_check_fails
