@@ -4,7 +4,7 @@ from typing import Any, Callable, Self, TypeVar
 T = TypeVar("T")
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Task:
     func: callable
     requires: list[Self | Callable[[], list[Self]]]
@@ -14,9 +14,9 @@ class Task:
     _enabled: bool
     _tags: list[Any]
 
-    _enabled_func: Callable
-    _when_check_fails_func: Callable
-    _tags_func: Callable
+    _enabled_func: Callable | None
+    _when_check_fails_func: Callable | None
+    _tags_func: Callable | None
 
     def __key(self):
         return (self.func,)

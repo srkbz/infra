@@ -66,8 +66,14 @@ class Runner:
 
     def run(self):
         for task in self._tasks:
-            task._enabled = task._enabled_func()
-            task._tags = task._tags_func()
+            task._enabled = (
+                task._enabled_func()
+                if task._enabled_func is not None
+                else task._enabled
+            )
+            task._tags = (
+                task._tags_func() if task._tags_func is not None else task._tags
+            )
 
         for task in self._tasks:
             if not task.enabled:
