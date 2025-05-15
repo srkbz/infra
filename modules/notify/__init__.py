@@ -27,11 +27,19 @@ _bin_template = read_file(join(dirname(__file__), "bin", "notify"))
 
 @task()
 def setup(dry_run: bool):
-    if not isdir(OUTBOX):
-        assert not dry_run
-        makedirs(OUTBOX, mode=0o500, exist_ok=True)
+    if ENABLED:
+        if not isdir(OUTBOX):
+            assert not dry_run
+            makedirs(OUTBOX, mode=0o500, exist_ok=True)
 
-    if not isfile(_bin_path) or read_file(_bin_path) != _bin_template:
-        assert not dry_run
-        write_file(_bin_path, _bin_template)
-        shell(f"chmod +x '{_bin_path}'")
+        if not isfile(_bin_path) or read_file(_bin_path) != _bin_template:
+            assert not dry_run
+            write_file(_bin_path, _bin_template)
+            shell(f"chmod +x '{_bin_path}'")
+    else:
+        if isdir(OUTBOX):
+            assert not dry_run
+            shell(f"rm -rf '{OUTBOX}'")
+        if isfile(_bin_path):
+            assert not dry_run
+            shell(f"rm -f '{_bin_path}'")
