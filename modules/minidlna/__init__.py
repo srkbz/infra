@@ -14,14 +14,8 @@ def setup():
     shell("systemctl restart minidlna.service")
 
 
-@setup.enabled
-def _():
-    return ENABLED
-
-
-@setup.tags
-def _():
-    return [AptPackages(["minidlna"]), Directory(DIRECTORY_ID)]
+setup.enabled(lambda: ENABLED)
+setup.tags(lambda: [AptPackages(["minidlna"]), Directory(DIRECTORY_ID)])
 
 
 @setup.when_check_fails
