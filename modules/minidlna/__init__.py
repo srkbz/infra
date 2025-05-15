@@ -2,10 +2,13 @@ from framework.api import task
 from framework.utils.fs import read_file, write_file
 from framework.utils.shell import shell
 
-from modules.apt import AptPackages
+from modules import apt
 from modules.directories import Directory
 
 from .conf_builder import *
+
+if ENABLED:
+    apt.config.add_packages("minidlna")
 
 
 @task()
@@ -24,4 +27,4 @@ def setup(dry_run: bool):
 
 
 setup.enabled(lambda: ENABLED)
-setup.tags(lambda: [AptPackages(["minidlna"]), Directory(DIRECTORY_ID)])
+setup.tags(lambda: [Directory(DIRECTORY_ID)])

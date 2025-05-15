@@ -10,17 +10,11 @@ from framework.utils.fs import read_file, remove_all, write_file
 
 import settings
 
-PACKAGES = getattr(settings, "APT_PACKAGES", [])
-CACHE_DIR = settings.CACHE_DIR
-
-
-@dataclass(frozen=True)
-class AptPackages:
-    packages: list[str]
+_CACHE_DIR = settings.CACHE_DIR
 
 
 @dataclass(frozen=True, kw_only=True)
-class AptSource:
+class Source:
     arch: str | None
     key: str | None
     url: str
@@ -28,7 +22,24 @@ class AptSource:
     release: str
 
 
-_cache_dir = join(CACHE_DIR, "apt")
+class Config:
+    def __init__(self):
+        self._packages: list[str] = []
+        self._sources: list[Source] = []
+
+    def add_packages(self, *packages: str):
+        self._packages.extend(packages)
+
+    def add_sources(self, *sources: Source):
+        self._sources.extend(sources)
+
+
+config = Config()
+
+config.add_packages(getattr(settings, "APT_PACKAGES", []))
+
+
+_cache_dir = join(_CACHE_DIR, "apt")
 _metapackage_dir = join(_cache_dir, "metapackage")
 _metapackage_deb = _metapackage_dir + ".deb"
 _debian_dir = join(_metapackage_dir, "DEBIAN")
@@ -36,42 +47,8 @@ _control_file = join(_debian_dir, "control")
 _installed_control_file = join(_cache_dir, "INSTALLED_CONTROL")
 
 
-def get_tasks_with_apt_packages() -> list[Task]:
-    return [task for task in runner.get_tasks() if task.get_tags(AptPackages)]
-
-
-def get_tasks_with_apt_sources() -> list[Task]:
-    return [task for task in runner.get_tasks() if task.get_tags(AptSource)]
-
-
-def get_packages() -> list[str]:
-    return list(
-        dict.fromkeys(
-            [
-                package
-                for task in runner.get_tasks()
-                for tag in task.get_tags(AptPackages)
-                for package in tag.packages
-            ]
-            + PACKAGES
-        )
-    )
-
-
-def get_sources() -> list[AptSource]:
-    return list(
-        dict.fromkeys(
-            [
-                source
-                for task in runner.get_tasks()
-                for source in task.get_tags(AptSource)
-            ]
-        )
-    )
-
-
 def build_control_file() -> str:
-    packages = get_packages()
+    packages = config._packages
 
     control_lines = [
         "Package: srkbz-infra-metapackage",
@@ -84,9 +61,9 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
-@task(required_by=[get_tasks_with_apt_sources])
+@task()
 def install_sources(dry_run: bool):
-    sources = get_sources()
+    sources = config._sources
 
     list_path = "/etc/apt/sources.list.d/srkbz-infra.list"
     list_content = []
@@ -125,7 +102,7 @@ def install_sources(dry_run: bool):
         write_file(list_path, list_content_text)
 
 
-@task(requires=[install_sources], required_by=[get_tasks_with_apt_packages])
+@task(requires=[install_sources])
 def install_packages(dry_run: bool):
     control_file_content = build_control_file()
 
