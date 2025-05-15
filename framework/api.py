@@ -17,7 +17,6 @@ def task(
             requires=requires,
             required_by=required_by,
             name=name,
-            when_check_fails_funcs=[],
         )
         runner.add_task(task)
 
