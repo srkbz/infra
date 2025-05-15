@@ -67,6 +67,10 @@ class Runner:
 
     def run(self):
         for task in self._tasks:
+            task._enabled = task._enabled_func()
+            task._tags = task._tags_func()
+
+        for task in self._tasks:
             if not task.enabled:
                 continue
 
@@ -92,11 +96,10 @@ class Runner:
 
             skip = False
 
-            if len(task.when_check_fails_funcs) > 0:
+            if task._when_check_fails_func is not None:
                 skip = True
                 try:
-                    for func in task.when_check_fails_funcs:
-                        func()
+                    task._when_check_fails_func()
                 except Exception:
                     skip = False
 
