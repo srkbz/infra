@@ -48,7 +48,7 @@ _installed_control_file = join(_cache_dir, "INSTALLED_CONTROL")
 
 
 def build_control_file() -> str:
-    packages = config._packages
+    packages = sorted(config._packages)
 
     control_lines = [
         "Package: srkbz-infra-metapackage",
