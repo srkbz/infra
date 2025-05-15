@@ -50,8 +50,7 @@ def task_name(task: Task):
     return (
         task.func.__module__
         + "."
-        + task.func.__name__
-        + (" " + task.title if task.title is not None else "")
+        + (task.name if task.name is not None else task.func.__name__)
     )
 
 

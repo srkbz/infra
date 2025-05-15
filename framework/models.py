@@ -9,6 +9,7 @@ class Task:
     func: callable
     requires: list[Self | Callable[[], list[Self]]]
     required_by: list[Self | Callable[[], list[Self]]]
+    name: str | None
 
     _enabled: bool
     _tags: list[Any]
