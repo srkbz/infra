@@ -84,7 +84,8 @@ def build_control_file() -> str:
     return "\n".join(control_lines) + "\n"
 
 
-def setup_sources(*, dry_run=False):
+@task(required_by=[get_tasks_with_apt_sources])
+def install_sources(dry_run: bool):
     sources = get_sources()
 
     list_path = "/etc/apt/sources.list.d/srkbz-infra.list"
@@ -124,20 +125,18 @@ def setup_sources(*, dry_run=False):
         write_file(list_path, list_content_text)
 
 
-@task(required_by=[get_tasks_with_apt_sources])
-def install_sources():
-    setup_sources(dry_run=False)
-
-
-@install_sources.when_check_fails
-def _():
-    setup_sources(dry_run=True)
-
-
 @task(requires=[install_sources], required_by=[get_tasks_with_apt_packages])
-def install_packages():
-    remove_all(_metapackage_dir)
+def install_packages(dry_run: bool):
     control_file_content = build_control_file()
+
+    if dry_run:
+        assert read_file(_control_file) == control_file_content
+        assert read_file(_installed_control_file) == control_file_content
+        assert isfile(_metapackage_deb)
+        return
+
+    remove_all(_metapackage_dir)
+
     write_file(_control_file, control_file_content)
 
     shell(f"dpkg-deb --build '{_metapackage_dir}' '{_metapackage_deb}'")
@@ -145,10 +144,3 @@ def install_packages():
     shell(f"apt-get install -y '{_metapackage_deb}'")
     shell("apt-get autoremove -y")
     write_file(_installed_control_file, control_file_content)
-
-
-@install_packages.when_check_fails
-def _():
-    assert read_file(_control_file) == build_control_file()
-    assert read_file(_installed_control_file) == build_control_file()
-    assert isfile(_metapackage_deb)
