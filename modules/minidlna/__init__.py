@@ -8,17 +8,24 @@ from modules.directories import Directory
 from .conf_builder import *
 
 
+def do_setup(*, dry_run: bool):
+    conf = build_conf()
+    if dry_run:
+        assert read_file("/etc/minidlna.conf") == conf
+    else:
+        write_file("/etc/minidlna.conf", conf)
+
+    if dry_run:
+        shell("systemctl status minidlna.service >/dev/null", echo=False)
+    else:
+        shell("systemctl restart minidlna.service")
+
+
 @task()
 def setup():
-    write_file("/etc/minidlna.conf", build_conf())
-    shell("systemctl restart minidlna.service")
+    do_setup(dry_run=False)
 
 
 setup.enabled(lambda: ENABLED)
 setup.tags(lambda: [AptPackages(["minidlna"]), Directory(DIRECTORY_ID)])
-
-
-@setup.when_check_fails
-def _():
-    assert read_file("/etc/minidlna.conf") == build_conf()
-    shell("systemctl status minidlna.service >/dev/null", echo=False)
+setup.when_check_fails(lambda: do_setup(dry_run=True))
