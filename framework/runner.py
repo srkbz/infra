@@ -1,4 +1,5 @@
 import sys
+import inspect
 from framework.models import Task
 from framework.planner import planner
 
@@ -98,13 +99,20 @@ class Runner:
             task.required_by.extend(list(dict.fromkeys(required_by)))
 
         for task in planner(self._tasks):
+            func_arg_spec = inspect.getfullargspec(task.func)
+            expects_dry_run_kwarg = (
+                "dry_run" in func_arg_spec.annotations
+                and func_arg_spec.annotations["dry_run"] == bool
+            )
 
-            skip = True
+            skip = False
 
-            try:
-                task.func(dry_run=True)
-            except Exception:
-                skip = False
+            if expects_dry_run_kwarg:
+                skip = True
+                try:
+                    task.func(dry_run=True)
+                except Exception:
+                    skip = False
 
             if skip:
                 log.info(
@@ -113,7 +121,10 @@ class Runner:
                 )
             else:
                 log.warn(task=task_name(task), message="running")
-                task.func(dry_run=False)
+                if expects_dry_run_kwarg:
+                    task.func(dry_run=False)
+                else:
+                    task.func()
 
 
 runner = Runner()
