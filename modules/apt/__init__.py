@@ -29,6 +29,7 @@ class Config:
 
     def add_packages(self, *packages: str):
         self._packages.extend(packages)
+        print(self._packages)
 
     def add_sources(self, *sources: Source):
         self._sources.extend(sources)
