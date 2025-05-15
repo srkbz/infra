@@ -1,11 +1,21 @@
 from framework.api import task
 from framework.utils.shell import shell
 
-from modules.docker import config as docker_config, setup
+from modules import docker
 
-docker_config.enable()
+import settings
+
+ENABLED = getattr(settings, "DOCKER_HELLO_WORLD_ENABLED", False)
+
+if ENABLED:
+    docker.config.enable()
 
 
-@task(requires=[setup])
+@task(requires=[docker.setup])
 def run():
     shell("docker run --rm hello-world")
+
+
+@run.enabled
+def _():
+    return ENABLED
