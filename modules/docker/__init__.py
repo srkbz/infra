@@ -35,6 +35,12 @@ class Config:
             )
 
 
+config = Config()
+
+
 @task(requires=[apt.install_packages])
 def setup(dry_run: bool):
     pass
+
+
+setup.enabled(lambda: config._enabled)
