@@ -4,7 +4,7 @@ from typing import Any, Callable, Self, TypeVar
 T = TypeVar("T")
 
 
-@dataclass(kw_only=True)
+@dataclass
 class Task:
     func: callable
     requires: list[Self | Callable[[], list[Self]]]
