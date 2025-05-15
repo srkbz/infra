@@ -1,6 +1,10 @@
-from os.path import isdir
+from os.path import isdir, isfile, join, dirname
 from os import makedirs
+
 from framework.api import task
+from framework.utils.fs import read_file, write_file
+
+from framework.utils.shell import shell
 from modules import apt
 
 import settings
@@ -17,9 +21,17 @@ if ENABLED:
 
     apt.config.add_packages("curl")
 
+_bin_path = join(BIN_TARGET, BIN_NAME)
+_bin_template = read_file(join(dirname(__file__), "bin", "notify"))
+
 
 @task()
 def setup(dry_run: bool):
     if not isdir(OUTBOX):
         assert not dry_run
         makedirs(OUTBOX, mode=0o500, exist_ok=True)
+
+    if not isfile(_bin_path) or read_file(_bin_path) != _bin_template:
+        assert not dry_run
+        write_file(_bin_path, _bin_template)
+        shell(f"chmod +x '{_bin_path}'")
