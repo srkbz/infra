@@ -16,6 +16,4 @@ def run():
     shell("docker run --rm hello-world")
 
 
-@run.enabled
-def _():
-    return ENABLED
+run.enabled(lambda: ENABLED)
