@@ -6,7 +6,7 @@ T = TypeVar("T")
 
 @dataclass(kw_only=True)
 class Task:
-    func: callable
+    func: Callable
     requires: list[Self | Callable[[], list[Self]]]
     required_by: list[Self | Callable[[], list[Self]]]
     name: str | None
