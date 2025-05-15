@@ -15,7 +15,7 @@ config = Config()
 
 
 @task()
-def setup(_: bool):
+def setup(dry_run: bool):
     pass
 
 
