@@ -33,3 +33,8 @@ class Config:
                 "docker-buildx-plugin",
                 "docker-compose-plugin",
             )
+
+
+@task(requires=[apt.install_packages])
+def setup(dry_run: bool):
+    pass
