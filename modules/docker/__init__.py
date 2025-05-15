@@ -15,24 +15,14 @@ config = Config()
 
 
 @task()
-def setup():
+def setup(_: bool):
     pass
 
 
-@setup.when_check_fails
-def _():
-    pass
-
-
-@setup.enabled
-def _():
-    return config._enabled
-
-
-@setup.tags
-def _():
-    if config._enabled:
-        return [
+setup.enabled(lambda: config._enabled)
+setup.tags(
+    lambda: (
+        [
             AptSource(
                 arch=shell(
                     "dpkg --print-architecture", captureStdout=True, echo=False
@@ -56,4 +46,7 @@ def _():
                 ]
             ),
         ]
-    return []
+        if config._enabled
+        else []
+    )
+)
