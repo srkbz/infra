@@ -29,7 +29,6 @@ class Config:
 
     def add_packages(self, *packages: str):
         self._packages.extend(packages)
-        print(self._packages)
 
     def add_sources(self, *sources: Source):
         self._sources.extend(sources)
@@ -37,7 +36,7 @@ class Config:
 
 config = Config()
 
-config.add_packages(getattr(settings, "APT_PACKAGES", []))
+config.add_packages(*getattr(settings, "APT_PACKAGES", []))
 
 
 _cache_dir = join(_CACHE_DIR, "apt")
