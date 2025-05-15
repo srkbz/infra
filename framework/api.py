@@ -20,7 +20,6 @@ def task(
             _enabled=True,
             _tags=[],
             _enabled_func=None,
-            _when_check_fails_func=None,
             _tags_func=None,
         )
         runner.add_task(task)

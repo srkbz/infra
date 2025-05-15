@@ -99,14 +99,12 @@ class Runner:
 
         for task in planner(self._tasks):
 
-            skip = False
+            skip = True
 
-            if task._when_check_fails_func is not None:
-                skip = True
-                try:
-                    task._when_check_fails_func()
-                except Exception:
-                    skip = False
+            try:
+                task.func(dry_run=True)
+            except Exception:
+                skip = False
 
             if skip:
                 log.info(
@@ -115,7 +113,7 @@ class Runner:
                 )
             else:
                 log.warn(task=task_name(task), message="running")
-                task.func()
+                task.func(dry_run=False)
 
 
 runner = Runner()

@@ -15,7 +15,6 @@ class Task:
     _tags: list[Any]
 
     _enabled_func: Callable | None
-    _when_check_fails_func: Callable | None
     _tags_func: Callable | None
 
     def __key(self):
@@ -31,9 +30,6 @@ class Task:
 
     def get_tags(self, clazz: type[T]) -> list[T]:
         return [tag for tag in self._tags if isinstance(tag, clazz)]
-
-    def when_check_fails(self, func):
-        self._when_check_fails_func = func
 
     def tags(self, func):
         self._tags_func = func
