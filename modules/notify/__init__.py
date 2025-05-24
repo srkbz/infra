@@ -25,6 +25,23 @@ _bin_path = join(BIN_TARGET, BIN_NAME)
 _bin_template = read_file(join(dirname(__file__), "bin", "notify"))
 
 
+def cleanup(dry_run: bool):
+    if isdir(OUTBOX):
+        assert not dry_run
+        shell(f"rm -rf '{OUTBOX}'")
+    if isfile(_bin_path):
+        assert not dry_run
+        shell(f"rm -f '{_bin_path}'")
+
+
+def cleanup_needed():
+    try:
+        cleanup(dry_run=True)
+        return False
+    except:
+        return True
+
+
 @task()
 def setup(dry_run: bool):
     if ENABLED:
@@ -43,3 +60,6 @@ def setup(dry_run: bool):
         if isfile(_bin_path):
             assert not dry_run
             shell(f"rm -f '{_bin_path}'")
+
+
+setup.enabled(lambda: ENABLED or cleanup_needed())

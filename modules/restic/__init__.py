@@ -25,6 +25,20 @@ _archive_sums = join(dirname(__file__), "versions", VERSION, "SHA256SUMS")
 _bin = join(_version_dir, f"restic_{VERSION}_{_VARIANT}")
 
 
+def cleanup(dry_run: bool):
+    if isdir(_cache_dir):
+        assert not dry_run
+        shell(f"rm -rf '{_cache_dir}'")
+
+
+def cleanup_needed():
+    try:
+        cleanup(dry_run=True)
+        return False
+    except:
+        return True
+
+
 @task()
 def install(dry_run: bool):
     if ENABLED:
@@ -48,9 +62,7 @@ def install(dry_run: bool):
             )
             shell(f"chmod +x '{_bin}'")
     else:
-        if isdir(_cache_dir):
-            assert not dry_run
-            shell(f"rm -rf '{_cache_dir}'")
+        cleanup(dry_run)
 
 
-install.enabled(lambda: ENABLED or isdir(_cache_dir))
+install.enabled(lambda: ENABLED or cleanup_needed())
