@@ -28,19 +28,20 @@ _bin = join(_version_dir, f"restic_{VERSION}_{_VARIANT}")
 
 @task()
 def install(dry_run: bool):
-    if not isfile(_archive):
-        assert not dry_run
-        makedirs(dirname(_archive), exist_ok=True)
-        shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
-    if not isfile(_archive_verified):
-        assert not dry_run
-        shell(
-            f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
-            cwd=dirname(_archive),
-        )
-        shell(f"touch '{_archive_verified}'")
     if not isfile(_bin):
         assert not dry_run
+
+        if not isfile(_archive):
+            makedirs(dirname(_archive), exist_ok=True)
+            shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
+
+        if not isfile(_archive_verified):
+            shell(
+                f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
+                cwd=dirname(_archive),
+            )
+            shell(f"touch '{_archive_verified}'")
+
         shell(
             f"bzip2 -d 'restic_{VERSION}_{_VARIANT}.bz2'",
             cwd=dirname(_archive),
