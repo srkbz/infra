@@ -53,4 +53,4 @@ def install(dry_run: bool):
             shell(f"rm -rf '{_cache_dir}'")
 
 
-# install.enabled(lambda: ENABLED)
+install.enabled(lambda: ENABLED or isdir(_cache_dir))
