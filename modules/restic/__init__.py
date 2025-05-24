@@ -13,8 +13,8 @@ VERSION = getattr(settings, "RESTIC_VERSION", "0.18.0")
 BACKUPS = getattr(settings, "RESTIC_BACKUPS", {})
 
 
-_VARIANTS = {"x86_64": "linux_amd64", "aarch64": "linux_arm64"}
-_VARIANT = _VARIANTS[platform.machine()]
+_ARCHS = {"x86_64": "amd64", "aarch64": "arm64"}
+_VARIANT = "linux_" + _ARCHS[platform.machine()]
 
 _CACHE_DIR = settings.CACHE_DIR
 
