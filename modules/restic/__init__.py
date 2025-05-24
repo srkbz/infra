@@ -1,6 +1,6 @@
 import platform
 from os import makedirs
-from os.path import isfile, join, dirname
+from os.path import isfile, isdir, join, dirname
 
 from framework.api import task
 from framework.utils.shell import shell
@@ -16,9 +16,8 @@ BACKUPS = getattr(settings, "RESTIC_BACKUPS", {})
 _ARCHS = {"x86_64": "amd64", "aarch64": "arm64"}
 _VARIANT = "linux_" + _ARCHS[platform.machine()]
 
-_CACHE_DIR = settings.CACHE_DIR
-
-_version_dir = join(_CACHE_DIR, "restic", "versions", VERSION)
+_cache_dir = join(settings.CACHE_DIR, "restic")
+_version_dir = join(_cache_dir, "versions", VERSION)
 _archive = join(_version_dir, f"restic_{VERSION}_{_VARIANT}.bz2")
 _archive_verified = join(_version_dir, f"restic_{VERSION}_{_VARIANT}.bz2.verified")
 _archive_url = f"https://github.com/restic/restic/releases/download/v{VERSION}/restic_{VERSION}_{_VARIANT}.bz2"
@@ -28,25 +27,30 @@ _bin = join(_version_dir, f"restic_{VERSION}_{_VARIANT}")
 
 @task()
 def install(dry_run: bool):
-    if not isfile(_bin):
-        assert not dry_run
+    if ENABLED:
+        if not isfile(_bin):
+            assert not dry_run
 
-        if not isfile(_archive):
-            makedirs(dirname(_archive), exist_ok=True)
-            shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
+            if not isfile(_archive):
+                makedirs(dirname(_archive), exist_ok=True)
+                shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
 
-        if not isfile(_archive_verified):
+            if not isfile(_archive_verified):
+                shell(
+                    f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
+                    cwd=dirname(_archive),
+                )
+                shell(f"touch '{_archive_verified}'")
+
             shell(
-                f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
+                f"bzip2 -d 'restic_{VERSION}_{_VARIANT}.bz2'",
                 cwd=dirname(_archive),
             )
-            shell(f"touch '{_archive_verified}'")
-
-        shell(
-            f"bzip2 -d 'restic_{VERSION}_{_VARIANT}.bz2'",
-            cwd=dirname(_archive),
-        )
-        shell(f"chmod +x '{_bin}'")
+            shell(f"chmod +x '{_bin}'")
+    else:
+        if isdir(_cache_dir):
+            assert not dry_run
+            shell(f"rm -rf '{_cache_dir}'")
 
 
-install.enabled(lambda: ENABLED)
+# install.enabled(lambda: ENABLED)
