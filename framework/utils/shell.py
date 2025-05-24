@@ -19,11 +19,14 @@ def shell(
     captureStdout: bool = False,
     captureStderr: bool = False,
     echo: bool = True,
+    cwd: str | None = None
 ):
     args = [*(SHELL if echo else SHELL_NO_ECHO), script]
     stdout = subprocess.PIPE if captureStdout else None
     stderr = subprocess.PIPE if captureStderr else None
-    result = subprocess.run(args, check=check, stdin=None, stdout=stdout, stderr=stderr)
+    result = subprocess.run(
+        args, check=check, stdin=None, stdout=stdout, stderr=stderr, cwd=cwd
+    )
 
     return ShellResult(
         exit_code=result.returncode,

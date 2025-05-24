@@ -6,7 +6,7 @@ from framework.runner import runner
 
 import settings
 
-DIRECTORIES = getattr(settings, "DIRECTORIES", [])
+DIRECTORIES = getattr(settings, "DIRECTORIES", {})
 
 
 @dataclass(frozen=True)
