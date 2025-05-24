@@ -20,7 +20,7 @@ _CACHE_DIR = settings.CACHE_DIR
 
 _version_dir = join(_CACHE_DIR, "restic", "versions", VERSION)
 _archive = join(_version_dir, f"restic_{VERSION}_{_VARIANT}.bz2")
-_archive_verified = join(_version_dir, "archive.verified")
+_archive_verified = join(_version_dir, f"restic_{VERSION}_{_VARIANT}.bz2.verified")
 _archive_url = f"https://github.com/restic/restic/releases/download/v{VERSION}/restic_{VERSION}_{_VARIANT}.bz2"
 _archive_sums = join(dirname(__file__), "versions", VERSION, "SHA256SUMS")
 _bin = join(_version_dir, f"restic_{VERSION}_{_VARIANT}")
