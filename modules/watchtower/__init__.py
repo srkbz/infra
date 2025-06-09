@@ -65,7 +65,10 @@ def cleanup_needed():
 
 @task(requires=[docker.setup])
 def setup(dry_run: bool):
-    up(dry_run)
+    if ENABLED:
+        up(dry_run)
+    else:
+        down(dry_run)
 
 
 setup.enabled(lambda: ENABLED or cleanup_needed())
