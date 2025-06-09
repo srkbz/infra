@@ -6,6 +6,7 @@ from framework.utils.shell import shell
 from framework.utils.fs import read_file, remove_all
 
 from modules import docker
+from modules import apt
 
 import settings
 
@@ -46,10 +47,7 @@ def up(dry_run: bool):
 
 
 def down(dry_run: bool):
-    if (
-        isfile(_compose_file)
-        and shell("command -v docker", check=False, echo=False).exit_code == 0
-    ):
+    if isfile(_compose_file):
         assert not dry_run
         shell("docker compose down --volumes --remove-orphans", cwd=_state_dir)
 
@@ -66,7 +64,12 @@ def cleanup_needed():
         return True
 
 
-@task(requires=[docker.setup])
+@task(
+    requires=[docker.setup] if ENABLED else [],
+    required_by=(
+        [apt.install_packages, docker.setup] if not ENABLED and cleanup_needed() else []
+    ),
+)
 def setup(dry_run: bool):
     if ENABLED:
         up(dry_run)
