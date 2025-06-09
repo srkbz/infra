@@ -50,9 +50,17 @@ def down(dry_run: bool):
         remove_all(_state_dir)
 
 
+def cleanup_needed():
+    try:
+        down(dry_run=True)
+        return False
+    except:
+        return True
+
+
 @task(requires=[docker.setup])
-def start():
-    shell("docker run --rm hello-world")
+def setup(dry_run: bool):
+    up(dry_run)
 
 
-start.enabled(lambda: ENABLED)
+setup.enabled(lambda: ENABLED or cleanup_needed())
