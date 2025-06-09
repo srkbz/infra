@@ -33,7 +33,9 @@ def up(dry_run: bool):
         shell(f"cp '{_base_compose_file}' '{_compose_file}'")
 
     if (
-        shell("docker compose ps -q", cwd=_state_dir, captureStdout=True).stdout.strip()
+        shell(
+            "docker compose ps -q", cwd=_state_dir, captureStdout=True, echo=False
+        ).stdout.strip()
         == ""
     ):
         assert not dry_run
