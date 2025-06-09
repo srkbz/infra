@@ -1,0 +1,12 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    restart: always
+    environment:
+      WATCHTOWER_SCHEDULE: "0 0 4 * * 0" # Sundays, 4 AM.
+      WATCHTOWER_LABEL_TAKE_PRECEDENCE: "true"
+      WATCHTOWER_LABEL_ENABLE: "true"
+      # WATCHTOWER_NOTIFICATIONS_HOSTNAME: "${WATCHTOWER_NOTIFICATIONS_HOSTNAME}"
+      # WATCHTOWER_NOTIFICATION_URL: "${WATCHTOWER_NOTIFICATION_URL}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

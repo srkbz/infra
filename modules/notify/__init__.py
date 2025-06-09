@@ -54,12 +54,7 @@ def setup(dry_run: bool):
             write_file(_bin_path, _bin_template)
             shell(f"chmod +x '{_bin_path}'")
     else:
-        if isdir(OUTBOX):
-            assert not dry_run
-            shell(f"rm -rf '{OUTBOX}'")
-        if isfile(_bin_path):
-            assert not dry_run
-            shell(f"rm -f '{_bin_path}'")
+        cleanup(dry_run)
 
 
 setup.enabled(lambda: ENABLED or cleanup_needed())
