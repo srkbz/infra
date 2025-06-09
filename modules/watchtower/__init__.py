@@ -39,7 +39,10 @@ def up(dry_run: bool):
     if not run_docker_compose_up:
         run_docker_compose_up = (
             shell(
-                "docker compose ps -q", cwd=_state_dir, captureStdout=True, echo=False
+                "docker compose ps -q",
+                cwd=_state_dir,
+                captureStdout=True,
+                echo=False,
             ).stdout.strip()
             == ""
         )
