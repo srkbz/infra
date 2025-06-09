@@ -46,7 +46,10 @@ def up(dry_run: bool):
 
 
 def down(dry_run: bool):
-    if isfile(_compose_file) and shell("command -v docker", check=False).exit_code == 0:
+    if (
+        isfile(_compose_file)
+        and shell("command -v docker", check=False, echo=False).exit_code == 0
+    ):
         assert not dry_run
         shell("docker compose down --volumes --remove-orphans", cwd=_state_dir)
 
