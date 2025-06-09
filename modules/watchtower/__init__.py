@@ -26,18 +26,21 @@ def up(dry_run: bool):
         assert not dry_run
         makedirs(_state_dir)
 
+    run_docker_compose_up = (
+        shell(
+            "docker compose ps -q", cwd=_state_dir, captureStdout=True, echo=False
+        ).stdout.strip()
+        == ""
+    )
+
     if not isfile(_compose_file) or read_file(_base_compose_file) != read_file(
         _compose_file
     ):
         assert not dry_run
         shell(f"cp '{_base_compose_file}' '{_compose_file}'")
+        run_docker_compose_up = True
 
-    if (
-        shell(
-            "docker compose ps -q", cwd=_state_dir, captureStdout=True, echo=False
-        ).stdout.strip()
-        == ""
-    ):
+    if run_docker_compose_up:
         assert not dry_run
         shell("docker compose up -d", cwd=_state_dir)
 
