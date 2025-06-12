@@ -18,11 +18,7 @@ _VARIANT = "linux_" + _ARCHS[platform.machine()]
 _cache_dir = join(settings.CACHE_DIR, "caddy")
 _version_dir = join(_cache_dir, "versions", VERSION)
 _archive = join(_version_dir, f"caddy_{VERSION}_{_VARIANT}.deb")
-_archive_verified = _archive + ".verified"
 _archive_url = f"https://github.com/caddyserver/caddy/releases/download/v{VERSION}/caddy_{VERSION}_{_VARIANT}.deb"
-_archive_sums = join(
-    dirname(__file__), "versions", VERSION, f"caddy_{VERSION}_checksums.txt"
-)
 
 
 def install(dry_run: bool):
@@ -30,14 +26,6 @@ def install(dry_run: bool):
         assert not dry_run
         makedirs(dirname(_archive), exist_ok=True)
         shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
-
-    if not isfile(_archive_verified):
-        assert not dry_run
-        shell(
-            f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
-            cwd=dirname(_archive),
-        )
-        shell(f"touch '{_archive_verified}'")
 
     if shell(
         "command -v caddy >/dev/null", check=False, echo=False
