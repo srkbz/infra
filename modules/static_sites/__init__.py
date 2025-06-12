@@ -1,3 +1,4 @@
+import json
 from os import makedirs, listdir
 from os.path import isfile, isdir, join, dirname
 
@@ -10,7 +11,7 @@ from modules import docker
 import settings
 
 ENABLED = getattr(settings, "STATIC_SITES_ENABLED", False)
-SITES = getattr(settings, "STATIC_SITES", {})
+SITES: dict[str, dict] = getattr(settings, "STATIC_SITES", {})
 
 _cache_dir = join(settings.CACHE_DIR, "static_sites")
 _sites_dir = join(_cache_dir, "sites")
@@ -41,6 +42,14 @@ def _setup(dry_run: bool):
         assert not dry_run
         site_path = join(_sites_dir, site_id)
         makedirs(site_path)
+
+    for site_id, site_config in SITES.items():
+        site_path = join(_sites_dir, site_id)
+        site_config_path = join(site_path, "CONFIG")
+        site_config_json = json.dumps(site_config)
+        if read_file(site_config_path) != site_config_json:
+            assert not dry_run
+            write_file(site_config_path, site_config_json)
 
     if read_file(_build_bin) != read_file(_build_bin_base):
         assert not dry_run
