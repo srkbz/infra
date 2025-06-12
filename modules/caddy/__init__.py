@@ -21,8 +21,9 @@ _version_dir = join(_cache_dir, "versions", VERSION)
 _archive = join(_version_dir, f"caddy_{VERSION}_{_VARIANT}.deb")
 _archive_url = f"https://github.com/caddyserver/caddy/releases/download/v{VERSION}/caddy_{VERSION}_{_VARIANT}.deb"
 
-_root_conf = "/etc/caddy/Caddyfile"
-_root_conf_template = join(dirname(__file__), "assets", "Caddyfile")
+_conf_root = "/etc/caddy/Caddyfile"
+_conf_root_template = join(dirname(__file__), "assets", "Caddyfile")
+_conf_dir = "/etc/caddy/conf.d"
 
 
 def install(dry_run: bool):
@@ -44,9 +45,13 @@ def install(dry_run: bool):
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
         needs_reload = False
 
-    if read_file(_root_conf) != read_file(_root_conf_template):
+    if not isdir(_conf_dir):
         assert not dry_run
-        shell(f"cp '{_root_conf_template}' '{_root_conf}'")
+        makedirs(_conf_dir)
+
+    if read_file(_conf_root) != read_file(_conf_root_template):
+        assert not dry_run
+        shell(f"cp '{_conf_root_template}' '{_conf_root}'")
         needs_reload = True
 
     if needs_reload:
