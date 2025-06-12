@@ -26,7 +26,7 @@ _conf_root_template = join(dirname(__file__), "assets", "Caddyfile")
 _conf_dir = "/etc/caddy/conf.d"
 
 
-def install(dry_run: bool):
+def _setup(dry_run: bool):
     needs_reload = False
 
     if not isfile(_archive):
@@ -59,7 +59,38 @@ def install(dry_run: bool):
         shell("systemctl reload caddy")
 
 
+def _cleanup(dry_run: bool):
+    if shell("command -v caddy >/dev/null", check=False, echo=False).exit_code == 0:
+        assert not dry_run
+        shell(f"apt-get remove -y caddy")
+
+    if isfile(_conf_root):
+        assert not dry_run
+        shell(f"rm -f '{_conf_root}'")
+
+    if isdir(_conf_dir):
+        assert not dry_run
+        shell(f"rm -rf '{_conf_dir}'")
+
+    if isdir(_cache_dir):
+        assert not dry_run
+        shell(f"rm -rf '{_cache_dir}'")
+
+
+def _cleanup_needed():
+    try:
+        _cleanup(dry_run=True)
+        return False
+    except:
+        return True
+
+
 @task()
 def setup(dry_run: bool):
     if ENABLED:
-        install(dry_run)
+        _setup(dry_run)
+    else:
+        _cleanup(dry_run)
+
+
+setup.enabled(lambda: ENABLED or _cleanup_needed())
