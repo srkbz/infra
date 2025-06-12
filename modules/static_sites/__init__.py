@@ -2,7 +2,7 @@ import json
 from os import makedirs, listdir
 from os.path import isfile, isdir, join, dirname
 
-from framework.api import task
+from framework.api import command, task
 from framework.utils.shell import shell
 from framework.utils.fs import read_file, write_file
 
@@ -73,3 +73,8 @@ def setup(dry_run: bool):
 
 
 setup.enabled(lambda: ENABLED or _needs_cleanup())
+
+
+@command(name="static-sites-build")
+def build_cmd():
+    print("Henlo")
