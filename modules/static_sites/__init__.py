@@ -46,7 +46,7 @@ def _setup(dry_run: bool):
     for site_id, site_config in SITES.items():
         site_path = join(_sites_dir, site_id)
         site_config_path = join(site_path, "CONFIG")
-        site_config_json = json.dumps(site_config)
+        site_config_json = json.dumps(site_config, indent=2) + "\n"
         if read_file(site_config_path) != site_config_json:
             assert not dry_run
             write_file(site_config_path, site_config_json)
