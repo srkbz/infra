@@ -1,5 +1,6 @@
 import sys
 import inspect
+from typing import Callable
 from framework.models import Task
 from framework.planner import planner
 
@@ -58,14 +59,25 @@ def task_name(task: Task):
 class Runner:
     def __init__(self):
         self._tasks: list[Task] = []
+        self._commands: list[tuple[str, Callable]] = []
 
     def add_task(self, task: Task):
         self._tasks.append(task)
+
+    def add_command(self, name: str, func: Callable):
+        self._commands.append((name, func))
 
     def get_tasks(self):
         return [task for task in self._tasks if task._enabled]
 
     def run(self):
+        args = sys.argv[:1]
+        if len(args) == 0:
+            self.default()
+        else:
+            print(args)
+
+    def default(self):
         for task in self._tasks:
             task._enabled = (
                 task._enabled_func()

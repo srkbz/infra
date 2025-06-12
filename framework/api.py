@@ -30,3 +30,10 @@ def task(
         return task
 
     return decorator
+
+
+def command(*, name: str):
+    def decorator(func):
+        return func
+
+    return decorator
