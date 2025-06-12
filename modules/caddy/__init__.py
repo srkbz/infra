@@ -65,7 +65,7 @@ def _setup(dry_run: bool):
     if str(len(config._caddyfiles)) != read_file(_conf_count):
         assert not dry_run
         shell(f"rm -rf '{_conf_dir}'/*")
-        write_file(_conf_count, str(config._caddyfiles.count()))
+        write_file(_conf_count, str(len(config._caddyfiles)))
         needs_reload = True
 
     for i, caddyfile in enumerate(CADDYFILES + config._caddyfiles):
