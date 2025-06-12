@@ -71,7 +71,7 @@ class Runner:
         return [task for task in self._tasks if task._enabled]
 
     def run(self):
-        args = sys.argv[:1]
+        args = sys.argv[1:]
         if len(args) == 0:
             self.default()
         else:
