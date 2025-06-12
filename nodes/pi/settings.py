@@ -13,7 +13,7 @@ CADDY_CADDYFILES = [
     textwrap.dedent(
         """
         :80 {
-            respond 'Hello World!'
+            respond "Hello World!"
         }
         """
     )
