@@ -16,5 +16,5 @@ CADDY_CADDYFILES = [
             respond "Hello World!"
         }
         """
-    )
+    ).strip()
 ]
