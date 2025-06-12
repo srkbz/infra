@@ -78,11 +78,8 @@ class Runner:
             requested_name = args[0]
             command_args = args[1:]
             for command_name, command_func in self._commands:
-                print(command_name)
-                print(requested_name)
                 if command_name == requested_name:
-                    print("HEY")
-                    command_func(command_args)
+                    command_func(*command_args)
 
     def default(self):
         for task in self._tasks:
