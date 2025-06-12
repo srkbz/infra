@@ -80,6 +80,7 @@ class Runner:
             for command_name, command_func in self._commands:
                 print(command_name)
                 if command_name == name:
+                    print("HEY")
                     command_func(args)
 
     def default(self):
