@@ -56,7 +56,6 @@ def _setup(dry_run: bool):
     ):
         assert not dry_run
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
-        needs_reload = False
 
     if not isdir(_conf_dir):
         assert not dry_run
