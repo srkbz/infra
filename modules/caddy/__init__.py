@@ -69,9 +69,9 @@ def _setup(dry_run: bool):
         needs_reload = True
 
     for i, caddyfile in enumerate(CADDYFILES + config._caddyfiles):
-        if read_file(join(_conf_dir), f"{str(i)}.conf") != caddyfile:
+        if read_file(join(_conf_dir, f"{str(i)}.conf")) != caddyfile:
             assert not dry_run
-            write_file(f"{str(i)}.conf", caddyfile)
+            write_file(join(_conf_dir, f"{str(i)}.conf"), caddyfile)
             needs_reload = True
 
     if read_file(_conf_root) != read_file(_conf_root_template):
