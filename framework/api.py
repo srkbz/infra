@@ -34,6 +34,7 @@ def task(
 
 def command(*, name: str):
     def decorator(func):
+        runner.add_command(name, func)
         return func
 
     return decorator
