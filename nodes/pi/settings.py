@@ -1,3 +1,5 @@
+import textwrap
+
 DIRECTORIES = {
     "public": {"path": "/srv/public", "owner": ["root", "root"], "perm": "755"},
 }
@@ -8,9 +10,11 @@ MINIDLNA_DIRECTORY_ID = "public"
 
 CADDY_ENABLED = True
 CADDY_CADDYFILES = [
-    """
-    :80 {
-        respond 'Hello World!'
-    }
-    """
+    textwrap.dedent(
+        """
+        :80 {
+            respond 'Hello World!'
+        }
+        """
+    )
 ]
