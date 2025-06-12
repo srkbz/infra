@@ -62,7 +62,7 @@ def _setup(dry_run: bool):
         assert not dry_run
         makedirs(_conf_dir)
 
-    if str(config._caddyfiles.count()) != read_file(_conf_count):
+    if str(len(config._caddyfiles)) != read_file(_conf_count):
         assert not dry_run
         shell(f"rm -rf '{_conf_dir}'/*")
         write_file(_conf_count, str(config._caddyfiles.count()))
