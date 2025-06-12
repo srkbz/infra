@@ -32,3 +32,9 @@ def install(dry_run: bool):
     ).stdout.startswith(f"v{VERSION} "):
         assert not dry_run
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
+
+
+@task()
+def setup(dry_run: bool):
+    if ENABLED:
+        install(dry_run)
