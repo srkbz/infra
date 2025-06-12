@@ -75,7 +75,7 @@ class Runner:
         if len(args) == 0:
             self.default()
         else:
-            requested_name = args[:1]
+            requested_name = args[0]
             command_args = args[1:]
             for command_name, command_func in self._commands:
                 print(command_name)
