@@ -4,6 +4,7 @@ from os.path import isfile, isdir, join, dirname
 
 from framework.api import task
 from framework.utils.shell import shell
+from framework.utils.fs import read_file, write_file
 
 
 import settings
@@ -19,6 +20,9 @@ _cache_dir = join(settings.CACHE_DIR, "caddy")
 _version_dir = join(_cache_dir, "versions", VERSION)
 _archive = join(_version_dir, f"caddy_{VERSION}_{_VARIANT}.deb")
 _archive_url = f"https://github.com/caddyserver/caddy/releases/download/v{VERSION}/caddy_{VERSION}_{_VARIANT}.deb"
+
+_root_conf = "/etc/caddy/Caddyfile"
+_root_conf_template = join(dirname(__file__), "assets", "Caddyfile")
 
 
 def install(dry_run: bool):
@@ -36,6 +40,10 @@ def install(dry_run: bool):
     ):
         assert not dry_run
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
+
+    if read_file(_root_conf) != read_file(_root_conf_template):
+        assert not dry_run
+        shell(f"cp '{_root_conf_template}' '{_root_conf}'")
 
 
 @task()
