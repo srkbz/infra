@@ -13,10 +13,8 @@ import settings
 ENABLED = getattr(settings, "STATIC_SITES_ENABLED", False)
 SITES: dict[str, dict] = getattr(settings, "STATIC_SITES", {})
 
-_cache_dir = join(settings.CACHE_DIR, "static_sites")
-_sites_dir = join(_cache_dir, "sites")
-_build_bin = "/usr/local/bin/srk-static-site-build"
-_build_bin_base = join(dirname(__file__), "bin", "srk-static-site-build")
+_state_dir = join(settings.STATE_DIR, "static_sites")
+_sites_dir = join(_state_dir, "sites")
 
 if ENABLED:
     docker.config.enable()
@@ -51,16 +49,11 @@ def _setup(dry_run: bool):
             assert not dry_run
             write_file(site_config_path, site_config_json)
 
-    if read_file(_build_bin) != read_file(_build_bin_base):
-        assert not dry_run
-        write_file(_build_bin, read_file(_build_bin_base))
-        shell(f"chmod +x '{_build_bin}'")
-
 
 def _cleanup(dry_run: bool):
-    if not isdir(_cache_dir):
+    if not isdir(_state_dir):
         assert not dry_run
-        shell(f"rm -rf '{_cache_dir}'")
+        shell(f"rm -rf '{_state_dir}'")
 
 
 def _needs_cleanup():
