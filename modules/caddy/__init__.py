@@ -26,6 +26,8 @@ _root_conf_template = join(dirname(__file__), "assets", "Caddyfile")
 
 
 def install(dry_run: bool):
+    needs_reload = False
+
     if not isfile(_archive):
         assert not dry_run
         makedirs(dirname(_archive), exist_ok=True)
@@ -40,10 +42,16 @@ def install(dry_run: bool):
     ):
         assert not dry_run
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
+        needs_reload = False
 
     if read_file(_root_conf) != read_file(_root_conf_template):
         assert not dry_run
         shell(f"cp '{_root_conf_template}' '{_root_conf}'")
+        needs_reload = True
+
+    if needs_reload:
+        assert not dry_run
+        shell("systemctl reload caddy")
 
 
 @task()
