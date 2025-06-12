@@ -78,6 +78,7 @@ class Runner:
             name = args[:1]
             args = args[1:]
             for command_name, command_func in self._commands:
+                print(command_name)
                 if command_name == name:
                     command_func(args)
 
