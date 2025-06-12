@@ -14,6 +14,8 @@ SITES = getattr(settings, "STATIC_SITES", {})
 
 _cache_dir = join(settings.CACHE_DIR, "static_sites")
 _sites_dir = join(_cache_dir, "sites")
+_build_bin = "/usr/local/bin/srk-static-site-build"
+_build_bin_base = join(dirname(__file__), "bin", "srk-static-site-build")
 
 if ENABLED:
     docker.config.enable()
@@ -39,6 +41,11 @@ def _setup(dry_run: bool):
         assert not dry_run
         site_path = join(_sites_dir, site_id)
         makedirs(site_path)
+
+    if read_file(_build_bin) != read_file(_build_bin_base):
+        assert not dry_run
+        write_file(_build_bin, read_file(_build_bin_base))
+        shell(f"chmod +x '{_build_bin}'")
 
 
 def _cleanup(dry_run: bool):
