@@ -32,6 +32,7 @@ def install(dry_run: bool):
         shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
 
     if not isfile(_archive_verified):
+        assert not dry_run
         shell(
             f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
             cwd=dirname(_archive),
