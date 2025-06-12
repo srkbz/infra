@@ -27,9 +27,13 @@ def install(dry_run: bool):
         makedirs(dirname(_archive), exist_ok=True)
         shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
 
-    if shell("command -v caddy", check=False, echo=False).exit_code != 0 or not shell(
+    if shell(
+        "command -v caddy >/dev/null", check=False, echo=False
+    ).exit_code != 0 or not shell(
         "caddy --version", echo=False, captureStdout=True
-    ).stdout.startswith(f"v{VERSION} "):
+    ).stdout.startswith(
+        f"v{VERSION} "
+    ):
         assert not dry_run
         shell(f"apt-get install -y --allow-downgrades '{_archive}'")
 
