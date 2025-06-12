@@ -1,3 +1,5 @@
+from os.path import isfile
+
 from framework.api import task
 from framework.utils.fs import read_file, write_file
 from framework.utils.shell import shell
@@ -10,21 +12,45 @@ from .conf_builder import *
 if ENABLED:
     apt.config.add_packages("minidlna")
 
+_conf_file = "/etc/minidlna.conf"
 
-@task()
-def setup(dry_run: bool):
+
+def _setup(dry_run: bool):
     conf = build_conf()
 
-    if dry_run:
-        assert read_file("/etc/minidlna.conf") == conf
-    else:
-        write_file("/etc/minidlna.conf", conf)
+    if read_file(_conf_file) != conf:
+        assert not dry_run
+        write_file(_conf_file, conf)
 
-    if dry_run:
-        shell("systemctl status minidlna.service >/dev/null", echo=False)
-    else:
+    if (
+        shell(
+            "systemctl status minidlna.service >/dev/null", echo=False, check=False
+        ).exit_code
+        != 0
+    ):
+        assert not dry_run
         shell("systemctl restart minidlna.service")
 
 
-setup.enabled(lambda: ENABLED)
+def _cleanup(dry_run: bool):
+    if isfile(_conf_file):
+        assert not dry_run
+        shell(f"rm -f '{_conf_file}'")
+
+
+def _needs_cleanup():
+    try:
+        _cleanup(dry_run=True)
+        return False
+    except:
+        return True
+
+
+@task()
+def setup(dry_run: bool):
+    if ENABLED:
+        _setup(dry_run)
+
+
+setup.enabled(lambda: ENABLED or _needs_cleanup())
 setup.tags(lambda: [Directory(DIRECTORY_ID)])
