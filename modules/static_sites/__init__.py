@@ -76,5 +76,5 @@ setup.enabled(lambda: ENABLED or _needs_cleanup())
 
 
 @command(name="static-sites-build")
-def build_cmd():
+def build_cmd(site_id):
     print("Henlo")
