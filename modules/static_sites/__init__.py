@@ -76,6 +76,7 @@ def build_cmd(site_id):
 
     site_repository = SITES[site_id]["repository"]
     site_branch = SITES[site_id].get("branch", "master")
+    site_build_script = SITES[site_id].get("build_script", None)
 
     print(f"Building {site_id} ({build_id})")
     makedirs(build_workspace)
@@ -83,3 +84,17 @@ def build_cmd(site_id):
     shell(
         f"git clone --depth 1 --branch '{site_branch}' '{site_repository}' '{build_workspace}'"
     )
+
+    if site_build_script is not None:
+        shell(site_build_script, cwd=build_workspace)
+        # copy to live
+    elif isfile(join(build_workspace, "Dockerfile")):
+        shell(f"docker build -t 'static_site_{build_id}' .", cwd=build_workspace)
+        container_id = shell(
+            f"docker create 'static_site_{build_id}'", captureStdout=True, echo=False
+        ).stdout.strip()
+        # copy to live
+        shell(f"docker rm -f '{container_id}'")
+        shell(f"docker rmi 'static_site_{build_id}'")
+
+    shell(f"rm -rf '{build_workspace}'")
