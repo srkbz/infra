@@ -44,8 +44,6 @@ def _setup(dry_run: bool):
         makedirs(site_path)
 
 
-
-
 def _cleanup(dry_run: bool):
     if not isdir(_state_dir):
         assert not dry_run
@@ -71,10 +69,17 @@ def setup(dry_run: bool):
 setup.enabled(lambda: ENABLED or _needs_cleanup())
 
 
-@command(name='static-sites-build')
+@command(name="static-sites-build")
 def build_cmd(site_id):
     build_id = uuid.uuid4().hex
-    build_workspace= join(_sites_cache_dir, site_id, "builds", build_id) 
+    build_workspace = join(_sites_cache_dir, site_id, "builds", build_id)
+
+    site_repository = SITES[site_id]["repository"]
+    site_branch = SITES[site_id].get("branch", "master")
 
     print(f"Building {site_id} ({build_id})")
     makedirs(build_workspace)
+
+    shell(
+        f"git clone --depth 1 --branch '{site_branch}' '{site_repository}' '{build_workspace}'"
+    )
