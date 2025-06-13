@@ -81,6 +81,9 @@ def build_cmd(site_id):
     site_repository = SITES[site_id]["repository"]
     site_branch = SITES[site_id].get("branch", "master")
     site_build_script = SITES[site_id].get("build_script", None)
+    site_directory = SITES[site_id].get("directory", "dist")
+
+    site_live = join(_sites_state_dir, site_id)
 
     print(f"Building {site_id} ({build_id})")
     makedirs(build_workspace)
@@ -90,15 +93,22 @@ def build_cmd(site_id):
     )
 
     if site_build_script is not None:
+        site_directory_full = join(build_workspace, site_directory)
         shell(site_build_script, cwd=build_workspace)
-        # copy to live
+        shell(f"rm -rf '{site_live}'")
+        shell(f"cp -r '{site_directory_full}' '{site_live}'")
     elif isfile(join(build_workspace, "Dockerfile")):
         shell(f"docker build -t 'static_site_{build_id}' .", cwd=build_workspace)
         container_id = shell(
             f"docker create 'static_site_{build_id}'", captureStdout=True, echo=False
         ).stdout.strip()
-        # copy to live
+        shell(f"rm -rf '{site_live}'")
+        shell(f"docker cp '{container_id}:/{site_directory}' '{site_live}'")
         shell(f"docker rm -f '{container_id}'")
         shell(f"docker rmi 'static_site_{build_id}'")
+    else:
+        site_directory_full = join(build_workspace, site_directory)
+        shell(f"rm -rf '{site_live}'")
+        shell(f"cp -r '{site_directory_full}' '{site_live}'")
 
     shell(f"rm -rf '{build_workspace}'")
