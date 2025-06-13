@@ -1,4 +1,5 @@
 import json
+import uuid
 from os import makedirs, listdir
 from os.path import isfile, isdir, join, dirname
 
@@ -77,4 +78,5 @@ setup.enabled(lambda: ENABLED or _needs_cleanup())
 
 @command(name="static-sites-build")
 def build_cmd(site_id):
-    print("Building " + site_id)
+    _build_id = uuid.uuid4().hex
+    print(f"Building {site_id} ({_build_id})")
