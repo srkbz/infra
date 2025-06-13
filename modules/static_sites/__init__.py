@@ -44,9 +44,13 @@ def _setup(dry_run: bool):
 
 
 def _cleanup(dry_run: bool):
-    if not isdir(_state_dir):
+    if isdir(_state_dir):
         assert not dry_run
         shell(f"rm -rf '{_state_dir}'")
+
+    if isdir(_cache_dir):
+        assert not dry_run
+        shell(f"rm -rf '{_cache_dir}'")
 
 
 def _needs_cleanup():
