@@ -71,6 +71,10 @@ setup.enabled(lambda: ENABLED or _needs_cleanup())
 
 @command(name="static-sites-build")
 def build_cmd(site_id):
+    if site_id not in SITES:
+        print("Unknown site: " + site_id)
+        return
+
     build_id = uuid.uuid4().hex
     build_workspace = join(_sites_cache_dir, site_id, "builds", build_id)
 

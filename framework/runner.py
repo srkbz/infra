@@ -77,9 +77,14 @@ class Runner:
         else:
             requested_name = args[0]
             command_args = args[1:]
+            found = False
             for command_name, command_func in self._commands:
                 if command_name == requested_name:
+                    found = True
                     command_func(*command_args)
+                    break
+            if not found:
+                print("Command not found: " + requested_name)
 
     def default(self):
         for task in self._tasks:
