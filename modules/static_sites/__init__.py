@@ -61,23 +61,7 @@ def _needs_cleanup():
         return True
 
 
-@task(requires=[docker.setup])
-def setup(dry_run: bool):
-    if ENABLED:
-        _setup(dry_run)
-    else:
-        _cleanup(dry_run)
-
-
-setup.enabled(lambda: ENABLED or _needs_cleanup())
-
-
-@command(name="static-sites-build")
-def build_cmd(site_id):
-    if site_id not in SITES:
-        print("Unknown site: " + site_id)
-        return
-
+def _build(site_id: str):
     build_id = uuid.uuid4().hex
     build_workspace = join(_sites_cache_dir, site_id, "builds", build_id)
 
@@ -115,3 +99,29 @@ def build_cmd(site_id):
         shell(f"cp -r '{site_directory_full}' '{site_live}'")
 
     shell(f"rm -rf '{build_workspace}'")
+
+
+@task(requires=[docker.setup])
+def setup(dry_run: bool):
+    if ENABLED:
+        _setup(dry_run)
+    else:
+        _cleanup(dry_run)
+
+
+setup.enabled(lambda: ENABLED or _needs_cleanup())
+
+
+@command(name="static-sites-build")
+def build_cmd(site_id):
+    if site_id not in SITES:
+        print("Unknown site: " + site_id)
+        return
+
+    _build(site_id)
+
+
+@command(name="static-sites-build-all")
+def build_all_cmd():
+    for site_id in SITES:
+        _build(site_id)
