@@ -6,7 +6,7 @@ MINIDLNA_ENABLED = True
 MINIDLNA_FRIENDLY_NAME = "Raspberry Pi"
 MINIDLNA_DIRECTORY_ID = "public"
 
-STATIC_SITES_ENABLED = True
+STATIC_SITES_ENABLED = False
 STATIC_SITES = {
     "sirikon.me": {"repository": "https://github.com/sirikon/sirikon.me.git"},
     "osoondo.com": {"repository": "https://github.com/sirikon/osoondo.com.git"},
