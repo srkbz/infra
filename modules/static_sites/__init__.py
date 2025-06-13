@@ -1,10 +1,9 @@
 import uuid
 from os import makedirs, listdir
-from os.path import isfile, isdir, join, dirname
+from os.path import isfile, isdir, join
 
 from framework.api import command, task
 from framework.utils.shell import shell
-from framework.utils.fs import read_file, write_file
 
 from modules import docker
 
