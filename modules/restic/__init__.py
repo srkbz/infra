@@ -25,7 +25,29 @@ _archive_sums = join(dirname(__file__), "versions", VERSION, "SHA256SUMS")
 _bin = join(_version_dir, f"restic_{VERSION}_{_VARIANT}")
 
 
-def cleanup(dry_run: bool):
+def _setup(dry_run: bool):
+    if not isfile(_bin):
+        assert not dry_run
+
+        if not isfile(_archive):
+            makedirs(dirname(_archive), exist_ok=True)
+            shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
+
+        if not isfile(_archive_verified):
+            shell(
+                f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
+                cwd=dirname(_archive),
+            )
+            shell(f"touch '{_archive_verified}'")
+
+        shell(
+            f"bzip2 -d 'restic_{VERSION}_{_VARIANT}.bz2'",
+            cwd=dirname(_archive),
+        )
+        shell(f"chmod +x '{_bin}'")
+
+
+def _cleanup(dry_run: bool):
     if isdir(_cache_dir):
         assert not dry_run
         shell(f"rm -rf '{_cache_dir}'")
@@ -33,36 +55,18 @@ def cleanup(dry_run: bool):
 
 def cleanup_needed():
     try:
-        cleanup(dry_run=True)
+        _cleanup(dry_run=True)
         return False
     except:
         return True
 
 
 @task()
-def install(dry_run: bool):
+def setup(dry_run: bool):
     if ENABLED:
-        if not isfile(_bin):
-            assert not dry_run
-
-            if not isfile(_archive):
-                makedirs(dirname(_archive), exist_ok=True)
-                shell(f"curl --fail --location --output '{_archive}' '{_archive_url}'")
-
-            if not isfile(_archive_verified):
-                shell(
-                    f"cat '{_archive_sums}' | grep '{_VARIANT}' | sha256sum --check",
-                    cwd=dirname(_archive),
-                )
-                shell(f"touch '{_archive_verified}'")
-
-            shell(
-                f"bzip2 -d 'restic_{VERSION}_{_VARIANT}.bz2'",
-                cwd=dirname(_archive),
-            )
-            shell(f"chmod +x '{_bin}'")
+        _setup(dry_run)
     else:
-        cleanup(dry_run)
+        _cleanup(dry_run)
 
 
-install.enabled(lambda: ENABLED or cleanup_needed())
+setup.enabled(lambda: ENABLED or cleanup_needed())
