@@ -1,11 +1,12 @@
 import uuid
+import textwrap
 from os import makedirs, listdir
 from os.path import isfile, isdir, join
 
 from framework.api import command, task
 from framework.utils.shell import shell
 
-from modules import docker
+from modules import docker, caddy
 
 import settings
 
@@ -19,6 +20,23 @@ _sites_cache_dir = join(_cache_dir, "sites")
 
 if ENABLED:
     docker.config.enable()
+    for site_id in SITES:
+        _site_state_dir = join(_sites_state_dir, site_id)
+        caddy.config.add_caddyfile(
+            textwrap.dedent(
+                f"""
+                https://{site_id} {{
+                    root * {_site_state_dir}
+                    encode zstd gzip
+
+                    @versioned_urls query v=*
+                    header @versioned_urls Cache-Control "public, max-age=31536000, immutable"
+
+                    file_server
+                }}
+                """
+            ).lstrip()
+        )
 
 
 def _setup(dry_run: bool):
