@@ -20,7 +20,7 @@ _sites_cache_dir = join(_cache_dir, "sites")
 
 if ENABLED:
     docker.config.enable()
-    for site_id in SITES:
+    for site_id in sorted(SITES.keys()):
         _site_state_dir = join(_sites_state_dir, site_id)
         caddy.config.add_caddyfile(
             textwrap.dedent(
