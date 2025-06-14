@@ -13,7 +13,7 @@ import settings
 ENABLED = getattr(settings, "STATIC_SITES_ENABLED", False)
 SITES: dict[str, dict] = getattr(settings, "STATIC_SITES", {})
 
-_state_dir = join(settings.STATE_DIR, "static_sites")
+_state_dir = "/srv/srkbz/static_sites"
 _cache_dir = join(settings.CACHE_DIR, "static_sites")
 _sites_state_dir = join(_state_dir, "sites")
 _sites_cache_dir = join(_cache_dir, "sites")
