@@ -44,6 +44,14 @@ def _setup(dry_run: bool):
         assert not dry_run
         makedirs(_sites_state_dir)
 
+    if (
+        shell(
+            f"stat --format '%a' '{_sites_state_dir}'", echo=False, captureStdout=True
+        ).stdout
+        != "755"
+    ):
+        shell(f"chmod 755 '{_sites_state_dir}'")
+
     site_ids = SITES.keys()
     existing_site_ids = listdir(_sites_state_dir)
 
