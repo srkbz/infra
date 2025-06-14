@@ -66,8 +66,7 @@ def _setup(dry_run: bool):
 
     for site_id in sites_to_add:
         assert not dry_run
-        site_path = join(_sites_state_dir, site_id)
-        makedirs(site_path)
+        _build(site_path)
 
 
 def _cleanup(dry_run: bool):
