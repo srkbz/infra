@@ -47,7 +47,7 @@ def _setup(dry_run: bool):
     if (
         shell(
             f"stat --format '%a' '{_sites_state_dir}'", echo=False, captureStdout=True
-        ).stdout
+        ).stdout.strip()
         != "755"
     ):
         assert not dry_run
