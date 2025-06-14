@@ -50,6 +50,7 @@ def _setup(dry_run: bool):
         ).stdout
         != "755"
     ):
+        assert not dry_run
         shell(f"chmod 755 '{_sites_state_dir}'")
 
     site_ids = SITES.keys()
