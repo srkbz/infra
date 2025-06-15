@@ -55,6 +55,7 @@ def _cleanup(dry_run: bool):
     for interface_name in [
         n.removesuffix(".conf") for n in listdir(_wireguard_conf_home)
     ]:
+        assert not dry_run
         shell(f"systemctl stop 'wg-quick@{interface_name}'")
 
     if not isdir(_wireguard_conf_home):
