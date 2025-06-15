@@ -38,7 +38,9 @@ def _setup(dry_run: bool):
                 ensure_perms(dry_run, conf_file, "600"),
                 ensure_owners(dry_run, conf_file, "root:root"),
                 shell(
-                    f"systemctl status 'wg-quick@{conf_name}'", echo=False, check=False
+                    f"systemctl status 'wg-quick@{conf_name}'>/dev/null",
+                    echo=False,
+                    check=False,
                 ).exit_code
                 != 0,
             ]
