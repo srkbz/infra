@@ -21,6 +21,28 @@ if PROFILE is not None:
     match PROFILE:
         case "facade":
             FACADE_PRIVATE_KEY = getattr(settings, "VPN_FACADE_PRIVATE_KEY")
+            VAULT_PUBLIC_KEY = getattr(settings, "VPN_VAULT_PUBLIC_KEY")
+
+            wireguard.config.add_interface(
+                textwrap.dedent(
+                    f"""
+                    [Interface]
+                    Address = {FACADE_IP}/32
+                    ListenPort = {WG_PORT}
+                    PrivateKey = {FACADE_PRIVATE_KEY}
+
+                    # Vault
+                    [Peer]
+                    PublicKey = {VAULT_PUBLIC_KEY}
+                    AllowedIPs = {VAULT_IP}/32
+                    PersistentKeepalive = 5
+                    """
+                ).lstrip()
+            )
+
+        case "vault":
+            VAULT_PRIVATE_KEY = getattr(settings, "VPN_VAULT_PRIVATE_KEY")
+            FACADE_PUBLIC_KEY = getattr(settings, "VPN_FACADE_PUBLIC_KEY")
 
             wireguard.config.add_interface(
                 textwrap.dedent(
@@ -28,7 +50,14 @@ if PROFILE is not None:
                     [Interface]
                     Address = {VAULT_IP}/32
                     ListenPort = {WG_PORT}
-                    PrivateKey = {FACADE_PRIVATE_KEY}
+                    PrivateKey = {VAULT_PRIVATE_KEY}
+
+                    # Facade
+                    [Peer]
+                    PublicKey = {FACADE_PUBLIC_KEY}
+                    AllowedIPs = {FACADE_IP}/32
+                    Endpoint = {FACADE_PUBLIC_ADDRESS}:{WG_PORT}"
+                    PersistentKeepalive = 5
                     """
                 ).lstrip()
             )
