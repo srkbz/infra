@@ -52,6 +52,11 @@ def _setup(dry_run: bool):
 
 
 def _cleanup(dry_run: bool):
+    for interface_name in [
+        n.removesuffix(".conf") for n in listdir(_wireguard_conf_home)
+    ]:
+        shell(f"systemctl stop 'wg-quick@{interface_name}'")
+
     if not isdir(_wireguard_conf_home):
         return
 
@@ -72,7 +77,12 @@ def _is_enabled():
     return len(config._interfaces) > 0
 
 
-@task(requires=[apt.install_packages])
+@task(
+    requires=[apt.install_packages] if _is_enabled() else [],
+    required_by=(
+        [apt.install_packages] if not _is_enabled() and _needs_cleanup() else []
+    ),
+)
 def setup(dry_run: bool):
     if _is_enabled():
         _setup(dry_run)
