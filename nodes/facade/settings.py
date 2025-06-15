@@ -17,7 +17,6 @@ STATIC_SITES = {
 }
 
 VPN_PROFILE = "facade"
-
 VPN_FACADE_PRIVATE_KEY = read_file(
     ".secrets/VPN_FACADE_PRIVATE_KEY", must_exist=True
 ).strip()
