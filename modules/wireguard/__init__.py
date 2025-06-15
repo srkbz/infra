@@ -50,6 +50,9 @@ def _setup(dry_run: bool):
 
 
 def _cleanup(dry_run: bool):
+    if not isdir(_wireguard_conf_home):
+        return
+
     if len(listdir(_wireguard_conf_home)) != 0:
         assert not dry_run
         shell(f"rm -rf '{_wireguard_conf_home}'/*")
