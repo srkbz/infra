@@ -4,11 +4,13 @@ from os.path import dirname
 from framework.utils.shell import shell
 
 
-def read_file(path) -> str:
+def read_file(path, must_exist: bool = False) -> str:
     try:
         with open(path, "r") as f:
             return f.read()
     except FileNotFoundError:
+        if must_exist:
+            raise
         pass
     return None
 
