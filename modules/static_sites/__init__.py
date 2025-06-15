@@ -11,7 +11,6 @@ from modules import docker, caddy
 
 import settings
 
-ENABLED = getattr(settings, "STATIC_SITES_ENABLED", False)
 SITES: dict[str, dict] = getattr(settings, "STATIC_SITES", {})
 
 _state_dir = "/srv/srkbz/static_sites"
@@ -19,7 +18,12 @@ _cache_dir = join(settings.CACHE_DIR, "static_sites")
 _sites_state_dir = join(_state_dir, "sites")
 _sites_cache_dir = join(_cache_dir, "sites")
 
-if ENABLED:
+
+def _is_enabled():
+    return len(SITES) > 0
+
+
+if _is_enabled():
     docker.config.enable()
     for site_id in sorted(SITES.keys()):
         _site_state_dir = join(_sites_state_dir, site_id)
@@ -123,13 +127,13 @@ def _build(site_id: str):
 
 @task(requires=[docker.setup])
 def setup(dry_run: bool):
-    if ENABLED:
+    if _is_enabled():
         _setup(dry_run)
     else:
         _cleanup(dry_run)
 
 
-setup.enabled(lambda: ENABLED or _needs_cleanup())
+setup.enabled(lambda: _is_enabled() or _needs_cleanup())
 
 
 @command(name="static-sites-build")
