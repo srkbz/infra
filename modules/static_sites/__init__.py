@@ -5,6 +5,7 @@ from os.path import isfile, isdir, join
 
 from framework.api import command, task
 from framework.utils.shell import shell
+from framework.utils.fs import ensure_perms
 
 from modules import docker, caddy
 
@@ -44,14 +45,7 @@ def _setup(dry_run: bool):
         assert not dry_run
         makedirs(_sites_state_dir)
 
-    if (
-        shell(
-            f"stat --format '%a' '{_sites_state_dir}'", echo=False, captureStdout=True
-        ).stdout.strip()
-        != "755"
-    ):
-        assert not dry_run
-        shell(f"chmod 755 '{_sites_state_dir}'")
+    ensure_perms(dry_run, _site_state_dir, "755")
 
     site_ids = SITES.keys()
     existing_site_ids = listdir(_sites_state_dir)

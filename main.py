@@ -4,7 +4,7 @@ import importlib
 
 from framework.runner import runner
 
-for module in os.listdir(os.path.join(os.path.dirname(__file__), "modules")):
+for module in sorted(os.listdir(os.path.join(os.path.dirname(__file__), "modules"))):
     importlib.import_module("modules." + module)
 
 
