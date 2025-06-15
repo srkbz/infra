@@ -56,7 +56,7 @@ if PROFILE is not None:
                     [Peer]
                     PublicKey = {FACADE_PUBLIC_KEY}
                     AllowedIPs = {FACADE_IP}/32
-                    Endpoint = {FACADE_PUBLIC_ADDRESS}:{WG_PORT}"
+                    Endpoint = {FACADE_PUBLIC_ADDRESS}:{WG_PORT}
                     PersistentKeepalive = 5
                     """
                 ).lstrip()
