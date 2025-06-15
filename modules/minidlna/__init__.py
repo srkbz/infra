@@ -9,7 +9,7 @@ from modules.directories import Directory
 
 from .conf_builder import *
 
-if ENABLED:
+if is_enabled():
     apt.config.add_packages("minidlna")
 
 _conf_file = "/etc/minidlna.conf"
@@ -48,9 +48,9 @@ def _needs_cleanup():
 
 @task()
 def setup(dry_run: bool):
-    if ENABLED:
+    if is_enabled():
         _setup(dry_run)
 
 
-setup.enabled(lambda: ENABLED or _needs_cleanup())
+setup.enabled(lambda: is_enabled() or _needs_cleanup())
 setup.tags(lambda: [Directory(DIRECTORY_ID)])
