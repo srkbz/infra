@@ -46,7 +46,7 @@ def _setup(dry_run: bool):
             assert not dry_run
             shell(f"systemctl enable 'wg-quick@{conf_name}'")
             shell(f"systemctl start 'wg-quick@{conf_name}'")
-            shell(f"wg syncconf '{conf_name}' <(wg-quick strip '${conf_name}')")
+            shell(f"wg syncconf '{conf_name}' <(wg-quick strip '{conf_name}')")
 
 
 def _cleanup(dry_run: bool):
