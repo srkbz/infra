@@ -1,5 +1,5 @@
-from os import makedirs, listdir
-from os.path import isfile, isdir, join, dirname
+from os import listdir
+from os.path import isdir, join
 
 from framework.api import task
 from framework.utils.shell import shell
