@@ -20,8 +20,6 @@ class Config:
 
 config = Config()
 
-
-ENABLED = getattr(settings, "CADDY_ENABLED", False)
 VERSION = getattr(settings, "CADDY_VERSION", "2.10.0")
 CADDYFILES = getattr(settings, "CADDY_CADDYFILES", [])
 
@@ -37,6 +35,10 @@ _conf_root = "/etc/caddy/Caddyfile"
 _conf_root_template = join(dirname(__file__), "assets", "Caddyfile")
 _conf_dir = "/etc/caddy/conf.d"
 _conf_count = join(_conf_dir, "COUNT")
+
+
+def _is_enabled():
+    return len(CADDYFILES + config._caddyfiles) > 0
 
 
 def _setup(dry_run: bool):
@@ -111,10 +113,10 @@ def _cleanup_needed():
 
 @task()
 def setup(dry_run: bool):
-    if ENABLED:
+    if _is_enabled():
         _setup(dry_run)
     else:
         _cleanup(dry_run)
 
 
-setup.enabled(lambda: ENABLED or _cleanup_needed())
+setup.enabled(lambda: _is_enabled() or _cleanup_needed())

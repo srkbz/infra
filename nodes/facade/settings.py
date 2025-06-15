@@ -1,7 +1,5 @@
 from framework.utils.fs import read_file
 
-CADDY_ENABLED = True
-
 STATIC_SITES_ENABLED = True
 STATIC_SITES = {
     "sirikon.me": {"repository": "https://github.com/sirikon/sirikon.me.git"},
