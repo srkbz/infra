@@ -1,16 +1,4 @@
-# Sway
-# mod key is Home
-# 1920x1080 60hz
-# menu opens on Home + OK
-# blueman-manager
-# pavucontrol
-# moonlight
-# navigate workspace on Home + Number
-# switch between windows with Home + directional pad
-# close current window with Home + Q
-# shutdown/restart menu with Home + Esc
-# auto-login and launch sway on boot
-from os.path import isfile, dirname, join
+from os.path import dirname, join
 from os import makedirs
 import textwrap
 
@@ -26,7 +14,6 @@ import settings
 
 ENABLED = getattr(settings, "TV_ENABLED", False)
 USER = getattr(settings, "TV_USER", "tv")
-MOONLIGHT_VERSION = getattr(settings, "TV_MOONLIGHT_VERSION", "6.1.0")
 
 if ENABLED:
     apt.config.add_packages("sway", "pavucontrol", "blueman", "wev", "alacritty")
