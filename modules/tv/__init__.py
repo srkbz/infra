@@ -52,12 +52,12 @@ def _setup(dry_run: bool):
             read_file(join(dirname(__file__), "config", "sway.conf")),
         )
 
-    if read_file("/home/tv/.config/alacritty/config") != read_file(
+    if read_file("/home/tv/.config/alacritty/alacritty.toml") != read_file(
         join(dirname(__file__), "config", "alacritty.toml")
     ):
         assert not dry_run
         write_file(
-            "/home/tv/.config/alacritty/config",
+            "/home/tv/.config/alacritty/alacritty.toml",
             read_file(join(dirname(__file__), "config", "alacritty.toml")),
         )
 
