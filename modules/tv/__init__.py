@@ -52,6 +52,15 @@ def _setup(dry_run: bool):
             read_file(join(dirname(__file__), "config", "sway.conf")),
         )
 
+    if read_file("/home/tv/.config/alacritty/config") != read_file(
+        join(dirname(__file__), "config", "alacritty.toml")
+    ):
+        assert not dry_run
+        write_file(
+            "/home/tv/.config/alacritty/config",
+            read_file(join(dirname(__file__), "config", "alacritty.toml")),
+        )
+
     wallpaper_path = join(dirname(__file__), "wallpaper.png")
     if not isfile("/home/tv/wallpaper.png"):
         assert not dry_run
