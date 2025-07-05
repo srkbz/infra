@@ -10,7 +10,7 @@
 # close current window with Home + Q
 # shutdown/restart menu with Home + Esc
 # auto-login and launch sway on boot
-from os.path import isfile
+from os.path import isfile, dirname, join
 from os import makedirs
 import textwrap
 
@@ -51,6 +51,15 @@ def _setup(dry_run: bool):
                 fi
                 """
             ).lstrip(),
+        )
+
+    if read_file("/home/tv/.config/sway/config") != read_file(
+        join(dirname(__file__), "config", "sway.conf")
+    ):
+        assert not dry_run
+        write_file(
+            "/home/tv/.config/sway/config",
+            read_file(join(dirname(__file__), "config", "sway.conf")),
         )
 
     autologin_conf = textwrap.dedent(
