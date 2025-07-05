@@ -24,7 +24,7 @@ def setup_moonlight(dry_run: bool):
             check=False,
             captureStdout=True,
             echo=False,
-        ).stdout
+        ).stdout.strip()
         != _moonlight_bin
     ):
         assert not dry_run
