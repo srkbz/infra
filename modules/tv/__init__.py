@@ -1,4 +1,4 @@
-from os.path import dirname, join
+from os.path import isfile, dirname, join
 from os import makedirs
 import textwrap
 
@@ -51,6 +51,11 @@ def _setup(dry_run: bool):
             "/home/tv/.config/sway/config",
             read_file(join(dirname(__file__), "config", "sway.conf")),
         )
+
+    wallpaper_path = join(dirname(__file__), "wallpaper.png")
+    if not isfile("/home/tv/wallpaper.png"):
+        assert not dry_run
+        shell(f"cp '{wallpaper_path}' /home/tv/wallpaper.png")
 
     autologin_conf = textwrap.dedent(
         f"""
