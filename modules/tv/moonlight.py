@@ -20,7 +20,10 @@ def setup_moonlight(dry_run: bool):
 
     if (
         shell(
-            f"readlink -f '{_moonlight_bin_public}'", check=False, captureStdout=True
+            f"readlink -f '{_moonlight_bin_public}'",
+            check=False,
+            captureStdout=True,
+            echo=False,
         ).stdout
         != _moonlight_bin
     ):
