@@ -37,18 +37,24 @@ def _setup(dry_run: bool):
         assert not dry_run
         shell(f"useradd --create-home --shell /bin/bash '{USER}'")
 
-    if not isfile("/etc/systemd/system/getty@tty1.service.d/autologin.conf"):
+    autologin_conf = textwrap.dedent(
+        f"""
+        [Service]
+        Type=simple
+        Environment=XDG_SESSION_TYPE=wayland
+        ExecStart=
+        ExecStart=-/sbin/agetty -o '-p -f -- \\u' --noclear --autologin '{USER}' %I sway
+        """
+    ).lstrip()
+
+    if (
+        read_file("/etc/systemd/system/getty@tty1.service.d/autologin.conf")
+        != autologin_conf
+    ):
         assert not dry_run
         makedirs("/etc/systemd/system/getty@tty1.service.d", exist_ok=True)
         write_file(
-            "/etc/systemd/system/getty@tty1.service.d/autologin.conf",
-            textwrap.dedent(
-                f"""
-                [Service]
-                ExecStart=
-                ExecStart=-/sbin/agetty -o '-p -f -- \\u' --noclear --autologin '{USER}' %I /bin/bash
-                """
-            ).lstrip(),
+            "/etc/systemd/system/getty@tty1.service.d/autologin.conf", autologin_conf
         )
 
 
