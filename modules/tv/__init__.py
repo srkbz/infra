@@ -35,7 +35,7 @@ def _setup(dry_run: bool):
         != 0
     ):
         assert not dry_run
-        shell(f"useradd --create-home '{USER}'")
+        shell(f"useradd --create-home --shell /bin/bash '{USER}'")
 
     if not isfile("/etc/systemd/system/getty@tty1.service.d/autologin.conf"):
         assert not dry_run
