@@ -52,8 +52,8 @@ def _setup(dry_run: bool):
             read_file(join(dirname(__file__), "config", "sway.conf")),
         )
 
-    alacritty_conf = read_file(join(dirname(__file__), "config", "alacritty.toml"))
-    alacritty_conf_path = "/home/tv/.config/alacritty/alacritty.toml"
+    alacritty_conf = read_file(join(dirname(__file__), "config", "alacritty.yml"))
+    alacritty_conf_path = "/home/tv/.config/alacritty/alacritty.yml"
 
     if read_file(alacritty_conf_path) != alacritty_conf:
         assert not dry_run
