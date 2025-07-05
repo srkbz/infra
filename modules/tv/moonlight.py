@@ -12,7 +12,12 @@ _moonlight_bin_public = "/usr/local/bin/moonlight"
 
 
 def setup_moonlight(dry_run: bool):
-    if not isfile(_moonlight_bin_public):
+    if (
+        shell(
+            f"readlink -f '{_moonlight_bin_public}'", check=False, captureStdout=True
+        ).stdout
+        != _moonlight_bin
+    ):
         assert not dry_run
         makedirs(_moonlight_root, exist_ok=True)
         shell(f"curl -Lo '{_moonlight_bin}' '{_moonlight_url}'")
