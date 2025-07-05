@@ -37,13 +37,29 @@ def _setup(dry_run: bool):
         assert not dry_run
         shell(f"useradd --create-home --shell /bin/bash '{USER}'")
 
+    if "# srkbz infra - sway on tty" not in read_file("/home/tv/.bashrc"):
+        assert not dry_run
+        write_file(
+            "/home/tv/.bashrc",
+            read_file("/home/tv/.bashrc")
+            + "\n\n"
+            + textwrap.dedent(
+                f"""
+                # srkbz infra - sway on tty
+                if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
+                    exec sway
+                fi
+                """
+            ).lstrip(),
+        )
+
     autologin_conf = textwrap.dedent(
         f"""
         [Service]
         Type=simple
         Environment=XDG_SESSION_TYPE=wayland
         ExecStart=
-        ExecStart=-/sbin/agetty -o '-p -f -- \\u' --noclear --autologin '{USER}' %I sway
+        ExecStart=-/sbin/agetty -o '-p -f -- \\u' --noclear --autologin '{USER}' %I /bin/bash
         """
     ).lstrip()
 
