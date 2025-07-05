@@ -24,6 +24,7 @@ import settings
 
 ENABLED = getattr(settings, "TV_ENABLED", False)
 USER = getattr(settings, "TV_USER", "tv")
+MOONLIGHT_VERSION = getattr(settings, "TV_MOONLIGHT_VERSION", "6.1.0")
 
 if ENABLED:
     apt.config.add_packages("sway", "pavucontrol", "blueman", "wev", "alacritty")
@@ -81,6 +82,13 @@ def _setup(dry_run: bool):
         write_file(
             "/etc/systemd/system/getty@tty1.service.d/autologin.conf", autologin_conf
         )
+
+    if not isfile("/usr/local/bin/moonlight"):
+        assert not dry_run
+        shell(
+            f"curl -Lo /usr/local/bin/moonlight 'https://github.com/moonlight-stream/moonlight-qt/releases/download/v{MOONLIGHT_VERSION}/Moonlight-{MOONLIGHT_VERSION}-x86_64.AppImage'"
+        )
+        shell("chmod +x /usr/local/bin/moonlight")
 
 
 def _cleanup(dry_run: bool):
