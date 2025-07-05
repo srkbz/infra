@@ -19,8 +19,10 @@ from framework.utils.fs import read_file, write_file
 from framework.utils.shell import shell
 
 from modules import apt
+from .moonlight import setup_moonlight
 
 import settings
+
 
 ENABLED = getattr(settings, "TV_ENABLED", False)
 USER = getattr(settings, "TV_USER", "tv")
@@ -83,12 +85,7 @@ def _setup(dry_run: bool):
             "/etc/systemd/system/getty@tty1.service.d/autologin.conf", autologin_conf
         )
 
-    if not isfile("/usr/local/bin/moonlight"):
-        assert not dry_run
-        shell(
-            f"curl -Lo /usr/local/bin/moonlight 'https://github.com/moonlight-stream/moonlight-qt/releases/download/v{MOONLIGHT_VERSION}/Moonlight-{MOONLIGHT_VERSION}-x86_64.AppImage'"
-        )
-        shell("chmod +x /usr/local/bin/moonlight")
+    setup_moonlight(dry_run)
 
 
 def _cleanup(dry_run: bool):
