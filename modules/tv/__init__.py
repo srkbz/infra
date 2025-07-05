@@ -26,7 +26,7 @@ ENABLED = getattr(settings, "TV_ENABLED", False)
 USER = getattr(settings, "TV_USER", "tv")
 
 if ENABLED:
-    apt.config.add_packages("sway", "pavucontrol", "blueman")
+    apt.config.add_packages("sway", "pavucontrol", "blueman", "wev")
 
 
 def _setup(dry_run: bool):
