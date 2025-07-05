@@ -4,7 +4,7 @@ from framework.utils.shell import shell
 
 import settings
 
-MOONLIGHT_VERSION = getattr(settings, "TV_MOONLIGHT_VERSION", "6.0.1")
+MOONLIGHT_VERSION = getattr(settings, "TV_MOONLIGHT_VERSION", "6.1.0")
 _moonlight_url = f"https://github.com/moonlight-stream/moonlight-qt/releases/download/v{MOONLIGHT_VERSION}/Moonlight-{MOONLIGHT_VERSION}-x86_64.AppImage"
 _moonlight_root = f"/opt/srkbz/tv/moonlight/{MOONLIGHT_VERSION}"
 _moonlight_bin = join(_moonlight_root, "moonlight.AppImage")
