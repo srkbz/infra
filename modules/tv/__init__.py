@@ -16,7 +16,9 @@ ENABLED = getattr(settings, "TV_ENABLED", False)
 USER = getattr(settings, "TV_USER", "tv")
 
 if ENABLED:
-    apt.config.add_packages("sway", "pavucontrol", "blueman", "wev", "alacritty", "rofi")
+    apt.config.add_packages(
+        "sway", "pavucontrol", "blueman", "wev", "alacritty", "rofi"
+    )
 
 
 def _setup(dry_run: bool):
@@ -51,6 +53,13 @@ def _setup(dry_run: bool):
             "/home/tv/.config/sway/config",
             read_file(join(dirname(__file__), "config", "sway.conf")),
         )
+
+    rofi_conf = read_file(join(dirname(__file__), "config", "rofi.conf"))
+    rofi_conf_path = "/home/tv/.config/rofi/config.rasi"
+
+    if read_file(rofi_conf_path) != rofi_conf:
+        assert not dry_run
+        write_file(rofi_conf_path, rofi_conf)
 
     alacritty_conf = read_file(join(dirname(__file__), "config", "alacritty.yml"))
     alacritty_conf_path = "/home/tv/.config/alacritty/alacritty.yml"
