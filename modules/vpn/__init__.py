@@ -1,6 +1,7 @@
 import textwrap
 from ipaddress import ip_address, ip_network
 
+from framework.utils.fs import read_file
 from modules import wireguard
 
 import settings
@@ -20,8 +21,12 @@ PROFILE = getattr(settings, "VPN_PROFILE", None)
 if PROFILE is not None:
     match PROFILE:
         case "facade":
-            FACADE_PRIVATE_KEY = getattr(settings, "VPN_FACADE_PRIVATE_KEY")
-            VAULT_PUBLIC_KEY = getattr(settings, "VPN_VAULT_PUBLIC_KEY")
+            FACADE_PRIVATE_KEY = read_file(
+                getattr(settings, "VPN_FACADE_PRIVATE_KEY_PATH"), must_exist=True
+            ).strip()
+            VAULT_PUBLIC_KEY = read_file(
+                getattr(settings, "VPN_VAULT_PUBLIC_KEY_PATH"), must_exist=True
+            ).strip()
 
             wireguard.config.add_interface(
                 textwrap.dedent(
@@ -41,8 +46,12 @@ if PROFILE is not None:
             )
 
         case "vault":
-            VAULT_PRIVATE_KEY = getattr(settings, "VPN_VAULT_PRIVATE_KEY")
-            FACADE_PUBLIC_KEY = getattr(settings, "VPN_FACADE_PUBLIC_KEY")
+            VAULT_PRIVATE_KEY = read_file(
+                getattr(settings, "VPN_VAULT_PRIVATE_KEY_PATH"), must_exist=True
+            ).strip()
+            FACADE_PUBLIC_KEY = read_file(
+                getattr(settings, "VPN_FACADE_PUBLIC_KEY_PATH"), must_exist=True
+            ).strip()
 
             wireguard.config.add_interface(
                 textwrap.dedent(

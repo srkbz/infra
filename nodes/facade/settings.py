@@ -1,5 +1,3 @@
-from framework.utils.fs import read_file
-
 STATIC_SITES = {
     "sirikon.me": {"repository": "https://github.com/sirikon/sirikon.me.git"},
     "osoondo.com": {"repository": "https://github.com/sirikon/osoondo.com.git"},
@@ -14,9 +12,5 @@ STATIC_SITES = {
 }
 
 VPN_PROFILE = "facade"
-VPN_FACADE_PRIVATE_KEY = read_file(
-    ".secrets/VPN_FACADE_PRIVATE_KEY", must_exist=True
-).strip()
-VPN_VAULT_PUBLIC_KEY = read_file(
-    ".secrets/VPN_VAULT_PUBLIC_KEY", must_exist=True
-).strip()
+VPN_FACADE_PRIVATE_KEY_PATH = ".secrets/VPN_FACADE_PRIVATE_KEY"
+VPN_VAULT_PUBLIC_KEY_PATH = ".secrets/VPN_VAULT_PUBLIC_KEY"
